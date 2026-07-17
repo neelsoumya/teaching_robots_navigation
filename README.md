@@ -1,6 +1,7 @@
 # teaching_robots_navigation
 Teaching robot navigation
 
+- [notes](notes.md)
 
 01_Introduction_to_Robotics.md
 02_Coordinate_Frames_and_Transformations.md
