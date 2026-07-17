@@ -18,3 +18,8 @@ as you move the camera you can detect vthe depth of objects
 ewok rampage object traking youtube video
 
 signs AR code etc
+
+
+occupancy map
+
+
