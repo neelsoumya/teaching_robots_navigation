@@ -1,3 +1,12 @@
+
+humanoid robots
+
+gemini rpobots
+
+mirror tasks with robots LLM with robots
+
+mentimeter surveys and discussion
+
 how do underwater robots navigate?
 
 GPS denied
