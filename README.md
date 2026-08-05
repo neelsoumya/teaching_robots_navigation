@@ -5,6 +5,7 @@ Teaching robot navigation
 - [introduction](intro.md)
 - [notes](notes.md)
 - [odometry](odometry.md)
+- [SLAM](SLAM.md)
 - [humanoid robots](humanoid_robots.md)
 
 
