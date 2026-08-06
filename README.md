@@ -7,6 +7,9 @@ Teaching robot navigation
 - [odometry](odometry.md)
 - [SLAM](SLAM.md)
 - [humanoid robots](humanoid_robots.md)
+- [drones](drones_indoor.md)
+- [ROS](ROS.md)
+
 
 
 01_Introduction_to_Robotics.md
