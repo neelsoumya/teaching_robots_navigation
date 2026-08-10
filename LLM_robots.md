@@ -17,3 +17,5 @@
 - Sense of Agency in Alter3
 
 -  `Can Alter3 recognize itself when looking in a mirror?`
+
+![image](https://arxiv.org/html/2406.11420v1/extracted/5671667/fig3.png)
