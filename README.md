@@ -4,6 +4,7 @@ Teaching robot navigation
 
 - [introduction](intro.md)
 - [notes](notes.md)
+- [how does a submarine navigate underwater without GPS](inertial_navigation.md)
 - [odometry](odometry.md)
 - [SLAM](SLAM.md)
 - [humanoid robots](humanoid_robots.md)
