@@ -10,3 +10,10 @@
 ![image](https://arxiv.org/html/2406.11420v1/extracted/5671667/fig_prompt.png)
 
 
+## Question and activity for class
+
+- If we make LLMs embodied in a robot, will they have agency?
+
+- Sense of Agency in Alter3
+
+-  `Can Alter3 recognize itself when looking in a mirror?`
