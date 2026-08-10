@@ -8,7 +8,10 @@
 
 - Other Indian drones used in warehouses [Addverb](https://www.youtube.com/watch?v=JCk9il9rXfE)
 
+- Custom drones used for [vertical lifting](https://www.youtube.com/shorts/rEW8eratMEg)
+
 - indoor environment
+
 
 - relate it to concepts studies in class
 
