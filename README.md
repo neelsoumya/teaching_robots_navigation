@@ -8,6 +8,7 @@ Teaching robot navigation
 - [SLAM](SLAM.md)
 - [humanoid robots](humanoid_robots.md)
 - [drones](drones_indoor.md)
+- [LLMs and robots](LLM_robots.md)
 - [ROS](ROS.md)
 
 
