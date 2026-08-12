@@ -2,6 +2,7 @@
 Teaching robot navigation
 
 
+- [installation](installation.md)
 - [introduction](intro.md)
 - [notes](notes.md)
 - [how does a submarine navigate underwater without GPS](inertial_navigation.md)
