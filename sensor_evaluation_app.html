@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics & UAV Sensor Evaluation Interactive Learning Module</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#FAF8F5',
+                            card: '#FFFFFF',
+                            text: '#2C323B',
+                            muted: '#64748B',
+                            border: '#E8E3DA',
+                            accent: '#C85A32',
+                            accentHover: '#B04B26',
+                            teal: '#2A7B88',
+                            amber: '#D97706',
+                            emerald: '#059669',
+                            slate: '#1E293B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F5;
+            color: #2C323B;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #C85A32;
+            color: #C85A32;
+            font-weight: 700;
+        }
+
+        input[type=range] {
+            accent-color: #C85A32;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-orange-100 selection:text-orange-900">
+
+    <header class="bg-white border-b border-brand-border sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">🚁</span>
+                    <div>
+                        <h1 class="text-lg font-bold text-brand-slate leading-tight">UAV & Robotics Sensor Evaluation</h1>
+                        <p class="text-xs text-brand-muted hidden sm:block">Interactive Engineering Trade-off & Physical Failure Analysis Portal</p>
+                    </div>
+                </div>
+                <nav class="flex space-x-1 sm:space-x-4 text-xs sm:text-sm font-medium overflow-x-auto py-2">
+                    <button onclick="switchTab('overview')" id="nav-overview" class="tab-btn active px-3 py-2 border-b-2 border-transparent hover:text-brand-accent transition-colors whitespace-nowrap">Overview</button>
+                    <button onclick="switchTab('physics')" id="nav-physics" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-accent transition-colors whitespace-nowrap">Sensor Noise Physics</button>
+                    <button onclick="switchTab('tradeoffs')" id="nav-tradeoffs" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-accent transition-colors whitespace-nowrap">Power & Mass Trade-offs</button>
+                    <button onclick="switchTab('lab')" id="nav-lab" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-accent transition-colors whitespace-nowrap">Flight Time Simulator</button>
+                    <button onclick="switchTab('cases')" id="nav-cases" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-accent transition-colors whitespace-nowrap">Case Studies & FSM</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+        <section id="tab-overview" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-brand-border shadow-sm">
+                <h2 class="text-2xl font-bold text-brand-slate mb-3">Executive Summary & Pedagogical Objectives</h2>
+                <p class="text-brand-text leading-relaxed mb-6">
+                    When designing autonomous mobile systems, engineers often assume sensors operate under ideal mathematical assumptions. In reality, sensor selection is dominated by physical environmental noise, structural vibration, payload mass limits, and severe electrical battery constraints. This teaching module equips engineering students to evaluate sensor performance, quantify payload energy penalties on unmanned aerial vehicles (UAVs), and architect fault-tolerant sensor fusion strategies.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-brand-bg p-5 rounded-xl border border-brand-border">
+                        <div class="w-10 h-10 rounded-lg bg-orange-100 text-brand-accent flex items-center justify-center font-bold text-lg mb-3">1</div>
+                        <h3 class="font-bold text-brand-slate text-base mb-2">Physical Noise & Failure Modes</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            Analyze non-Gaussian error sources in LiDAR, RGB-D cameras, and IMUs, highlighting motor vibration jitter, surface absorption, and specular reflection.
+                        </p>
+                    </div>
+                    <div class="bg-brand-bg p-5 rounded-xl border border-brand-border">
+                        <div class="w-10 h-10 rounded-lg bg-teal-100 text-brand-teal flex items-center justify-center font-bold text-lg mb-3">2</div>
+                        <h3 class="font-bold text-brand-slate text-base mb-2">Power-Weight-Throughput Triangle</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            Quantify the non-linear relationship between added payload mass and drone hover power draw (<span class="font-mono font-bold">P ∝ m<sup>1.5</sup></span>) according to momentum theory.
+                        </p>
+                    </div>
+                    <div class="bg-brand-bg p-5 rounded-xl border border-brand-border">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 text-brand-emerald flex items-center justify-center font-bold text-lg mb-3">3</div>
+                        <h3 class="font-bold text-brand-slate text-base mb-2">Robust System Integration</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            Formulate concrete fallback state machines (FSM) and sensor fusion strategies that tolerate sensor dropouts without exceeding onboard power budgets.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="text-3xl">📏</div>
+                    <div>
+                        <div class="text-xs text-brand-muted uppercase font-bold tracking-wider">LiDAR Range Formula</div>
+                        <div class="text-sm font-mono font-bold text-brand-slate">d = (c · Δt) / 2</div>
+                        <div class="text-[11px] text-brand-muted">Time-of-flight distance calculation</div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="text-3xl">🔋</div>
+                    <div>
+                        <div class="text-xs text-brand-muted uppercase font-bold tracking-wider">Hover Power Scaling</div>
+                        <div class="text-sm font-mono font-bold text-brand-accent">P<sub>hover</sub> ∝ (m · g)<sup>1.5</sup></div>
+                        <div class="text-[11px] text-brand-muted">Non-linear UAV payload penalty</div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="text-3xl">🎯</div>
+                    <div>
+                        <div class="text-xs text-brand-muted uppercase font-bold tracking-wider">Jitter Drift Error</div>
+                        <div class="text-sm font-mono font-bold text-brand-teal">Δy ≈ r · tan(Δθ)</div>
+                        <div class="text-[11px] text-brand-muted">Vibration angular error at distance</div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="text-3xl">⏱️</div>
+                    <div>
+                        <div class="text-xs text-brand-muted uppercase font-bold tracking-wider">IMU Dead Reckoning</div>
+                        <div class="text-sm font-mono font-bold text-brand-slate">Error ∝ t<sup>2</sup></div>
+                        <div class="text-[11px] text-brand-muted">Quadratic position drift over time</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-physics" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-brand-border shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-slate mb-2">Sensor Inaccuracies & Physical Failure Modes</h2>
+                    <p class="text-brand-text leading-relaxed">
+                        Physical environments introduce noise, occlusion, and surface artifacts that disrupt idealized mathematical sensor models. Understanding the domain-specific failure modes between ground platforms and aerial platforms is critical for selecting sensor packages.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 border-b border-brand-border pb-3">
+                    <button onclick="setSensorPhysicsTab('lidar')" id="physics-btn-lidar" class="px-4 py-2 text-sm font-semibold rounded-lg bg-brand-accent text-white transition-all">LiDAR Failure Mechanics</button>
+                    <button onclick="setSensorPhysicsTab('vision')" id="physics-btn-vision" class="px-4 py-2 text-sm font-semibold rounded-lg bg-gray-100 text-brand-slate hover:bg-gray-200 transition-all">RGB-D & Visual Cameras</button>
+                    <button onclick="setSensorPhysicsTab('imu')" id="physics-btn-imu" class="px-4 py-2 text-sm font-semibold rounded-lg bg-gray-100 text-brand-slate hover:bg-gray-200 transition-all">IMU & GPS / GNSS</button>
+                </div>
+
+                <div id="physics-panel-lidar" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-orange-50/50 rounded-xl p-5 border border-orange-200 space-y-3">
+                            <h3 class="font-bold text-brand-accent text-lg flex items-center space-x-2">
+                                <span>🤖</span><span>Ground Robotics Failure Modes</span>
+                            </h3>
+                            <ul class="space-y-2 text-xs text-brand-slate leading-relaxed list-disc pl-4">
+                                <li><strong class="text-brand-slate">Narrow Beam Target Miss:</strong> A narrow 1° beam at long distance (>3m) can easily slip past small targets or rounded geometry, returning infinite distance (<span class="font-mono">inf</span>) or wall reflections behind the target.</li>
+                                <li><strong class="text-brand-slate">Specular Reflection & Absorption:</strong> Dark matte materials absorb the infrared beam; glossy or glass surfaces cause specular reflection away from the sensor receiver.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-teal-50/50 rounded-xl p-5 border border-teal-200 space-y-3">
+                            <h3 class="font-bold text-brand-teal text-lg flex items-center space-x-2">
+                                <span>🚁</span><span>UAV-Specific Aerial Failures</span>
+                            </h3>
+                            <ul class="space-y-2 text-xs text-brand-slate leading-relaxed list-disc pl-4">
+                                <li><strong class="text-brand-slate">High-Frequency Rotor Vibration:</strong> Unbalanced propellers induce angular jitter (<span class="font-mono">Δθ</span>). At 50m range, a minor 0.5° vibration causes 0.43m of point cloud positional error.</li>
+                                <li><strong class="text-brand-slate">Oblique Incidence Angles:</strong> Drones pitch and roll to translate horizontally. Oblique ground strikes spread the beam footprint, reducing signal-to-noise ratio.</li>
+                                <li><strong class="text-brand-slate">Prop-Wash Dust Artifacts:</strong> Rotor downwash near ground level kicks up particulate dust, generating false-positive obstacle detections.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-bg p-6 rounded-xl border border-brand-border space-y-4">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-brand-slate text-base">Interactive Simulator: Rotor Vibration Angular Jitter & Position Error</h3>
+                                <p class="text-xs text-brand-muted">Calculate positional drift error <span class="font-mono font-bold">Δy ≈ r · tan(Δθ)</span> caused by motor vibration jitter at varying range distances.</p>
+                            </div>
+                            <div class="flex items-center space-x-4 bg-white px-4 py-2 rounded-lg border border-brand-border text-xs font-mono">
+                                <span>Distance (r): <strong id="jitter-r-val" class="text-brand-accent">50 m</strong></span>
+                                <span>Jitter (Δθ): <strong id="jitter-angle-val" class="text-brand-teal">0.5°</strong></span>
+                                <span>Error (Δy): <strong id="jitter-err-val" class="text-red-600 font-bold">0.43 m</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-brand-slate mb-1">Target Range / Distance r (meters): <span id="lbl-range">50</span>m</label>
+                                    <input id="slider-range" type="range" min="5" max="100" value="50" class="w-full" oninput="updateJitterCalc()">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-brand-slate mb-1">Angular Jitter Δθ (degrees): <span id="lbl-angle">0.5</span>°</label>
+                                    <input id="slider-angle" type="range" min="0.1" max="2.0" step="0.1" value="0.5" class="w-full" oninput="updateJitterCalc()">
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-brand-border text-xs leading-relaxed text-brand-muted">
+                                    <strong class="text-brand-slate">Engineering Takeaway:</strong> In high-precision 3D mapping UAVs, vibration dampening mounts and software Kalman filtering are mandatory to bound point cloud noise below 5 cm.
+                                </div>
+                            </div>
+
+                            <div class="chart-container bg-white p-3 rounded-xl border border-brand-border">
+                                <canvas id="chartJitter"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="physics-panel-vision" class="space-y-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 rounded-xl p-5 border border-brand-border space-y-3">
+                            <h3 class="font-bold text-brand-slate text-base">Ground vs. Aerial Optical Disturbances</h3>
+                            <ul class="space-y-2 text-xs text-brand-muted leading-relaxed list-disc pl-4">
+                                <li><strong>Rapid Exposure Dynamics:</strong> Transitioning from tree canopy shade into direct sunlight causes sensor saturation and temporarily blinds visual odometry.</li>
+                                <li><strong>Rolling Shutter Artifacts:</strong> Low-cost CMOS cameras reading pixel rows sequentially experience geometric image warping at speeds ≥5 m/s.</li>
+                                <li><strong>Scale Ambiguity:</strong> Monocular cameras cannot estimate absolute metric scale without baseline calibration or depth fusion.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-5 border border-brand-border space-y-3">
+                            <h3 class="font-bold text-brand-slate text-base">Computational Overhead & Power Draw</h3>
+                            <p class="text-xs text-brand-muted leading-relaxed">
+                                Processing 1080p video streams at 30 FPS for visual SLAM or optical flow consumes substantial CPU/GPU wattage. On miniature quadcopters, onboard GPU power draw (10W-15W) can match or exceed the sensor's own power drain, placing double penalties on flight duration.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="physics-panel-imu" class="space-y-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 rounded-xl p-5 border border-brand-border space-y-3">
+                            <h3 class="font-bold text-brand-slate text-base">GNSS Multipathing & Signal Jumps</h3>
+                            <p class="text-xs text-brand-muted leading-relaxed">
+                                Near urban structures or dense foliage, GPS signals bounce off vertical concrete surfaces before reaching the receiver antenna. This multipathing phenomenon results in sudden position jumps of 2 to 10 meters, easily causing collision if directly fed into motion controllers.
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-5 border border-brand-border space-y-3">
+                            <h3 class="font-bold text-brand-slate text-base">Quadratic IMU Dead Reckoning Drift</h3>
+                            <p class="text-xs text-brand-muted leading-relaxed">
+                                Double-integrating uncalibrated MEMS accelerometer readings to compute position results in quadratic error propagation over time (<span class="font-mono font-bold">E ∝ t<sup>2</sup></span>). Without visual or LiDAR velocity correction, dead reckoning drifts by tens of meters within minutes.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-tradeoffs" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-brand-border shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-slate mb-2">Power, Weight, and Mass Constraints</h2>
+                    <p class="text-brand-text leading-relaxed">
+                        In ground robotics, adding a 1 kg sensor increases motor electrical draw marginally. In aerial robotics, payload mass penalizes total flight duration non-linearly due to aerodynamic hover thrust requirements.
+                    </p>
+                </div>
+
+                <div class="bg-orange-50/60 p-6 rounded-xl border border-orange-200 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="lg:col-span-2 space-y-3">
+                        <h3 class="font-bold text-brand-slate text-lg">The UAV Hover Momentum Relationship</h3>
+                        <p class="text-xs text-brand-slate leading-relaxed">
+                            Hover thrust required (<span class="font-mono">T</span>) equals total mass times gravity (<span class="font-mono">m · g</span>). According to aerodynamic momentum theory, required hover power scales to the 1.5 exponent of thrust:
+                        </p>
+                        <div class="bg-white p-3 rounded-lg border border-orange-200 font-mono text-sm font-bold text-brand-accent inline-block">
+                            P<sub>hover</sub> ∝ T<sup>1.5</sup> ∝ (m · g)<sup>1.5</sup>
+                        </div>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            <strong>Worked Example:</strong> Adding a 500g mechanical LiDAR to a 2.0kg baseline quadcopter increases mass by 25% (1.25×). The resulting hover power draw increases by <span class="font-mono font-bold">1.25<sup>1.5</sup> ≈ 1.398×</span>—a <strong>40% increase in power consumption!</strong>
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border space-y-2 text-center">
+                        <span class="text-3xl">⚠️</span>
+                        <div class="text-xs font-bold text-brand-slate">System Penalty Triad</div>
+                        <div class="text-[11px] text-brand-muted leading-normal">
+                            Heavy Sensor → High Weight → Exponential Battery Drain → Reduced Range
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h3 class="font-bold text-brand-slate text-lg">Sensor Suite Trade-Off Matrix</h3>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <span class="text-brand-muted font-medium">Filter View:</span>
+                            <button onclick="filterSensorTable('all')" id="btn-filter-all" class="px-3 py-1 rounded bg-brand-slate text-white">All Sensors</button>
+                            <button onclick="filterSensorTable('uav')" id="btn-filter-uav" class="px-3 py-1 rounded bg-gray-100 text-brand-slate hover:bg-gray-200">UAV Suitable (&lt;300g)</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-brand-border rounded-xl">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-brand-bg text-brand-slate font-bold uppercase tracking-wider border-b border-brand-border">
+                                <tr>
+                                    <th class="p-3.5">Sensor Type</th>
+                                    <th class="p-3.5">Typical Mass</th>
+                                    <th class="p-3.5">Power Draw</th>
+                                    <th class="p-3.5">Accuracy Range</th>
+                                    <th class="p-3.5">Primary Failure Mode</th>
+                                    <th class="p-3.5">Best Engineering Use Case</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sensor-table-body" class="divide-y divide-brand-border bg-white text-brand-slate">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                    <div class="bg-brand-bg p-4 rounded-xl border border-brand-border space-y-2">
+                        <h4 class="font-bold text-brand-slate text-sm text-center">Power Draw Comparison (Watts)</h4>
+                        <div class="chart-container bg-white p-2 rounded-lg border border-brand-border">
+                            <canvas id="chartPowerComp"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-brand-bg p-4 rounded-xl border border-brand-border space-y-2">
+                        <h4 class="font-bold text-brand-slate text-sm text-center">Payload Mass Comparison (Grams)</h4>
+                        <div class="chart-container bg-white p-2 rounded-lg border border-brand-border">
+                            <canvas id="chartMassComp"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-lab" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-brand-border shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-slate mb-2">Interactive Engineering Lab: UAV Flight Time Calculator</h2>
+                    <p class="text-brand-text leading-relaxed">
+                        Test sensor suite configurations on a baseline quadcopter. Adjust drone parameters, payload mass, and onboard computer electrical draw to observe non-linear flight duration degradation curves.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="bg-brand-bg p-6 rounded-xl border border-brand-border space-y-5">
+                        <h3 class="font-bold text-brand-slate text-base border-b border-brand-border pb-2">Aircraft & Payload Parameters</h3>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-slate mb-1">Baseline Drone Mass (Excluding Payload): <span id="val-base-mass" class="font-bold text-brand-accent">1800</span> g</label>
+                            <input id="slide-base-mass" type="range" min="1000" max="4000" step="100" value="1800" class="w-full" oninput="runFlightSim()">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-slate mb-1">Battery Energy Capacity: <span id="val-batt" class="font-bold text-brand-teal">74</span> Wh (4S 5000mAh)</label>
+                            <input id="slide-batt" type="range" min="30" max="150" step="5" value="74" class="w-full" oninput="runFlightSim()">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-slate mb-1">Sensor Suite Mass: <span id="val-sensor-mass" class="font-bold text-brand-accent">500</span> g</label>
+                            <input id="slide-sensor-mass" type="range" min="20" max="1500" step="20" value="500" class="w-full" oninput="runFlightSim()">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-brand-slate mb-1">Sensor & Onboard Compute Electrical Power: <span id="val-sensor-power" class="font-bold text-brand-teal">15</span> W</label>
+                            <input id="slide-sensor-power" type="range" min="0" max="50" step="1" value="15" class="w-full" oninput="runFlightSim()">
+                        </div>
+
+                        <div class="pt-2 border-t border-brand-border space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-brand-muted">Total Launch Mass:</span>
+                                <span id="out-total-mass" class="font-bold font-mono text-brand-slate">2300 g</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-brand-muted">Total Power Draw (Hover + Elec):</span>
+                                <span id="out-total-power" class="font-bold font-mono text-brand-accent">245 W</span>
+                            </div>
+                            <div class="flex justify-between text-sm bg-white p-3 rounded-lg border border-brand-border font-bold">
+                                <span>Estimated Flight Time:</span>
+                                <span id="out-flight-time" class="text-brand-accent font-mono">18.1 mins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white p-4 rounded-xl border border-brand-border">
+                            <h3 class="font-bold text-brand-slate text-sm mb-2">Flight Time Degradation vs. Payload Mass</h3>
+                            <div class="chart-container">
+                                <canvas id="chartFlightSim"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-xs space-y-1">
+                                <div class="font-bold text-emerald-800 text-sm">Option A: Stereo Camera Suite</div>
+                                <div>Payload: 120g | Power: 2.5W</div>
+                                <div id="opt-a-res" class="font-mono text-emerald-900 font-bold">Hover Duration: ~21.8 mins</div>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-xl border border-rose-200 text-xs space-y-1">
+                                <div class="font-bold text-rose-800 text-sm">Option B: Mechanical 3D LiDAR</div>
+                                <div>Payload: 850g | Power: 18.0W</div>
+                                <div id="opt-b-res" class="font-mono text-rose-900 font-bold">Hover Duration: ~14.2 mins</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-cases" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-brand-border shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-slate mb-2">Classroom Case Studies & FSM Fault Architecture</h2>
+                    <p class="text-brand-text leading-relaxed">
+                        Examine real-world robotic failures and test automated fault recovery state machines designed to prevent dangerous multirotor crashes during sensor degradation.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-brand-bg p-5 rounded-xl border border-brand-border space-y-3">
+                        <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-brand-accent rounded-full">Case Study 1: Ground Robotics</span>
+                        <h3 class="font-bold text-brand-slate text-base">Contaminated Barrel Cleanup</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            <strong>Problem:</strong> A ground robot attempting to attach to toxic barrels missed targets because a narrow 1° LiDAR beam returned <span class="font-mono">inf</span> at distances &gt;3m.
+                        </p>
+                        <p class="text-xs text-brand-slate leading-relaxed">
+                            <strong>Engineering Solution:</strong> Re-architected system roles. Used camera blob detection for mid-range tracking while restricting LiDAR to close-range (&lt;1m) collision detection.
+                        </p>
+                    </div>
+
+                    <div class="bg-brand-bg p-5 rounded-xl border border-brand-border space-y-3">
+                        <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-teal-100 text-brand-teal rounded-full">Case Study 2: Aerial Robotics</span>
+                        <h3 class="font-bold text-brand-slate text-base">Powerline Inspection Drone</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            <strong>Problem:</strong> Solid-state LiDAR missed thin 1-2cm wire cables during rapid yawing, while stereo cameras failed due to sun glare.
+                        </p>
+                        <p class="text-xs text-brand-slate leading-relaxed">
+                            <strong>Engineering Solution:</strong> Combined high-frame-rate solid-state LiDAR (100 Hz) with IMU-driven Kalman filter, and enforced a flight speed cap (v ≤ 2 m/s) to bound braking distance.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-brand-bg p-6 rounded-xl border border-brand-border space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="font-bold text-brand-slate text-base">Interactive FSM Simulator: Autonomous Degraded Sensor Recovery</h3>
+                            <p class="text-xs text-brand-muted">Simulate environmental degradation and observe autonomous state transitions.</p>
+                        </div>
+                        <button onclick="triggerFSMStep()" class="px-4 py-2 bg-brand-accent text-white font-semibold text-xs rounded-lg hover:bg-brand-accentHover transition-all">Simulate Environmental Step</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
+                        <div id="fsm-node-nominal" class="p-4 rounded-xl border-2 border-brand-emerald bg-emerald-50 text-brand-slate transition-all">
+                            <div class="text-xs font-bold uppercase text-brand-emerald">State 1</div>
+                            <div class="font-bold text-sm">Nominal Mission</div>
+                            <div class="text-[10px] text-brand-muted mt-1">Normal SLAM / Pathing</div>
+                        </div>
+                        <div id="fsm-node-degraded" class="p-4 rounded-xl border-2 border-brand-border bg-white text-brand-slate transition-all">
+                            <div class="text-xs font-bold uppercase text-brand-muted">State 2</div>
+                            <div class="font-bold text-sm">Sensor Degraded</div>
+                            <div class="text-[10px] text-brand-muted mt-1">Dust / Zero LiDAR Points</div>
+                        </div>
+                        <div id="fsm-node-recover" class="p-4 rounded-xl border-2 border-brand-border bg-white text-brand-slate transition-all">
+                            <div class="text-xs font-bold uppercase text-brand-muted">State 3</div>
+                            <div class="font-bold text-sm">Altitude Hold</div>
+                            <div class="text-[10px] text-brand-muted mt-1">IMU + Barometer Lock</div>
+                        </div>
+                        <div id="fsm-node-rth" class="p-4 rounded-xl border-2 border-brand-border bg-white text-brand-slate transition-all">
+                            <div class="text-xs font-bold uppercase text-brand-muted">State 4</div>
+                            <div class="font-bold text-sm">Controlled Land / RTH</div>
+                            <div class="text-[10px] text-brand-muted mt-1">Failsafe Return</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-slate text-emerald-400 font-mono p-4 rounded-xl text-xs space-y-1 h-32 overflow-y-auto" id="fsm-console">
+                        <div>[SYSTEM] System Initialized in NOMINAL STATE. All sensor streams valid.</div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 pt-4">
+                    <h3 class="font-bold text-brand-slate text-lg">Seminar Discussion Prompts & Instructor Guide</h3>
+
+                    <details class="bg-white rounded-xl border border-brand-border p-4 cursor-pointer group">
+                        <summary class="font-semibold text-brand-slate text-sm group-hover:text-brand-accent flex justify-between items-center">
+                            <span>Q1: Why might a $50 ultrasonic sensor be preferable to a $1,500 lightweight LiDAR for low-altitude UAV hold?</span>
+                            <span class="text-brand-muted group-open:rotate-180 transition-transform">▼</span>
+                        </summary>
+                        <div class="mt-3 text-xs text-brand-muted leading-relaxed border-t border-brand-border pt-3">
+                            <strong class="text-brand-slate">Instructor Key Points:</strong> Ultrasonic rangefinders draw &lt;0.5W, weigh under 30g, require minimal CPU overhead, and operate with high reliability over flat, non-absorbing surfaces like concrete or water where specular LiDAR beams scatter.
+                        </div>
+                    </details>
+
+                    <details class="bg-white rounded-xl border border-brand-border p-4 cursor-pointer group">
+                        <summary class="font-semibold text-brand-slate text-sm group-hover:text-brand-accent flex justify-between items-center">
+                            <span>Q2: Why does sensor accuracy degrade in real hardware compared to simulation models?</span>
+                            <span class="text-brand-muted group-open:rotate-180 transition-transform">▼</span>
+                        </summary>
+                        <div class="mt-3 text-xs text-brand-muted leading-relaxed border-t border-brand-border pt-3">
+                            <strong class="text-brand-slate">Instructor Key Points:</strong> Simulators primarily use simple Gaussian noise models. Real deployments encounter non-Gaussian environmental noise such as propeller downwash dust turbulence, direct camera sun glare, motor acoustic harmonics, thermal IMU drift, and non-Lambertian surface reflections.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-brand-border py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-brand-muted space-y-1">
+            <p>Teaching Module: Sensor Evaluation & Engineering Trade-Offs in Robotics and UAVs</p>
+            <p>Undergraduate & Master's Level Engineering Course Resource</p>
+        </div>
+    </footer>
+
+    <script>
+        const sensorData = [
+            { name: ["Mechanical 3D", "LiDAR"], rawName: "Mechanical 3D LiDAR", mass: 850, power: 22, accuracy: "±1-3 cm", failure: "Vibration, Mass, Power", usecase: "High-Precision 3D Mapping", uav: false },
+            { name: ["Solid-State", "LiDAR"], rawName: "Solid-State LiDAR", mass: 200, power: 4, accuracy: "±3-5 cm", failure: "Narrow FOV (60°-90°)", usecase: "Frontal Obstacle Avoidance", uav: true },
+            { name: ["Stereo Camera", "Suite"], rawName: "Stereo Camera Suite", mass: 100, power: 2.2, accuracy: "Medium (Degrades w/ range)", failure: "Low Light, Featureless Surfaces", usecase: "Close-range VIO & Landing", uav: true },
+            { name: ["Ultrasonic", "Rangefinder"], rawName: "Ultrasonic Rangefinder", mass: 20, power: 0.3, accuracy: "±5-10 cm", failure: "Soft Surfaces, Angular Limits", usecase: "Low-Altitude Terrain Hold", uav: true }
+        ];
+
+        let chartJitterInstance = null;
+        let chartPowerCompInstance = null;
+        let chartMassCompInstance = null;
+        let chartFlightSimInstance = null;
+
+        function switchTab(tabId) {
+            ['overview', 'physics', 'tradeoffs', 'lab', 'cases'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`nav-${t}`).classList.remove('active');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabId}`).classList.add('active');
+
+            if (tabId === 'physics' && !chartJitterInstance) initJitterChart();
+            if (tabId === 'tradeoffs' && !chartPowerCompInstance) initTradeoffCharts();
+            if (tabId === 'lab') {
+                if (!chartFlightSimInstance) initFlightSimChart();
+                runFlightSim();
+            }
+        }
+
+        function setSensorPhysicsTab(type) {
+            ['lidar', 'vision', 'imu'].forEach(t => {
+                document.getElementById(`physics-panel-${t}`).classList.add('hidden');
+                document.getElementById(`physics-btn-${t}`).className = "px-4 py-2 text-sm font-semibold rounded-lg bg-gray-100 text-brand-slate hover:bg-gray-200 transition-all";
+            });
+
+            document.getElementById(`physics-panel-${type}`).classList.remove('hidden');
+            document.getElementById(`physics-btn-${type}`).className = "px-4 py-2 text-sm font-semibold rounded-lg bg-brand-accent text-white transition-all";
+        }
+
+        function initJitterChart() {
+            const ctx = document.getElementById('chartJitter').getContext('2d');
+            chartJitterInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                    datasets: [{
+                        label: ['Positional Drift', 'Δy (meters)'],
+                        data: [],
+                        borderColor: '#C85A32',
+                        backgroundColor: 'rgba(200, 90, 50, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                },
+                                label: (ctx) => ` Error: ${ctx.raw.toFixed(2)} meters`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Target Distance r (m)', font: { size: 10 } } },
+                        y: { title: { display: true, text: 'Positional Error Δy (m)', font: { size: 10 } }, beginAtZero: true }
+                    }
+                }
+            });
+            updateJitterCalc();
+        }
+
+        function updateJitterCalc() {
+            const r = parseFloat(document.getElementById('slider-range').value);
+            const angleDeg = parseFloat(document.getElementById('slider-angle').value);
+
+            document.getElementById('lbl-range').innerText = r;
+            document.getElementById('lbl-angle').innerText = angleDeg;
+
+            const angleRad = angleDeg * (Math.PI / 180);
+            const err = r * Math.tan(angleRad);
+
+            document.getElementById('jitter-r-val').innerText = `${r} m`;
+            document.getElementById('jitter-angle-val').innerText = `${angleDeg}°`;
+            document.getElementById('jitter-err-val').innerText = `${err.toFixed(2)} m`;
+
+            if (chartJitterInstance) {
+                const distances = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+                chartJitterInstance.data.datasets[0].data = distances.map(d => d * Math.tan(angleRad));
+                chartJitterInstance.update();
+            }
+        }
+
+        function populateSensorTable(filter = 'all') {
+            const tbody = document.getElementById('sensor-table-body');
+            tbody.innerHTML = '';
+
+            sensorData.forEach(s => {
+                if (filter === 'uav' && !s.uav) return;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-brand-slate">${s.rawName}</td>
+                    <td class="p-3.5 font-mono">${s.mass} g</td>
+                    <td class="p-3.5 font-mono text-brand-accent">${s.power} W</td>
+                    <td class="p-3.5">${s.accuracy}</td>
+                    <td class="p-3.5 text-red-600">${s.failure}</td>
+                    <td class="p-3.5 text-brand-teal font-medium">${s.usecase}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterSensorTable(type) {
+            document.getElementById('btn-filter-all').className = type === 'all' ? "px-3 py-1 rounded bg-brand-slate text-white" : "px-3 py-1 rounded bg-gray-100 text-brand-slate hover:bg-gray-200";
+            document.getElementById('btn-filter-uav').className = type === 'uav' ? "px-3 py-1 rounded bg-brand-slate text-white" : "px-3 py-1 rounded bg-gray-100 text-brand-slate hover:bg-gray-200";
+            populateSensorTable(type);
+        }
+
+        function initTradeoffCharts() {
+            const labels = sensorData.map(s => s.name);
+
+            const ctxPower = document.getElementById('chartPowerComp').getContext('2d');
+            chartPowerCompInstance = new Chart(ctxPower, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: sensorData.map(s => s.power),
+                        backgroundColor: '#C85A32'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { title: { display: true, text: 'Watts (W)' }, beginAtZero: true } }
+                }
+            });
+
+            const ctxMass = document.getElementById('chartMassComp').getContext('2d');
+            chartMassCompInstance = new Chart(ctxMass, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: sensorData.map(s => s.mass),
+                        backgroundColor: '#2A7B88'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { title: { display: true, text: 'Mass (Grams)' }, beginAtZero: true } }
+                }
+            });
+        }
+
+        function initFlightSimChart() {
+            const ctx = document.getElementById('chartFlightSim').getContext('2d');
+            chartFlightSimInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: ['Hover Flight Time', '(Minutes)'],
+                        data: [],
+                        borderColor: '#2A7B88',
+                        backgroundColor: 'rgba(42, 123, 136, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                },
+                                label: (c) => ` ${c.raw.toFixed(1)} minutes hover`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Added Payload Mass (Grams)' } },
+                        y: { title: { display: true, text: 'Flight Duration (Mins)' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function runFlightSim() {
+            const baseMass = parseFloat(document.getElementById('slide-base-mass').value);
+            const battWh = parseFloat(document.getElementById('slide-batt').value);
+            const sensorMass = parseFloat(document.getElementById('slide-sensor-mass').value);
+            const sensorPower = parseFloat(document.getElementById('slide-sensor-power').value);
+
+            document.getElementById('val-base-mass').innerText = baseMass;
+            document.getElementById('val-batt').innerText = battWh;
+            document.getElementById('val-sensor-mass').innerText = sensorMass;
+            document.getElementById('val-sensor-power').innerText = sensorPower;
+
+            const baseHoverPower = 200;
+            const totalMass = baseMass + sensorMass;
+
+            const aeroHoverPower = baseHoverPower * Math.pow(totalMass / baseMass, 1.5);
+            const totalPower = aeroHoverPower + sensorPower;
+
+            const flightTimeHrs = battWh / totalPower;
+            const flightTimeMins = flightTimeHrs * 60;
+
+            document.getElementById('out-total-mass').innerText = `${totalMass} g`;
+            document.getElementById('out-total-power').innerText = `${Math.round(totalPower)} W`;
+            document.getElementById('out-flight-time').innerText = `${flightTimeMins.toFixed(1)} mins`;
+
+            const pA = baseHoverPower * Math.pow((baseMass + 120) / baseMass, 1.5) + 2.5;
+            const tA = (battWh / pA) * 60;
+            document.getElementById('opt-a-res').innerText = `Hover Duration: ~${tA.toFixed(1)} mins`;
+
+            const pB = baseHoverPower * Math.pow((baseMass + 850) / baseMass, 1.5) + 18.0;
+            const tB = (battWh / pB) * 60;
+            document.getElementById('opt-b-res').innerText = `Hover Duration: ~${tB.toFixed(1)} mins`;
+
+            if (chartFlightSimInstance) {
+                const payloadSteps = [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600];
+                const timeCurve = payloadSteps.map(p => {
+                    const P = baseHoverPower * Math.pow((baseMass + p) / baseMass, 1.5) + sensorPower;
+                    return (battWh / P) * 60;
+                });
+
+                chartFlightSimInstance.data.labels = payloadSteps.map(p => `${p}g`);
+                chartFlightSimInstance.data.datasets[0].data = timeCurve;
+                chartFlightSimInstance.update();
+            }
+        }
+
+        let fsmState = 0;
+        const fsmStates = ['nominal', 'degraded', 'recover', 'rth'];
+
+        function triggerFSMStep() {
+            fsmState = (fsmState + 1) % 4;
+            const consoleBox = document.getElementById('fsm-console');
+
+            fsmStates.forEach(s => {
+                const node = document.getElementById(`fsm-node-${s}`);
+                node.className = "p-4 rounded-xl border-2 border-brand-border bg-white text-brand-slate transition-all";
+            });
+
+            const currentStr = fsmStates[fsmState];
+            const activeNode = document.getElementById(`fsm-node-${currentStr}`);
+
+            let logMsg = "";
+            if (currentStr === 'nominal') {
+                activeNode.className = "p-4 rounded-xl border-2 border-brand-emerald bg-emerald-50 text-brand-slate transition-all";
+                logMsg = "[INFO] All sensors nominal. Executing path velocity command v = 3.0 m/s.";
+            } else if (currentStr === 'degraded') {
+                activeNode.className = "p-4 rounded-xl border-2 border-amber-500 bg-amber-50 text-brand-slate transition-all";
+                logMsg = "[WARN] Prop-wash dust threshold exceeded! LiDAR valid returns dropped below 10%. Entropy threshold breached (>500ms).";
+            } else if (currentStr === 'recover') {
+                activeNode.className = "p-4 rounded-xl border-2 border-brand-accent bg-orange-50 text-brand-slate transition-all";
+                logMsg = "[CRITICAL] Transitioning to ALTITUDE HOLD. Locking position via IMU dead reckoning and Barometer telemetry.";
+            } else if (currentStr === 'rth') {
+                activeNode.className = "p-4 rounded-xl border-2 border-red-600 bg-red-50 text-brand-slate transition-all";
+                logMsg = "[FAILSAFE] Initiating vertical land and automated Return-To-Home (RTH) sequence.";
+            }
+
+            const div = document.createElement('div');
+            div.innerText = logMsg;
+            consoleBox.appendChild(div);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            populateSensorTable();
+        });
+    </script>
+</body>
+</html>

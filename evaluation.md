@@ -4,6 +4,8 @@
 
 - [PDF](evals.pdf)
 
+- [Evaluation app](sensor_evaluation_app.html)
+
 
 ## Example of LIDAR
 
