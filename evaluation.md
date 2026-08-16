@@ -2,6 +2,9 @@
 
 - How to evaluate your systems (robots, UAVs)?
 
+- [PDF](evals.pdf)
+
+
 ## Example of LIDAR
 
 LiDAR works like "laser radar"—it fires invisible light beams and measures how long they take to bounce back to calculate precise distances. Here is how the LiDAR was evaluated in this ground robot report, along with how that same process translates to flying drones (UAVs).
