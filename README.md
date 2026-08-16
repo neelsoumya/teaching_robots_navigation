@@ -12,6 +12,8 @@ Teaching robot navigation
 - [drones](drones_indoor.md)
 - [LLMs and robots](LLM_robots.md)
 - [ROS](ROS.md)
+- [Evaluation](evaluation.md)
+
 
 
 
