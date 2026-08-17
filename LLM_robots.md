@@ -67,4 +67,294 @@
 
 
 
+## Practicals
 
+Here is the complete set of resources, theoretical foundations, code examples, and Google Colab notebook structure formatted in standard Markdown. You can copy and paste this text directly into your course repository or `README.md` file.
+
+---
+
+
+
+---
+
+## 1. Theoretical Foundations: VLMs vs. VLAs
+
+When introducing multimodal embodied AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
+
+* **Vision-Language Models (VLMs):** Models like GPT-4o, Gemini, or SayCan take images and text prompts as input and output high-level textual descriptions, symbolic plans, or code (e.g., generating Python scripts for MoveIt 2). They operate in symbolic/discrete space and rely on downstream controllers to execute physical motion.
+* **Vision-Language-Action (VLA) Models:** Models like OpenVLA, Octo, and $\pi_0$ process camera frames and text instructions to directly output continuous motor control parameters—typically $7\text{-DoF}$ continuous pose deltas $(x, y, z, \text{roll}, \text{pitch}, \text{yaw}, \text{gripper})$. They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
+
+
+
+---
+
+## 2. Curated Open-Source Teaching Resources
+
+| Resource / Framework | Maintainer / Institution | Key Educational Utility | Primary Focus |
+| --- | --- | --- | --- |
+| **LeRobot (`lerobot`)** | Hugging Face | Open-source framework providing lightweight dataset loaders, PyTorch policy implementations (ACT, Diffusion Policy, SmolVLA), and physical robot control interfaces.
+
+ | Undergraduate practicals & physical hardware deployment. |
+| **OpenVLA Ecosystem** | Stanford Vision & Learning Lab | 7B-parameter generalist manipulation model trained on the Open X-Embodiment dataset. Integrates natively with Hugging Face `transformers`.
+
+ | Advanced undergraduate/postgraduate demonstration of end-to-end continuous action prediction.
+
+ |
+| **Open X-Embodiment** | Global Research Consortium | Standardized dataset spanning over 1 million real-world robot trajectories across 22 distinct hardware embodiments.
+
+ | Demonstrating multi-robot cross-embodiment generalization and dataset standardization.
+
+ |
+
+---
+
+## 3. Standalone Python Practical Scripts
+
+### Script A: Conceptual Minimal VLA Model (Zero-GPU Required)
+
+This self-contained script uses standard PyTorch components to illustrate how visual feature extraction and text embeddings concatenate to output a continuous $7\text{-DoF}$ robot trajectory vector. It runs instantly on any standard CPU.
+
+```python
+import torch
+import torch.nn as nn
+
+class ConceptualVLA(nn.Module):
+    """
+    Minimal conceptual VLA architecture for classroom demonstration.
+    Demonstrates how vision tokens and language embeddings fuse
+    to predict continuous 7-DoF robot motor commands.
+    """
+    def __init__(self):
+        super().__init__()
+        # 1. Vision Backbone: Simulates SigLIP / DINOv2 feature extraction
+        self.vision_encoder = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5, stride=2),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool2d((1, 1)),
+            nn.Flatten()
+        )
+        
+        # 2. Language Backbone: Simulates LLM Token Embedding layer
+        self.text_embedding = nn.Embedding(num_embeddings=200, embedding_dim=32)
+        
+        # 3. Action Head: Predicts 7-DoF (dx, dy, dz, droll, dpitch, dyaw, gripper)
+        self.action_head = nn.Sequential(
+            nn.Linear(32 + 32, 64),
+            nn.ReLU(),
+            nn.Linear(64, 7)
+        )
+
+    def forward(self, image_tensor, text_tokens):
+        # Extract features from both input modalities
+        visual_feats = self.vision_encoder(image_tensor)
+        text_feats = self.text_embedding(text_tokens).mean(dim=1)
+        
+        # Multimodal fusion via feature concatenation
+        fused_context = torch.cat([visual_feats, text_feats], dim=-1)
+        
+        # Output continuous 7-DoF motor control vector
+        action_vector = self.action_head(fused_context)
+        return action_vector
+
+if __name__ == "__main__":
+    # Instantiate toy model
+    vla = ConceptualVLA()
+    
+    # 1. Simulate RGB Camera Frame (Batch=1, Channels=3, Height=224, Width=224)
+    simulated_camera_frame = torch.randn(1, 3, 224, 224)
+    
+    # 2. Simulate Tokenized Instruction: "Pick up the red block"
+    simulated_prompt_tokens = torch.tensor([[12, 45, 89, 102]])
+    
+    # 3. Forward pass
+    predicted_action = vla(simulated_camera_frame, simulated_prompt_tokens)
+    
+    labels = ["dx (m)", "dy (m)", "dz (m)", "droll (rad)", "dpitch (rad)", "dyaw (rad)", "gripper (0-1)"]
+    values = predicted_action.detach().numpy()[0]
+    
+    print("=" * 50)
+    print("  SIMULATED VLA PREDICTED 7-DoF ACTION OUTPUT")
+    print("=" * 50)
+    for label, val in zip(labels, values):
+        print(f"  {label:<15}: {val:+.4f}")
+    print("=" * 50)
+
+```
+
+---
+
+### Script B: Quantized Real OpenVLA 7B Inference (4-bit via `bitsandbytes`)
+
+Standard OpenVLA in 16-bit precision requires over $16\text{ GB}$ of VRAM. Applying 4-bit quantization via `bitsandbytes` reduces the VRAM requirement down to approximately $5\text{ GB}$ to $7\text{ GB}$, making real inference accessible on consumer GPUs or Google Colab T4 runtimes.
+
+```python
+import torch
+from PIL import Image
+import requests
+from transformers import AutoModelForVision2Seq, AutoProcessor, BitsAndBytesConfig
+
+# 1. Configure 4-bit quantization to fit within limited GPU VRAM
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+print("Loading OpenVLA-7B model and processor...")
+
+# 2. Load OpenVLA Processor and Quantized Weights
+processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+vla_model = AutoModelForVision2Seq.from_pretrained(
+    "openvla/openvla-7b",
+    quantization_config=quantization_config,
+    low_cpu_mem_usage=True,
+    trust_remote_code=True
+)
+
+# 3. Download sample tabletop camera frame
+img_url = "https://raw.githubusercontent.com/openvla/openvla/main/assets/bridge_example.png"
+image = Image.open(requests.get(img_url, stream=True).raw).convert("RGB")
+
+# 4. Formulate task instruction
+prompt = "In: What action should the robot take to pick up the cucumber? \nOut:"
+
+# 5. Predict action vector
+inputs = processor(prompt, image).to("cuda")
+predicted_action = vla_model.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+
+print("\n" + "=" * 50)
+print("  OPENVLA REAL-WORLD PREDICTED ACTION VECTOR")
+print("=" * 50)
+print("Action Vector [x, y, z, roll, pitch, yaw, gripper]:")
+print(predicted_action)
+print("=" * 50)
+
+```
+
+---
+
+## 4. Google Colab Notebook Structure (`.ipynb` Ready)
+
+Below is the cell-by-cell Markdown structure for setting up a complete Google Colab practical session for students.
+
+# 🤖 Lab Session: Introduction to Vision-Language-Action (VLA) Models
+
+**Module:** Autonomous Mobile Robotics & VLA Architectures
+
+**Runtime Requirements:**
+
+* **Part 1:** CPU or GPU (Instant Execution)
+* **Part 2:** T4 GPU (`Runtime` -> `Change runtime type` -> `T4 GPU`)
+
+---
+
+## Setup Dependenciesbash
+
+
+```python
+!pip install -q torch torchvision transformers accelerate bitsandbytes pillow timm
+
+```
+
+---
+
+## Part 1: Conceptual VLA Architecture (Zero-GPU / Instant Execution)
+
+This section demonstrates the internal components of a VLA:
+1. Processing a camera image through a **Vision Encoder**.
+2. Processing a text prompt through a **Language Encoder**.
+3. Fusing representations to predict continuous **7-DoF motor actions** $(dx, dy, dz, d\text{roll}, d\text{pitch}, d\text{yaw}, \text{gripper})$.
+
+```python
+import torch
+import torch.nn as nn
+
+class MinimalVLA(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.vision_backbone = nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=5, stride=2),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool2d((1, 1)),
+            nn.Flatten()
+        )
+        self.text_embedding = nn.Embedding(200, 32)
+        self.action_head = nn.Sequential(
+            nn.Linear(32 + 32, 64),
+            nn.ReLU(),
+            nn.Linear(64, 7)
+        )
+
+    def forward(self, image_tensor, text_tokens):
+        visual_feats = self.vision_backbone(image_tensor)
+        text_feats = self.text_embedding(text_tokens).mean(dim=1)
+        fused_context = torch.cat([visual_feats, text_feats], dim=-1)
+        return self.action_head(fused_context)
+
+# Execution
+model = MinimalVLA()
+simulated_image = torch.randn(1, 3, 224, 224)
+simulated_tokens = torch.tensor([[12, 45, 89, 102]])
+
+predicted_actions = model(simulated_image, simulated_tokens)
+labels = ["dx (m)", "dy (m)", "dz (m)", "droll (rad)", "dpitch (rad)", "dyaw (rad)", "gripper (0-1)"]
+
+print("=" * 50)
+print("  CONCEPTUAL VLA 7-DoF PREDICTION OUTPUT")
+print("=" * 50)
+for label, val in zip(labels, predicted_actions.detach().numpy()[0]):
+    print(f"  {label:<15}: {val:+.4f}")
+print("=" * 50)
+
+```
+
+---
+
+## Part 2: Real-World OpenVLA 7B Inference (Requires T4 GPU)
+
+This section loads OpenVLA-7B using **4-bit quantization (`bitsandbytes`)**. 4-bit quantization reduces GPU memory usage from $16\text{ GB}$ down to $\sim 5\text{ GB}$, fitting within the free Google Colab T4 GPU quota.
+
+```python
+import torch
+from PIL import Image
+import requests
+from transformers import AutoModelForVision2Seq, AutoProcessor, BitsAndBytesConfig
+
+# 1. Configure 4-Bit Quantization
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+print("Loading OpenVLA-7B processor and quantized model...")
+
+# 2. Load Model & Processor
+processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+vla_model = AutoModelForVision2Seq.from_pretrained(
+    "openvla/openvla-7b",
+    quantization_config=quantization_config,
+    low_cpu_mem_usage=True,
+    trust_remote_code=True
+)
+
+# 3. Download Test Image
+img_url = "[https://raw.githubusercontent.com/openvla/openvla/main/assets/bridge_example.png](https://raw.githubusercontent.com/openvla/openvla/main/assets/bridge_example.png)"
+image = Image.open(requests.get(img_url, stream=True).raw).convert("RGB")
+
+# 4. Define Prompt
+prompt = "In: What action should the robot take to pick up the cucumber? \nOut:"
+
+# 5. Predict Action Vector
+inputs = processor(prompt, image).to("cuda")
+predicted_action = vla_model.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+
+print("\n" + "=" * 50)
+print("  OPENVLA PREDICTED 7-DoF ACTION VECTOR")
+print("=" * 50)
+print(predicted_action)
+print("=" * 50)
+
+```
+
+```
+
+```
