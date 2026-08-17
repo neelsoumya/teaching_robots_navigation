@@ -2,8 +2,8 @@
 
 - ROS system for robotics
 
+- [link](https://docs.ros.org/en/humble/index.html)
 
-Here is the complete introductory guide, operational principles, teaching notes, and educational resources for ROS 2 formatted in standard Markdown.
 
 ---
 
@@ -29,6 +29,507 @@ The Robot Operating System (ROS 2) is an open-source middleware framework design
 +-------------------------------------------------------------+
 
 ```
+
+
+- The Robot Operating System (ROS) is a set of software libraries and tools for building robot applications. From drivers and state-of-the-art algorithms to powerful developer tools, ROS has the open source tools you need for your next robotics project.
+
+## Key Concepts
+
+                    ROS COMPUTATION GRAPH
+
+             ┌───────────────┐
+             │     NODE      │
+             │  computation  │
+             └───────┬───────┘
+                     │
+                  publishes
+                     │
+                     ▼
+             ┌───────────────┐
+             │     TOPIC     │
+             │ communication │
+             └───────┬───────┘
+                     │
+                subscribes
+                     │
+                     ▼
+             ┌───────────────┐
+             │     NODE      │
+             │  computation  │
+             └───────────────┘
+
+
+
+SENSING             THINKING             ACTING
+
+ Camera ──┐
+          │
+ LiDAR ───┼──► Perception ──► Planning ──► Control ──► Motors
+          │
+ Encoders ┘
+
+
+
+## Ideas
+
+Absolutely. A **ROS computation graph** is a very good way to introduce robotics because it makes ROS feel much less mysterious: essentially, you have a collection of programs (**nodes**) that communicate by passing messages.
+
+## 1. The simplest possible ROS computation graph
+
+Imagine a small robot with a camera that detects objects.
+
+You might have three nodes:
+
+```text
+             Image messages
+   ┌──────────────────────────────┐
+   │                              ▼
+┌───────────┐              ┌───────────────┐
+│  Camera   │ ────────────► │ Object        │
+│   Node    │   /camera/   │ Detection     │
+└───────────┘    image      │    Node       │
+                            └───────┬───────┘
+                                    │
+                                    │ /objects
+                                    ▼
+                            ┌───────────────┐
+                            │   Robot       │
+                            │   Controller  │
+                            └───────────────┘
+```
+
+The important idea is:
+
+**Node → Topic → Node**
+
+A ROS computation graph is essentially a network of these communicating components.
+
+---
+
+# 2. What is a node?
+
+A **node** is simply a program that performs some job.
+
+For example:
+
+* `camera_node` — gets images from a camera
+* `lidar_node` — gets measurements from a LiDAR
+* `localization_node` — estimates where the robot is
+* `planner_node` — decides where the robot should go
+* `controller_node` — converts that decision into motor commands
+
+You can think of nodes as **independent computational processes**.
+
+For example:
+
+```text
+camera_node.py
+```
+
+might continuously do:
+
+```python
+while True:
+    image = camera.read()
+    publish(image)
+```
+
+while another program does:
+
+```python
+while True:
+    image = receive()
+    objects = detect_objects(image)
+    publish(objects)
+```
+
+ROS provides the infrastructure for those two programs to communicate.
+
+---
+
+# 3. Topics are the communication channels
+
+Suppose the camera publishes images onto:
+
+```text
+/camera/image
+```
+
+The object detector subscribes to that topic.
+
+So:
+
+```text
+Camera Node
+     │
+     │ publishes
+     ▼
+/camera/image
+     │
+     │ subscribes
+     ▼
+Object Detection Node
+```
+
+The topic is like a **named communication channel**.
+
+The camera doesn't need to know who is listening.
+
+It simply says:
+
+> "I am publishing images on `/camera/image`."
+
+Any node interested in those images can subscribe.
+
+---
+
+# 4. A slightly more realistic robot
+
+Now imagine a mobile robot navigating around a room.
+
+It has:
+
+* a LiDAR
+* a camera
+* wheel encoders
+* a localization system
+* a path planner
+* a motor controller
+
+The computation graph might look like this:
+
+```text
+                         ┌─────────────────┐
+                         │     Camera      │
+                         │      Node       │
+                         └────────┬────────┘
+                                  │
+                                  │ /camera/image
+                                  ▼
+                         ┌─────────────────┐
+                         │ Object Detection│
+                         │      Node       │
+                         └────────┬────────┘
+                                  │
+                                  │ /objects
+                                  │
+                                  ▼
+┌──────────────┐          ┌─────────────────┐
+│    LiDAR     │          │                 │
+│     Node     │─────────►│   Localisation  │
+└──────────────┘ /scan    │      Node       │
+                          │                 │
+┌──────────────┐          └────────┬────────┘
+│ Wheel Encoder│                   │
+│     Node     │───────────────────┘
+└──────────────┘                   │
+                                   │ /pose
+                                   ▼
+                          ┌─────────────────┐
+                          │     Planner     │
+                          │      Node       │
+                          └────────┬────────┘
+                                   │
+                                   │ /cmd_vel
+                                   ▼
+                          ┌─────────────────┐
+                          │    Controller   │
+                          │      Node       │
+                          └────────┬────────┘
+                                   │
+                                   ▼
+                                Motors
+```
+
+This is the sort of diagram I would show students.
+
+---
+
+# 5. The really important distinction: node vs topic
+
+This is probably the first conceptual hurdle for beginners.
+
+### Node = computation
+
+Something that **does something**.
+
+```text
+Camera Node
+LiDAR Node
+Planner Node
+Controller Node
+```
+
+### Topic = communication
+
+Something that **carries information between nodes**.
+
+```text
+/camera/image
+/scan
+/odom
+/pose
+/cmd_vel
+```
+
+So:
+
+```text
+        COMPUTATION              COMMUNICATION
+
+       ┌─────────┐
+       │  Node A │
+       └────┬────┘
+            │
+            │ publishes
+            ▼
+       ┌─────────┐
+       │  Topic  │
+       └────┬────┘
+            │
+            │ subscribes
+            ▼
+       ┌─────────┐
+       │  Node B │
+       └─────────┘
+```
+
+---
+
+# 6. Why is this useful?
+
+This architecture means that you can replace individual components without rewriting the whole robot.
+
+For example, suppose you have:
+
+```text
+Camera → Object Detector → Planner → Controller
+```
+
+You could replace the object detector with a better AI model:
+
+```text
+Camera → YOLO → Planner → Controller
+```
+
+without changing the camera or controller.
+
+Or replace it again:
+
+```text
+Camera → Vision Transformer → Planner → Controller
+```
+
+The interfaces remain the same.
+
+This is one of the big ideas behind ROS.
+
+---
+
+# 7. A very nice teaching example: "robot sees a wall"
+
+I'd actually recommend using an extremely simple example for your first ROS lecture.
+
+Suppose a robot has a LiDAR.
+
+The LiDAR publishes:
+
+```text
+/scan
+```
+
+The data might look conceptually like:
+
+```text
+        LiDAR
+
+          ↑
+          │
+      distance = 2.3 m
+
+     ┌───────────┐
+     │           │
+     │   ROBOT   │
+     │     ●     │
+     │           │
+     └───────────┘
+```
+
+The LiDAR node publishes the measurement:
+
+```text
+/scan
+     │
+     ▼
+┌─────────────┐
+│ Wall         │
+│ Detector     │
+└──────┬──────┘
+       │
+       │ /wall_distance
+       ▼
+┌─────────────┐
+│ Controller  │
+└──────┬──────┘
+       │
+       │ /cmd_vel
+       ▼
+     Motors
+```
+
+The controller might implement:
+
+```python
+if wall_distance < 0.5:
+    stop()
+else:
+    move_forward()
+```
+
+Suddenly students can see the whole ROS concept:
+
+**sensor → computation → decision → actuator**
+
+---
+
+# 8. ROS also has services
+
+Topics aren't the only communication mechanism.
+
+ROS has several important communication patterns.
+
+### Topics
+
+For continuous streams:
+
+```text
+Camera ──────► images ──────► Vision
+LiDAR  ──────► scans  ──────► Planner
+```
+
+### Services
+
+For a request/response:
+
+```text
+Navigation Node
+       │
+       │ "Please save map"
+       ▼
+    Service
+       │
+       ▼
+   Map Server
+       │
+       │ "Done"
+       ▼
+Navigation Node
+```
+
+A service is more like calling a function:
+
+```python
+result = save_map()
+```
+
+whereas a topic is more like a stream:
+
+```python
+while True:
+    image = get_next_image()
+```
+
+---
+
+# 9. Actions
+
+ROS also has **actions**, which are particularly useful for robotics.
+
+Imagine telling a robot:
+
+> "Go to the kitchen."
+
+That isn't an instantaneous operation. It might take 30 seconds.
+
+So you have:
+
+```text
+            "Go to kitchen"
+                  │
+                  ▼
+            ┌──────────┐
+            │ Navigation│
+            │   Action  │
+            └─────┬────┘
+                  │
+        ┌─────────┼─────────┐
+        ▼         ▼         ▼
+      Goal     Feedback    Result
+                 │
+                 ▼
+          "50% complete"
+```
+
+The robot can therefore:
+
+* receive a goal
+* provide feedback
+* eventually return a result
+* potentially cancel the operation
+
+This is very common in robotics.
+
+---
+
+# 10. The mental model I'd give your students
+
+I'd boil ROS down to this:
+
+```text
+                    ROS COMPUTATION GRAPH
+
+             ┌───────────────┐
+             │     NODE      │
+             │  computation  │
+             └───────┬───────┘
+                     │
+                  publishes
+                     │
+                     ▼
+             ┌───────────────┐
+             │     TOPIC     │
+             │ communication │
+             └───────┬───────┘
+                     │
+                subscribes
+                     │
+                     ▼
+             ┌───────────────┐
+             │     NODE      │
+             │  computation  │
+             └───────────────┘
+```
+
+And then connect it to the robotics pipeline:
+
+```text
+SENSING             THINKING             ACTING
+
+ Camera ──┐
+          │
+ LiDAR ───┼──► Perception ──► Planning ──► Control ──► Motors
+          │
+ Encoders ┘
+```
+
+**ROS is the infrastructure that lets all these pieces communicate.**
+
+That is, I think, the single most important intuition to establish before getting into ROS 2 commands, packages, launch files, `rclpy`, messages, QoS, TF2, Nav2, etc.
+
+
+
+
+
 
 ### Key Architectural Concepts
 
