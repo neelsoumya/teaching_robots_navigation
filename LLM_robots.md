@@ -66,6 +66,14 @@
 ![image](https://arxiv.org/html/2505.04769v2/ARpdf.png)
 
 
+## Link to competence and performance
+
+- Explainability important
+
+- But LLMs may hallucinate
+
+- See [competence vs performance lecture](competence_vs_performace_robotics.md)
+
 
 ## Practicals
 
