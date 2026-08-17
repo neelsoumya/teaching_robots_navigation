@@ -13,9 +13,10 @@ Teaching robot navigation
 - [LLMs and robots](LLM_robots.md)
 - [ROS](ROS.md)
 - [Evaluation](evaluation.md)
+- [Safety and Ethics](safety_ethics.md)
 
 
-
+## Additional material (TBD)
 
 01_Introduction_to_Robotics.md
 02_Coordinate_Frames_and_Transformations.md
