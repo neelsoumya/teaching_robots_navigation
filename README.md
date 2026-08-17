@@ -4,6 +4,8 @@ Teaching robot navigation
 
 - [installation](installation.md)
 - [introduction](intro.md)
+- [ROS](ROS.md)
+
 - [notes](notes.md)
 - [how does a submarine navigate underwater without GPS](inertial_navigation.md)
 - [odometry](odometry.md)
@@ -11,7 +13,9 @@ Teaching robot navigation
 - [humanoid robots](humanoid_robots.md)
 - [drones](drones_indoor.md)
 - [LLMs and robots](LLM_robots.md)
-- [ROS](ROS.md)
+- [Competence vs. Performance in robotics](competence_vs_performace_robotics.md)
+
+
 - [Evaluation](evaluation.md)
 - [Safety and Ethics](safety_ethics.md)
 
