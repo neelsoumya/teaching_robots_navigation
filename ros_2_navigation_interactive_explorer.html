@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROS 2 Navigation Architecture & Educational Explorer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0f3751',
+                        },
+                        sand: {
+                            50: '#fdfbf7',
+                            100: '#f7f4ed',
+                            200: '#eae4d9',
+                            300: '#d8cebe',
+                        },
+                        ros: {
+                            accent: '#222430',
+                            teal: '#0d9488',
+                            amber: '#d97706',
+                            rose: '#e11d48',
+                            purple: '#7c3aed'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fcfbfa;
+            color: #1e293b;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .tab-active {
+            border-bottom: 3px solid #0284c7;
+            color: #0284c7;
+            font-weight: 600;
+        }
+        .code-scroll::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .code-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- Chosen Palette: Warm Neutral Sand (#fcfbfa) with Slate typography, Deep Navy (#0f3751) and Sky Blue (#0284c7) accents, and contextual category highlights (Teal, Amber, Rose). -->
+
+    <!-- Application Structure Plan:
+         The application breaks down the comprehensive ROS 2 technical report into 6 key thematic modules accessible via a sticky top header:
+         1. Architecture & Lifecycle: Middleware stack diagram, dynamic DDS discovery port calculator, and interactive Lifecycle Node state machine.
+         2. Communication Primitives: Topic/Service/Action/Param interactive matrix, side-by-side Kitchen Analogy interactive explorer, and QoS profile trade-off chart.
+         3. Transforms & Frame Algebra: REP 103/105 hierarchy map, frame inversion math simulator (interactive canvas plotting T_map->odom calculation), and single-parent rule explanation.
+         4. Nav2 & Behavior Trees: Interactive BT execution flow simulator (step-by-step tree tick engine), costmap layer inspector, costmap inflation curve calculator (Chart.js), and controller plugin comparison.
+         5. Educational Hub & Lab Syllabus: TurtleBot4 hardware visual decomposition, interactive 6-module practical course syllabus, and student troubleshooting decision matrix.
+         6. Diagnostics & CLI Reference: Interactive filterable CLI command database with search and copy utility.
+    -->
+
+    <!-- Visualization & Content Choices:
+         - DDS Multicast Port Calculator: Interactive input allowing immediate domain ID math validation.
+         - Lifecycle Node State Machine: Dynamic Canvas-rendered state machine showing state transitions (Unconfigured -> Inactive -> Active -> Finalized).
+         - QoS Profile Radar/Bar Chart: Chart.js visualization comparing latency, reliability, and persistence trade-offs for high frequency LiDAR vs commands vs map.
+         - Coordinate Frame Inversion Simulator: Interactive Canvas plotting Map, Odom, Base_Link poses with real-time vector subtraction math (T_map->odom = T_map->base * T_odom->base^-1).
+         - Behavior Tree Execution Engine: Dynamic step-through tree simulator showing SUCCESS/RUNNING/FAILURE tick propagation across Recovery & Pipeline Sequence nodes.
+         - Costmap Inflation Formula Plotter: Interactive Chart.js plotting continuous decay cost: Cost(r) = 253 * exp(-decay * (r - r_inscribed)).
+         - Hardware Architecture Explorer: Interactive component layout for TurtleBot4 platform with sensor specifications.
+         - Filterable CLI Library: Dynamic keyword search and category tag filters for terminal diagnostic tools.
+         - Confirming NO SVG graphics used. NO Mermaid JS used. Visuals rely on styled HTML/CSS, Chart.js, and HTML5 Canvas.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-brand-800 text-white flex items-center justify-center font-mono font-bold text-lg shadow-inner">
+                        R2
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-slate-900 text-base leading-tight">ROS 2 Navigation & Architecture</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">Interactive Educational Hub & Technical Explorer</p>
+                    </div>
+                </div>
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-4 text-sm font-medium text-slate-600">
+                    <button onclick="switchTab('arch')" id="tab-arch" class="px-3 py-2 tab-active transition-colors">Middleware & Lifecycle</button>
+                    <button onclick="switchTab('comm')" id="tab-comm" class="px-3 py-2 hover:text-brand-600 transition-colors">Communication & QoS</button>
+                    <button onclick="switchTab('tf')" id="tab-tf" class="px-3 py-2 hover:text-brand-600 transition-colors">Transforms (REP 105)</button>
+                    <button onclick="switchTab('nav2')" id="tab-nav2" class="px-3 py-2 hover:text-brand-600 transition-colors">Nav2 & Behavior Trees</button>
+                    <button onclick="switchTab('edu')" id="tab-edu" class="px-3 py-2 hover:text-brand-600 transition-colors">Syllabus & Lab Hub</button>
+                    <button onclick="switchTab('cli')" id="tab-cli" class="px-3 py-2 hover:text-brand-600 transition-colors">CLI & Tools</button>
+                </nav>
+                <div class="md:hidden">
+                    <select onchange="switchTab(this.value)" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-md p-2 focus:ring-brand-500 focus:border-brand-500">
+                        <option value="arch">Middleware & Lifecycle</option>
+                        <option value="comm">Communication & QoS</option>
+                        <option value="tf">Transforms (REP 105)</option>
+                        <option value="nav2">Nav2 & Behavior Trees</option>
+                        <option value="edu">Syllabus & Lab Hub</option>
+                        <option value="cli">CLI & Tools</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION 1: ARCHITECTURE, DDS & LIFECYCLE -->
+        <section id="sec-arch" class="space-y-8">
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">ROS 2 Middleware Architecture & Operational Principles</h2>
+                <p class="text-slate-600 leading-relaxed max-w-4xl">
+                    This section presents the modular, decentralized layer structure of ROS 2 built upon the Data Distribution Service (DDS) industry standard. Unlike ROS 1, which relied on a single centralized <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">rosmaster</code>, ROS 2 enables real-time peer-to-peer data transport with dynamic discovery, deterministic node state management, and strict domain isolation across distributed networks.
+                </p>
+            </div>
+
+            <!-- DDS & Layer Abstraction Stack Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Stack Architecture Visual -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center">
+                            <span class="w-3 h-3 bg-brand-500 rounded-full mr-2"></span>
+                            Distributed Middleware Layer Abstraction Stack
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-4">Click any layer to inspect its software responsibilities and bindings.</p>
+                        
+                        <div class="space-y-2 text-sm font-mono" id="layer-stack">
+                            <div onclick="inspectLayer(0)" class="layer-item cursor-pointer p-3 rounded-lg bg-slate-800 text-slate-100 hover:bg-slate-700 transition flex justify-between items-center border-l-4 border-emerald-400">
+                                <span>User Application Layer</span>
+                                <span class="text-xs font-sans bg-slate-700 px-2 py-0.5 rounded text-emerald-300">User Code</span>
+                            </div>
+                            <div onclick="inspectLayer(1)" class="layer-item cursor-pointer p-3 rounded-lg bg-slate-800 text-slate-100 hover:bg-slate-700 transition flex justify-between items-center border-l-4 border-brand-400">
+                                <span>Client Libraries (rclcpp / rclpy)</span>
+                                <span class="text-xs font-sans bg-slate-700 px-2 py-0.5 rounded text-brand-300">C++ / Python API</span>
+                            </div>
+                            <div onclick="inspectLayer(2)" class="layer-item cursor-pointer p-3 rounded-lg bg-slate-800 text-slate-100 hover:bg-slate-700 transition flex justify-between items-center border-l-4 border-purple-400">
+                                <span>ROS Client Core (rcl)</span>
+                                <span class="text-xs font-sans bg-slate-700 px-2 py-0.5 rounded text-purple-300">C Implementation</span>
+                            </div>
+                            <div onclick="inspectLayer(3)" class="layer-item cursor-pointer p-3 rounded-lg bg-slate-800 text-slate-100 hover:bg-slate-700 transition flex justify-between items-center border-l-4 border-amber-400">
+                                <span>Middleware Interface (RMW)</span>
+                                <span class="text-xs font-sans bg-slate-700 px-2 py-0.5 rounded text-amber-300">RMW Abstraction</span>
+                            </div>
+                            <div onclick="inspectLayer(4)" class="layer-item cursor-pointer p-3 rounded-lg bg-slate-800 text-slate-100 hover:bg-slate-700 transition flex justify-between items-center border-l-4 border-rose-400">
+                                <span>DDS Transport Layer</span>
+                                <span class="text-xs font-sans bg-slate-700 px-2 py-0.5 rounded text-rose-300">FastDDS / CycloneDDS</span>
+                            </div>
+                            <div onclick="inspectLayer(5)" class="layer-item cursor-pointer p-3 rounded-lg bg-slate-800 text-slate-100 hover:bg-slate-700 transition flex justify-between items-center border-l-4 border-slate-400">
+                                <span>Host OS / Real-Time Kernel</span>
+                                <span class="text-xs font-sans bg-slate-700 px-2 py-0.5 rounded text-slate-300">Linux / RT-PREEMPT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Layer Details Inspector -->
+                    <div id="layer-details-box" class="mt-4 p-4 rounded-lg bg-sand-100 border border-sand-300 text-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1" id="layer-title">User Application Layer</h4>
+                        <p class="text-slate-600" id="layer-desc">Enforces application-domain logic, high-level task planning, state estimation algorithms, and user execution code in C++ or Python.</p>
+                        <div class="mt-2 text-brand-700 font-mono font-medium" id="layer-components">Key Components: C++ Nodes, Python Executables, Custom ROS Packages</div>
+                    </div>
+                </div>
+
+                <!-- DDS Dynamic Discovery & Network Isolation Calculator -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center">
+                            <span class="w-3 h-3 bg-ros-teal rounded-full mr-2"></span>
+                            Dynamic Discovery & Domain Isolation
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            ROS 2 uses the Simple Discovery Protocol (SDP) over UDP multicast. Nodes automatically discover peer publishers and subscribers on the same local network subnet without needing a central server.
+                        </p>
+
+                        <!-- Domain ID Port Calculator -->
+                        <div class="bg-sand-50 p-4 rounded-lg border border-sand-200 mb-4">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Interactive ROS_DOMAIN_ID Multicast Port Calculator:</label>
+                            <p class="text-xs text-slate-500 mb-3">Formula: <code class="font-mono bg-white px-1 py-0.5 rounded border">Multicast Port = 7400 + (250 × ROS_DOMAIN_ID)</code></p>
+                            
+                            <div class="flex items-center space-x-4">
+                                <input type="number" id="domain-id-input" min="0" max="232" value="15" oninput="calculateMulticastPort()" class="w-24 p-2 text-sm font-mono border border-slate-300 rounded-md focus:ring-brand-500 focus:border-brand-500">
+                                <div>
+                                    <div class="text-xs text-slate-500">Calculated UDP Multicast Port:</div>
+                                    <div class="text-xl font-bold font-mono text-brand-700" id="calculated-port">11150 Hz / UDP</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+                            <span class="font-bold">Classroom & Lab Precaution:</span> If multiple student laptops share the default domain <code class="font-mono bg-amber-100 px-1 rounded">ROS_DOMAIN_ID=0</code>, nodes will cross-talk, corrupting transform trees and topic scans. Always assign each workstation a unique Domain ID!
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                        Peer-to-peer unicast channels are instantiated immediately following successful SDP handshakes across local interfaces.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lifecycle State Machine Simulator -->
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Managed Lifecycle Node State Machine</h3>
+                        <p class="text-xs text-slate-500 mt-1">Simulate transitions across ROS 2 managed nodes to prevent non-deterministic startup sequences in critical navigation servers.</p>
+                    </div>
+                    <div class="mt-3 md:mt-0 flex space-x-2">
+                        <button onclick="triggerLifecycle('configure')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs rounded-md font-medium transition">Configure</button>
+                        <button onclick="triggerLifecycle('activate')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs rounded-md font-medium transition">Activate</button>
+                        <button onclick="triggerLifecycle('deactivate')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs rounded-md font-medium transition">Deactivate</button>
+                        <button onclick="triggerLifecycle('cleanup')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs rounded-md font-medium transition">Cleanup / Finalize</button>
+                    </div>
+                </div>
+
+                <!-- State Visualizer Canvas & State Info -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div class="md:col-span-2 bg-slate-900 rounded-lg p-4 h-64 flex items-center justify-center relative overflow-hidden">
+                        <canvas id="lifecycleCanvas" class="w-full h-full"></canvas>
+                    </div>
+                    <div class="bg-sand-50 p-5 rounded-lg border border-sand-200 space-y-3">
+                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Current Node Status</div>
+                        <div id="lifecycle-state-title" class="text-2xl font-bold text-slate-800">Unconfigured</div>
+                        <p id="lifecycle-state-desc" class="text-xs text-slate-600 leading-relaxed">
+                            Node is instantiated. Parameters are loaded, but no ROS topic publishers, service servers, or memory buffers are allocated.
+                        </p>
+                        <div class="pt-2 border-t border-sand-200 space-y-1.5 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-500">Memory Allocation:</span> <span id="lc-mem" class="font-mono text-slate-700">Minimal (Unallocated)</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Publishers Enabled:</span> <span id="lc-pub" class="font-mono text-rose-600">False</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Execution Loop:</span> <span id="lc-exec" class="font-mono text-rose-600">Disabled</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 2: COMMUNICATION PRIMITIVES & QOS -->
+        <section id="sec-comm" class="space-y-8 hidden">
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Core Communication Primitives & Quality of Service (QoS)</h2>
+                <p class="text-slate-600 leading-relaxed max-w-4xl">
+                    Nodes in the ROS Graph interact through four foundational primitives: Topics, Services, Actions, and Parameters. Selecting the correct primitive and configuring appropriate DDS Quality of Service (QoS) profiles dictates the real-time reliability and responsiveness of sensor data streams and control loops.
+                </p>
+            </div>
+
+            <!-- Primitives Matrix & Restaurant Analogy Explorer -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Kitchen Analogy Interactive Selector -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <span class="w-3 h-3 bg-ros-amber rounded-full mr-2"></span>
+                        The Restaurant Kitchen Mental Model
+                    </h3>
+                    <p class="text-xs text-slate-500">Toggle between ROS 2 mechanisms and their culinary analogy counterparts to make abstract middleware mechanics immediate.</p>
+
+                    <div class="space-y-2">
+                        <button onclick="selectAnalogy('topic')" id="btn-ana-topic" class="w-full text-left p-3 rounded-lg bg-sand-100 hover:bg-sand-200 border border-sand-300 transition font-medium text-xs flex justify-between items-center">
+                            <span>1. Topic (Publish / Subscribe)</span>
+                            <span class="text-xs font-mono text-brand-700">Order Notice Board</span>
+                        </button>
+                        <button onclick="selectAnalogy('service')" id="btn-ana-service" class="w-full text-left p-3 rounded-lg bg-white hover:bg-sand-100 border border-slate-200 transition font-medium text-xs flex justify-between items-center">
+                            <span>2. Service (Request / Response)</span>
+                            <span class="text-xs font-mono text-slate-500">Inventory Stock Query</span>
+                        </button>
+                        <button onclick="selectAnalogy('action')" id="btn-ana-action" class="w-full text-left p-3 rounded-lg bg-white hover:bg-sand-100 border border-slate-200 transition font-medium text-xs flex justify-between items-center">
+                            <span>3. Action (Goal / Feedback / Result)</span>
+                            <span class="text-xs font-mono text-slate-500">Multi-Course Meal Ticket</span>
+                        </button>
+                        <button onclick="selectAnalogy('parameter')" id="btn-ana-parameter" class="w-full text-left p-3 rounded-lg bg-white hover:bg-sand-100 border border-slate-200 transition font-medium text-xs flex justify-between items-center">
+                            <span>4. Parameter (Node-Local Key-Value)</span>
+                            <span class="text-xs font-mono text-slate-500">Chef's Recipe Dial</span>
+                        </button>
+                    </div>
+
+                    <div id="analogy-display" class="p-4 rounded-lg bg-brand-50 border border-brand-200 text-xs text-slate-700 leading-relaxed space-y-2">
+                        <div class="font-bold text-brand-900 text-sm" id="ana-title">Topic: Asynchronous Order Notice Board</div>
+                        <p id="ana-desc">Waitstaff post incoming orders asynchronously onto a notice board. Kitchen staff read orders off the board without directly stopping waitstaff or holding blocking conversations.</p>
+                        <div class="text-brand-800 font-mono text-[11px]" id="ana-usecase">Canonical Robotics Example: Continuous high-frequency LiDAR range scans (/scan) and wheel encoder telemetry (/odom).</div>
+                    </div>
+                </div>
+
+                <!-- Comparative Primitives Table -->
+                <div class="lg:col-span-2 bg-white rounded-xl p-6 border border-slate-200 shadow-sm overflow-x-auto">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Primitive Architectural Comparison</h3>
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-sand-50 text-slate-700">
+                                <th class="p-2.5 font-bold">Primitive</th>
+                                <th class="p-2.5 font-bold">Coupling Type</th>
+                                <th class="p-2.5 font-bold">Synchrony</th>
+                                <th class="p-2.5 font-bold">Data Pattern</th>
+                                <th class="p-2.5 font-bold">Primary Robotics Application</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-600 font-sans">
+                            <tr class="hover:bg-sand-50/50">
+                                <td class="p-2.5 font-mono font-bold text-brand-700">Topic</td>
+                                <td class="p-2.5">Fully Decoupled</td>
+                                <td class="p-2.5">Asynchronous</td>
+                                <td class="p-2.5">1-to-N / N-to-M Stream</td>
+                                <td class="p-2.5">High-frequency sensor telemetry (<code class="font-mono">/scan</code>, <code class="font-mono">/imu</code>), motor velocity (<code class="font-mono">/cmd_vel</code>).</td>
+                            </tr>
+                            <tr class="hover:bg-sand-50/50">
+                                <td class="p-2.5 font-mono font-bold text-teal-700">Service</td>
+                                <td class="p-2.5">Temporally Coupled</td>
+                                <td class="p-2.5">Synchronous / Blocking</td>
+                                <td class="p-2.5">Bidirectional Transaction</td>
+                                <td class="p-2.5">Instantaneous queries, clearing costmap buffers, sensor recalibration.</td>
+                            </tr>
+                            <tr class="hover:bg-sand-50/50">
+                                <td class="p-2.5 font-mono font-bold text-purple-700">Action</td>
+                                <td class="p-2.5">Loosely Coupled</td>
+                                <td class="p-2.5">Asynchronous / Non-blocking</td>
+                                <td class="p-2.5">Goal, Feedback, Result</td>
+                                <td class="p-2.5">Long-running tasks with cancelability (<code class="font-mono">/navigate_to_pose</code>, trajectory tracking).</td>
+                            </tr>
+                            <tr class="hover:bg-sand-50/50">
+                                <td class="p-2.5 font-mono font-bold text-amber-700">Parameter</td>
+                                <td class="p-2.5">Node-Intrinsic</td>
+                                <td class="p-2.5">Synchronous Read/Write</td>
+                                <td class="p-2.5">Local Key-Value Registry</td>
+                                <td class="p-2.5">Runtime tuning (max velocity limits, frame IDs, filter thresholds).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- QoS Profile Visual Analyzer -->
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between md:items-center mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">DDS Quality of Service (QoS) Profile Trade-offs</h3>
+                        <p class="text-xs text-slate-500 mt-1">Configure parameters to inspect trade-offs between transport latency, network throughput, and data reliability.</p>
+                    </div>
+                    <div class="mt-3 md:mt-0 flex items-center space-x-3 text-xs">
+                        <label class="font-bold text-slate-700">Preset Scenario:</label>
+                        <select id="qos-preset-select" onchange="applyQosPreset(this.value)" class="bg-sand-100 border border-slate-300 rounded-md p-1.5 font-medium text-slate-800">
+                            <option value="scan">High-Frequency LiDAR (/scan)</option>
+                            <option value="cmd">Motor Velocity Commands (/cmd_vel)</option>
+                            <option value="map">Static Map Stream (/map)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <!-- Chart Container -->
+                    <div class="lg:col-span-2">
+                        <div class="chart-container">
+                            <canvas id="qosChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Policy Explanations -->
+                    <div class="space-y-3 bg-sand-50 p-5 rounded-lg border border-sand-200 text-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-2" id="qos-title">LiDAR Range Stream QoS Profile</h4>
+                        <div class="space-y-2 text-slate-600">
+                            <div><strong class="text-slate-800">Reliability:</strong> <span id="qos-rel" class="font-mono text-amber-700">Best Effort</span> (Drops unacknowledged packets to maintain low latency)</div>
+                            <div><strong class="text-slate-800">Durability:</strong> <span id="qos-dur" class="font-mono text-slate-700">Volatile</span> (Maintains no historical buffer for late-joining subscribers)</div>
+                            <div><strong class="text-slate-800">History Depth:</strong> <span id="qos-dep" class="font-mono text-slate-700">Keep Last (Depth: 10)</span></div>
+                        </div>
+                        <div class="pt-3 border-t border-sand-200 text-slate-600 leading-relaxed" id="qos-explanation">
+                            Sensor streams prioritize low latency over guaranteed packet delivery. If a packet is lost over Wi-Fi, modern data replaces stale data instantly without waiting for TCP re-transmissions.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 3: SPATIAL TRANSFORMS & REP 105 -->
+        <section id="sec-tf" class="space-y-8 hidden">
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Spatial Frame Transformations & Coordinate Algebra (REP 103 / REP 105)</h2>
+                <p class="text-slate-600 leading-relaxed max-w-4xl">
+                    Autonomous mobile navigation requires computing continuous spatial transformations across sensors, chassis origins, local odometry, and global maps. Adhering to ROS Enhancement Proposals REP 103 (SI units & right-handed axes) and REP 105 (Coordinate Frames for Mobile Platforms) guarantees modular interoperability.
+                </p>
+            </div>
+
+            <!-- REP 105 Frame Hierarchy & Single-Parent Rule -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Spatial Tree Visualizer -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <span class="w-3 h-3 bg-brand-500 rounded-full mr-2"></span>
+                        REP 105 Spatial Tree Topology
+                    </h3>
+                    <p class="text-xs text-slate-500">Every frame must have exactly one active parent in the acyclic transformation graph.</p>
+
+                    <div class="space-y-2 font-mono text-xs">
+                        <div class="p-3 bg-slate-800 text-slate-100 rounded-lg flex justify-between items-center border-l-4 border-slate-400">
+                            <span>earth</span>
+                            <span class="text-[10px] font-sans bg-slate-700 px-2 py-0.5 rounded text-slate-300">Geodetic Anchor</span>
+                        </div>
+                        <div class="ml-4 pl-4 border-l-2 border-slate-300 space-y-2">
+                            <div class="p-3 bg-slate-800 text-slate-100 rounded-lg flex justify-between items-center border-l-4 border-brand-400">
+                                <span>map</span>
+                                <span class="text-[10px] font-sans bg-slate-700 px-2 py-0.5 rounded text-brand-300">Global Fixed (Discrete Updates)</span>
+                            </div>
+                            <div class="ml-4 pl-4 border-l-2 border-slate-300 space-y-2">
+                                <div class="p-3 bg-slate-800 text-slate-100 rounded-lg flex justify-between items-center border-l-4 border-emerald-400">
+                                    <span>odom</span>
+                                    <span class="text-[10px] font-sans bg-slate-700 px-2 py-0.5 rounded text-emerald-300">Local Fixed (Continuous Drift)</span>
+                                </div>
+                                <div class="ml-4 pl-4 border-l-2 border-slate-300 space-y-2">
+                                    <div class="p-3 bg-slate-800 text-slate-100 rounded-lg flex justify-between items-center border-l-4 border-purple-400">
+                                        <span>base_link</span>
+                                        <span class="text-[10px] font-sans bg-slate-700 px-2 py-0.5 rounded text-purple-300">Robot Chassis Origin</span>
+                                    </div>
+                                    <div class="ml-4 pl-4 border-l-2 border-slate-300 grid grid-cols-2 gap-2">
+                                        <div class="p-2 bg-slate-700 text-slate-200 rounded text-center text-[11px]">base_laser</div>
+                                        <div class="p-2 bg-slate-700 text-slate-200 rounded text-center text-[11px]">imu_link</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frame Inversion Math Simulator -->
+                <div class="lg:col-span-2 bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Interactive Transform Inversion Math Solver</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            To prevent discontinuous motor velocity spikes when global localization (AMCL or SLAM) makes discrete map corrections, localization engines publish the synthetic offset <code class="font-mono bg-slate-100 px-1 py-0.5 rounded text-brand-700">T_map → odom</code> calculated via frame inversion algebra:
+                        </p>
+
+                        <!-- Math Formula Box -->
+                        <div class="bg-sand-50 p-3 rounded-lg border border-sand-200 mb-4 text-center font-mono text-xs text-slate-800">
+                            T<sub>map → odom</sub> = T<sub>map → base_link</sub> · ( T<sub>odom → base_link</sub> )<sup>-1</sup>
+                        </div>
+
+                        <!-- Sliders for Poses -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-lg border border-slate-200 mb-4 text-xs">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Global Estimated Pose (T_map → base):</label>
+                                <div class="flex items-center space-x-2">
+                                    <span>X:</span>
+                                    <input type="range" id="map-x" min="0" max="10" step="0.1" value="6.5" oninput="calculateTransforms()" class="w-full">
+                                    <span id="map-x-val" class="font-mono font-bold text-brand-700 w-8">6.5</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Odometric Dead-Reckoning (T_odom → base):</label>
+                                <div class="flex items-center space-x-2">
+                                    <span>X:</span>
+                                    <input type="range" id="odom-x" min="0" max="10" step="0.1" value="5.0" oninput="calculateTransforms()" class="w-full">
+                                    <span id="odom-x-val" class="font-mono font-bold text-emerald-700 w-8">5.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Plot Canvas -->
+                        <div class="bg-slate-900 rounded-lg p-3 h-48 flex items-center justify-center relative">
+                            <canvas id="tfCanvas" class="w-full h-full"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="tf-math-output" class="mt-4 p-3 bg-brand-50 border border-brand-200 rounded-lg text-xs font-mono text-brand-900 flex justify-between items-center">
+                        <span>Calculated Dynamic Offset (T_map → odom):</span>
+                        <span class="text-sm font-bold text-brand-700" id="calc-offset-val">+1.50 meters</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 4: NAV2 & BEHAVIOR TREES -->
+        <section id="sec-nav2" class="space-y-8 hidden">
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Nav2 Architecture, Behavior Trees, and Costmaps</h2>
+                <p class="text-slate-600 leading-relaxed max-w-4xl">
+                    Nav2 decouples global path generation, dynamic controller execution, and recovery routines using modular servers orchestrated by XML-configurable Behavior Trees (<code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">BehaviorTree.CPP v4</code>).
+                </p>
+            </div>
+
+            <!-- Behavior Tree Execution Step Simulator -->
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div class="flex flex-col md:flex-row justify-between md:items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Interactive Behavior Tree Execution Engine</h3>
+                        <p class="text-xs text-slate-500 mt-1">Click "Tick BT Engine" to simulate root-to-leaf tick propagation across Recovery & Pipeline Sequence nodes.</p>
+                    </div>
+                    <div class="mt-3 md:mt-0 flex space-x-2">
+                        <button onclick="tickBT()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs rounded-md shadow-sm transition flex items-center">
+                            <span class="mr-1.5">►</span> Tick BT Engine
+                        </button>
+                        <button onclick="resetBT()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs rounded-md transition">Reset</button>
+                    </div>
+                </div>
+
+                <!-- BT Visual Display -->
+                <div class="bg-slate-900 rounded-xl p-6 text-white font-mono text-xs space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2 text-slate-400">
+                        <span>BT Root Execution Status: <span id="bt-root-status" class="text-amber-400 font-bold">IDLE</span></span>
+                        <span>Current Cycle Ticks: <span id="bt-tick-count" class="text-white font-bold">0</span></span>
+                    </div>
+
+                    <!-- Tree Nodes Display -->
+                    <div class="space-y-3">
+                        <!-- Recovery Node -->
+                        <div id="btnode-recovery" class="p-3 rounded-lg border-2 border-slate-700 bg-slate-800/80 transition-all">
+                            <div class="flex justify-between font-bold">
+                                <span class="text-amber-300">RecoveryNode (NavigateRecovery)</span>
+                                <span id="st-recovery" class="px-2 py-0.5 rounded bg-slate-700 text-slate-300 text-[10px]">IDLE</span>
+                            </div>
+                            
+                            <!-- Children Branches -->
+                            <div class="mt-3 ml-4 pl-4 border-l-2 border-slate-700 space-y-3">
+                                <!-- Pipeline Sequence -->
+                                <div id="btnode-pipeline" class="p-2.5 rounded border border-slate-700 bg-slate-900/80 transition-all">
+                                    <div class="flex justify-between font-bold">
+                                        <span class="text-brand-300">PipelineSequence (NavigateWithReplanning)</span>
+                                        <span id="st-pipeline" class="px-2 py-0.5 rounded bg-slate-700 text-slate-300 text-[10px]">IDLE</span>
+                                    </div>
+                                    <div class="mt-2 ml-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                                        <div id="btnode-planner" class="p-2 rounded bg-slate-800 border border-slate-700 flex justify-between">
+                                            <span>ComputePathToPose</span>
+                                            <span id="st-planner" class="text-slate-400 font-bold">IDLE</span>
+                                        </div>
+                                        <div id="btnode-controller" class="p-2 rounded bg-slate-800 border border-slate-700 flex justify-between">
+                                            <span>FollowPath (DWB/MPPI)</span>
+                                            <span id="st-controller" class="text-slate-400 font-bold">IDLE</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recovery Fallback -->
+                                <div id="btnode-fallback" class="p-2.5 rounded border border-slate-700 bg-slate-900/80 transition-all">
+                                    <div class="flex justify-between font-bold">
+                                        <span class="text-rose-300">ReactiveFallback (RecoveryActions)</span>
+                                        <span id="st-fallback" class="px-2 py-0.5 rounded bg-slate-700 text-slate-300 text-[10px]">IDLE</span>
+                                    </div>
+                                    <div class="mt-2 ml-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                                        <div id="btnode-clear" class="p-2 rounded bg-slate-800 border border-slate-700 flex justify-between">
+                                            <span>ClearCostmaps</span>
+                                            <span id="st-clear" class="text-slate-400 font-bold">IDLE</span>
+                                        </div>
+                                        <div id="btnode-spin" class="p-2 rounded bg-slate-800 border border-slate-700 flex justify-between">
+                                            <span>Spin (1.57 rad)</span>
+                                            <span id="st-spin" class="text-slate-400 font-bold">IDLE</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Costmap Inflation Curve Plotter & Controller Comparison -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Inflation Decay Calculator -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Costmap Inflation Decay Formula Plotter</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Nav2 applies exponential cost decay outward from physical obstacles based on robot footprint dimensions:
+                            <code class="block mt-1 p-1 bg-sand-100 rounded text-center font-mono text-[11px]">Cost(r) = 253 · exp(-decay_factor · (r - inscribed_radius))</code>
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-4 bg-sand-50 p-3 rounded-lg border border-sand-200 text-xs mb-4">
+                            <div>
+                                <label class="block font-bold text-slate-700">Decay Factor:</label>
+                                <input type="range" id="decay-val" min="1" max="15" step="0.5" value="5.0" oninput="updateInflationChart()" class="w-full">
+                                <span id="decay-disp" class="font-mono font-bold text-brand-700">5.0</span>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700">Inscribed Radius (m):</label>
+                                <input type="range" id="radius-val" min="0.1" max="0.8" step="0.05" value="0.25" oninput="updateInflationChart()" class="w-full">
+                                <span id="radius-disp" class="font-mono font-bold text-brand-700">0.25m</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="inflationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controller Plugin Matrix -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800">Local Trajectory Controller Plugin Comparison</h3>
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 rounded-lg border border-slate-200 hover:border-brand-300 transition">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>DWB Controller (Trajectory Critic)</span>
+                                <span class="text-brand-600 font-mono">Differential / Omnidirectional</span>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed">Evaluates discrete velocity sample grids over forward time horizons against multi-objective trajectory critics. Lightweight CPU utilization, but susceptible to local minima in tight spaces.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg border border-slate-200 hover:border-teal-300 transition">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>MPPI Controller (Model Predictive Path Integral)</span>
+                                <span class="text-teal-600 font-mono">GPU / Multi-Threaded CPU</span>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed">Samples thousands of stochastic trajectory candidates in parallel. Delivers smooth motion around dynamic obstacles across differential, Ackermann, and legged robots.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg border border-slate-200 hover:border-amber-300 transition">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Regulated Pure Pursuit Controller</span>
+                                <span class="text-amber-600 font-mono">Ackermann / Differential</span>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed">Scales forward linear velocity based on path curvature while tracking dynamic lookahead points. Highly stable and predictable along fixed industrial corridors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 5: EDUCATIONAL HUB & LAB SYLLABUS -->
+        <section id="sec-edu" class="space-y-8 hidden">
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">University Pedagogical Framework & Practical Syllabus</h2>
+                <p class="text-slate-600 leading-relaxed max-w-4xl">
+                    Connecting middleware abstractions to physical hardware execution requires structured practical progression. This curriculum guides students from ROS 2 client library basics through Gazebo physics simulation up to fully autonomous TurtleBot4 deployments.
+                </p>
+            </div>
+
+            <!-- TurtleBot4 Hardware Architecture & 6-Module Syllabus -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- TurtleBot4 Decomposed Visual -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                        <span class="w-3 h-3 bg-ros-purple rounded-full mr-2"></span>
+                        TurtleBot4 Educational Hardware Stack
+                    </h3>
+                    <p class="text-xs text-slate-500">Standard educational platform hardware decomposition.</p>
+
+                    <div class="space-y-2 text-xs font-mono">
+                        <div class="p-3 rounded-lg bg-slate-800 text-slate-100 border-l-4 border-purple-500">
+                            <div class="font-bold text-purple-300">Onboard Compute SBC</div>
+                            <div class="text-[11px] text-slate-300 font-sans mt-0.5">Raspberry Pi 4 B / Nvidia Jetson Orin Nano (Ubuntu Linux + ROS 2 Humble/Jazzy)</div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-800 text-slate-100 border-l-4 border-brand-500">
+                            <div class="font-bold text-brand-300">Primary Sensor Suite</div>
+                            <div class="text-[11px] text-slate-300 font-sans mt-0.5">2D RPLiDAR A1 Range Scanner + OAK-D Pro RGB-D Depth Camera</div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-800 text-slate-100 border-l-4 border-emerald-500">
+                            <div class="font-bold text-emerald-300">Mobility Base Platform</div>
+                            <div class="text-[11px] text-slate-300 font-sans mt-0.5">iRobot Create 3 Base (Internal Encoders, Cliff Sensors, Bumper Array)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6-Module Practical Curriculum -->
+                <div class="lg:col-span-2 bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800">Comprehensive 6-Module Practical Course Syllabus</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="p-3 rounded-lg bg-sand-50 border border-sand-200 hover:border-brand-300 transition text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Module 1: ROS 2 Middleware Fundamentals</span>
+                                <span class="text-brand-700 font-mono">colcon workspace & nodes</span>
+                            </div>
+                            <p class="text-slate-600">Build a workspace; construct C++/Python publisher and subscriber nodes to process synthetic range data.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-sand-50 border border-sand-200 hover:border-brand-300 transition text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Module 2: Advanced Primitives & Lifecycles</span>
+                                <span class="text-teal-700 font-mono">Actions & State Machines</span>
+                            </div>
+                            <p class="text-slate-600">Implement an Action Server controlling a dynamic motor turn sequence with live feedback and cancellation hooks.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-sand-50 border border-sand-200 hover:border-brand-300 transition text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Module 3: Kinematic Transforms & URDF</span>
+                                <span class="text-purple-700 font-mono">tf2 & Xacro Modeling</span>
+                            </div>
+                            <p class="text-slate-600">Model a differential-drive robot URDF; build static transform publishers; visualize kinematic trees in RViz2.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-sand-50 border border-sand-200 hover:border-brand-300 transition text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Module 4: Physics Simulation & Sensors</span>
+                                <span class="text-amber-700 font-mono">Gazebo & use_sim_time</span>
+                            </div>
+                            <p class="text-slate-600">Spawn a TurtleBot4 model in a custom Gazebo world; implement teleoperation; analyze encoder integration drift.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-sand-50 border border-sand-200 hover:border-brand-300 transition text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Module 5: Occupancy Mapping & SLAM</span>
+                                <span class="text-rose-700 font-mono">slam_toolbox & 2D Grids</span>
+                            </div>
+                            <p class="text-slate-600">Teleoperate a mobile platform through an unknown Gazebo maze using <code class="font-mono">slam_toolbox</code>; persist map grids.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-sand-50 border border-sand-200 hover:border-brand-300 transition text-xs">
+                            <div class="flex justify-between font-bold text-slate-800 mb-1">
+                                <span>Module 6: Autonomous Navigation</span>
+                                <span class="text-brand-700 font-mono">Nav2 & Keepout Filters</span>
+                            </div>
+                            <p class="text-slate-600">Launch the complete Nav2 stack; issue pose goals; configure Keepout costmap filters and custom recovery nodes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Troubleshooting Matrix -->
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">Common Student Technical Pitfalls & Resolutions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 rounded-lg bg-rose-50 border border-rose-200 space-y-2">
+                        <div class="font-bold text-rose-900 text-sm">1. Simulation Time Desynchronization</div>
+                        <p class="text-rose-800"><strong>Symptom:</strong> Buffer drops, missing laser scans, tf lookup failures inside RViz2.</p>
+                        <p class="text-slate-700"><strong>Remediation:</strong> Pass <code class="font-mono bg-white px-1 py-0.5 rounded border">use_sim_time:=True</code> globally across all node launches during Gazebo runs.</p>
+                    </div>
+
+                    <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 space-y-2">
+                        <div class="font-bold text-amber-900 text-sm">2. Cross-Talk on Shared Subnets</div>
+                        <p class="text-amber-800"><strong>Symptom:</strong> Workstations receive unexpected scans or conflicting transform trees from neighbors.</p>
+                        <p class="text-slate-700"><strong>Remediation:</strong> Export a unique integer domain ID per student shell: <code class="font-mono bg-white px-1 py-0.5 rounded border">export ROS_DOMAIN_ID=15</code>.</p>
+                    </div>
+
+                    <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 space-y-2">
+                        <div class="font-bold text-purple-900 text-sm">3. Transform Tree Loops</div>
+                        <p class="text-purple-800"><strong>Symptom:</strong> System crashes in <code class="font-mono">tf2_ros</code> with cyclic parent frame errors.</p>
+                        <p class="text-slate-700"><strong>Remediation:</strong> Never link <code class="font-mono">map</code> directly to <code class="font-mono">base_link</code>. Enforce single-parent chain: <code class="font-mono">map → odom → base_link</code>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 6: DIAGNOSTICS & CLI REFERENCE -->
+        <section id="sec-cli" class="space-y-8 hidden">
+            <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Diagnostic CLI Reference & Resource Matrix</h2>
+                <p class="text-slate-600 leading-relaxed max-w-4xl">
+                    Search and filter essential command-line tools for system inspection, topic echo, transform tree debugging, and goal submission.
+                </p>
+
+                <!-- Search & Tag Filters -->
+                <div class="mt-6 flex flex-col sm:flex-row gap-4">
+                    <input type="text" id="cli-search" oninput="filterCLI()" placeholder="Search commands (e.g. topic, tf, nav2, service)..." class="flex-grow p-2.5 text-xs font-mono border border-slate-300 rounded-md focus:ring-brand-500 focus:border-brand-500">
+                    <div class="flex space-x-2 text-xs">
+                        <button onclick="filterCLITag('all')" class="px-3 py-2 bg-slate-800 text-white rounded-md font-medium">All</button>
+                        <button onclick="filterCLITag('topic')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md font-medium">Topics</button>
+                        <button onclick="filterCLITag('tf')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md font-medium">TF2</button>
+                        <button onclick="filterCLITag('nav2')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md font-medium">Nav2</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filterable Commands List -->
+            <div id="cli-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- CLI Cards injected dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>ROS 2 Navigation Educational Architecture Explorer • Single-Page Interactive Reference Manual</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Layer Abstraction Stack Data
+        const layers = [
+            { title: "User Application Layer", desc: "Enforces application-domain logic, high-level task planning, state estimation algorithms, and user execution code in C++ or Python.", comps: "Key Components: C++ Nodes, Python Executables, Custom ROS Packages" },
+            { title: "Language Client Libraries (rclcpp / rclpy)", desc: "Exposes language-native programming interfaces wrapping core client bindings.", comps: "Key Components: rclcpp (C++17/20), rclpy (Python 3)" },
+            { title: "ROS Client Core (RCL)", desc: "Provides unified C-based implementation of foundational ROS 2 communication logic.", comps: "Key Components: Core rcl C library, executor mechanisms" },
+            { title: "ROS Middleware Interface (RMW)", desc: "Translates generic RCL message types into vendor-specific DDS primitives.", comps: "Key Components: rmw_fastrtps_cpp, rmw_cyclonedds_cpp" },
+            { title: "DDS Transport Layer", desc: "Manages peer-to-peer transport, dynamic discovery, serialization, and Quality of Service policies.", comps: "Key Components: eProsima Fast DDS, Eclipse Cyclone DDS" },
+            { title: "Host Operating System", desc: "Handles thread scheduling, process isolation, network sockets, and hardware drivers.", comps: "Key Components: Ubuntu Linux, Linux RT-PREEMPT, Windows, RTOS" }
+        ];
+
+        function inspectLayer(index) {
+            const layer = layers[index];
+            document.getElementById('layer-title').innerText = layer.title;
+            document.getElementById('layer-desc').innerText = layer.desc;
+            document.getElementById('layer-components').innerText = layer.comps;
+        }
+
+        // Domain ID Multicast Port Calculator
+        function calculateMulticastPort() {
+            const domainId = parseInt(document.getElementById('domain-id-input').value) || 0;
+            const port = 7400 + (250 * domainId);
+            document.getElementById('calculated-port').innerText = `${port} Hz / UDP`;
+        }
+
+        // Lifecycle State Machine Canvas Simulator
+        let lcState = 'unconfigured';
+        function triggerLifecycle(action) {
+            const titleEl = document.getElementById('lifecycle-state-title');
+            const descEl = document.getElementById('lifecycle-state-desc');
+            const memEl = document.getElementById('lc-mem');
+            const pubEl = document.getElementById('lc-pub');
+            const execEl = document.getElementById('lc-exec');
+
+            if (action === 'configure') {
+                lcState = 'inactive';
+                titleEl.innerText = "Inactive";
+                descEl.innerText = "ROS topics, services, and parameters are fully configured and locked, but execution loops and message emissions remain disabled.";
+                memEl.innerText = "Allocated & Locked";
+                pubEl.innerText = "False (Disabled)";
+                pubEl.className = "font-mono text-amber-600";
+                execEl.innerText = "Paused";
+                execEl.className = "font-mono text-amber-600";
+            } else if (action === 'activate') {
+                lcState = 'active';
+                titleEl.innerText = "Active";
+                descEl.innerText = "Main execution loops, timer callbacks, dynamic costmap updating, and publisher message outputs are fully enabled.";
+                memEl.innerText = "Active Buffers";
+                pubEl.innerText = "True (Publishing)";
+                pubEl.className = "font-mono text-emerald-600 font-bold";
+                execEl.innerText = "Running";
+                execEl.className = "font-mono text-emerald-600 font-bold";
+            } else if (action === 'deactivate') {
+                lcState = 'inactive';
+                titleEl.innerText = "Inactive";
+                descEl.innerText = "Node halted publisher outputs and dynamic timers while maintaining allocated memory buffers.";
+                memEl.innerText = "Allocated & Locked";
+                pubEl.innerText = "False (Disabled)";
+                pubEl.className = "font-mono text-amber-600";
+                execEl.innerText = "Paused";
+                execEl.className = "font-mono text-amber-600";
+            } else if (action === 'cleanup') {
+                lcState = 'unconfigured';
+                titleEl.innerText = "Unconfigured";
+                descEl.innerText = "Node released allocated memory buffers and returned to unconfigured state.";
+                memEl.innerText = "Minimal (Unallocated)";
+                pubEl.innerText = "False";
+                pubEl.className = "font-mono text-rose-600";
+                execEl.innerText = "Disabled";
+                execEl.className = "font-mono text-rose-600";
+            }
+            drawLifecycleCanvas();
+        }
+
+        function drawLifecycleCanvas() {
+            const canvas = document.getElementById('lifecycleCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const states = [
+                { id: 'unconfigured', label: 'Unconfigured', x: canvas.width * 0.2, y: canvas.height * 0.5 },
+                { id: 'inactive', label: 'Inactive', x: canvas.width * 0.5, y: canvas.height * 0.5 },
+                { id: 'active', label: 'Active', x: canvas.width * 0.8, y: canvas.height * 0.5 }
+            ];
+
+            // Draw connecting arrows
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(states[0].x, states[0].y);
+            ctx.lineTo(states[1].x, states[1].y);
+            ctx.lineTo(states[2].x, states[2].y);
+            ctx.stroke();
+
+            // Draw State Nodes
+            states.forEach(s => {
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, 24, 0, 2 * Math.PI);
+                if (s.id === lcState) {
+                    ctx.fillStyle = s.id === 'active' ? '#059669' : (s.id === 'inactive' ? '#d97706' : '#0284c7');
+                    ctx.shadowColor = ctx.fillStyle;
+                    ctx.shadowBlur = 12;
+                } else {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.shadowBlur = 0;
+                }
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#94a3b8';
+                ctx.stroke();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '10px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(s.label, s.x, s.y + 40);
+            });
+        }
+
+        // Restaurant Analogy Interactive Explorer
+        const analogies = {
+            topic: {
+                title: "Topic: Asynchronous Order Notice Board",
+                desc: "Waitstaff post incoming orders asynchronously onto a notice board. Kitchen staff read orders off the board without directly stopping waitstaff or holding blocking conversations.",
+                usecase: "Canonical Robotics Example: Continuous high-frequency LiDAR range scans (/scan) and wheel encoder telemetry (/odom)."
+            },
+            service: {
+                title: "Service: Direct Inventory Query",
+                desc: "A cook asks the inventory manager directly if a specific ingredient is in stock and pauses work to receive an immediate response before proceeding.",
+                usecase: "Canonical Robotics Example: Instantaneous state queries, resetting odometry buffers, or clearing global costmap layers."
+            },
+            action: {
+                title: "Action: Multi-Course Meal Ticket",
+                desc: "A waiter places an involved multi-course meal request (Goal). The kitchen continuously broadcasts progress updates ('Course 1 complete') (Feedback) and delivers the finalized dish (Result), while remaining open to cancellations.",
+                usecase: "Canonical Robotics Example: Autonomous navigation requests (/navigate_to_pose) and trajectory tracking."
+            },
+            parameter: {
+                title: "Parameter: Chef's Recipe Tuning Dial",
+                desc: "Node-intrinsic configuration settings that can be adjusted locally during runtime without altering core execution code.",
+                usecase: "Canonical Robotics Example: Setting maximum speed limits, sensor frame IDs, or filter thresholds."
+            }
+        };
+
+        function selectAnalogy(key) {
+            const data = analogies[key];
+            document.getElementById('ana-title').innerText = data.title;
+            document.getElementById('ana-desc').innerText = data.desc;
+            document.getElementById('ana-usecase').innerText = data.usecase;
+
+            ['topic', 'service', 'action', 'parameter'].forEach(k => {
+                const btn = document.getElementById(`btn-ana-${k}`);
+                if (k === key) {
+                    btn.className = "w-full text-left p-3 rounded-lg bg-sand-100 hover:bg-sand-200 border border-sand-300 transition font-medium text-xs flex justify-between items-center";
+                } else {
+                    btn.className = "w-full text-left p-3 rounded-lg bg-white hover:bg-sand-100 border border-slate-200 transition font-medium text-xs flex justify-between items-center";
+                }
+            });
+        }
+
+        // QoS Radar/Bar Chart
+        let qosChart;
+        function initQosChart() {
+            const ctx = document.getElementById('qosChart').getContext('2d');
+            qosChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Throughput Speed', 'Delivery Reliability', 'Memory Persistence', 'Latency Optimization'],
+                    datasets: [{
+                        label: 'QoS Metric Score',
+                        data: [95, 40, 10, 95],
+                        backgroundColor: ['#0284c7', '#d97706', '#64748b', '#059669'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 0, max: 100 }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function applyQosPreset(preset) {
+            const title = document.getElementById('qos-title');
+            const rel = document.getElementById('qos-rel');
+            const dur = document.getElementById('qos-dur');
+            const dep = document.getElementById('qos-dep');
+            const exp = document.getElementById('qos-explanation');
+
+            if (preset === 'scan') {
+                title.innerText = "LiDAR Range Stream QoS Profile";
+                rel.innerText = "Best Effort"; rel.className = "font-mono text-amber-700";
+                dur.innerText = "Volatile";
+                dep.innerText = "Keep Last (Depth: 10)";
+                exp.innerText = "Sensor streams prioritize low latency over guaranteed packet delivery. Unacknowledged packets are dropped to prevent buffer lag.";
+                qosChart.data.datasets[0].data = [95, 40, 10, 95];
+            } else if (preset === 'cmd') {
+                title.innerText = "Motor Velocity Commands (/cmd_vel)";
+                rel.innerText = "Reliable"; rel.className = "font-mono text-emerald-700";
+                dur.innerText = "Volatile";
+                dep.innerText = "Keep Last (Depth: 10)";
+                exp.innerText = "Control commands require high reliability to ensure physical motor velocity targets are acknowledged by hardware controllers.";
+                qosChart.data.datasets[0].data = [75, 90, 20, 85];
+            } else if (preset === 'map') {
+                title.innerText = "Static Map Stream (/map)";
+                rel.innerText = "Reliable"; rel.className = "font-mono text-emerald-700";
+                dur.innerText = "Transient Local";
+                dep.innerText = "Keep Last (Depth: 1)";
+                exp.innerText = "Maps are published infrequently. Transient Local durability ensures late-joining navigation nodes receive the persistent map grid immediately upon launch.";
+                qosChart.data.datasets[0].data = [30, 95, 100, 40];
+            }
+            qosChart.update();
+        }
+
+        // Coordinate Frame Inversion Simulator
+        function calculateTransforms() {
+            const mapX = parseFloat(document.getElementById('map-x').value);
+            const odomX = parseFloat(document.getElementById('odom-x').value);
+
+            document.getElementById('map-x-val').innerText = mapX.toFixed(1);
+            document.getElementById('odom-x-val').innerText = odomX.toFixed(1);
+
+            // T_map->odom = T_map->base - T_odom->base
+            const offset = mapX - odomX;
+            document.getElementById('calc-offset-val').innerText = (offset >= 0 ? '+' : '') + offset.toFixed(2) + " meters";
+
+            drawTFCanvas(mapX, odomX);
+        }
+
+        function drawTFCanvas(mapX, odomX) {
+            const canvas = document.getElementById('tfCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const originY = canvas.height * 0.5;
+            const scale = (canvas.width - 80) / 10;
+
+            // Draw Axis line
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(40, originY);
+            ctx.lineTo(canvas.width - 40, originY);
+            ctx.stroke();
+
+            // Render Map frame origin
+            ctx.fillStyle = '#0284c7';
+            ctx.beginPath(); ctx.arc(40, originY, 6, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillText("map (0.0)", 40, originY + 20);
+
+            // Render Odom frame
+            const odomPx = 40 + (mapX - odomX) * scale;
+            ctx.fillStyle = '#059669';
+            ctx.beginPath(); ctx.arc(odomPx, originY, 6, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillText(`odom (${(mapX - odomX).toFixed(1)})`, odomPx, originY - 15);
+
+            // Render Base_link pose
+            const basePx = 40 + mapX * scale;
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath(); ctx.arc(basePx, originY, 8, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillText(`base_link (${mapX.toFixed(1)})`, basePx, originY + 20);
+        }
+
+        // Behavior Tree Step Simulator
+        let btStep = 0;
+        function tickBT() {
+            btStep = (btStep % 4) + 1;
+            document.getElementById('bt-tick-count').innerText = btStep;
+
+            const rootSt = document.getElementById('bt-root-status');
+            const stRec = document.getElementById('st-recovery');
+            const stPipe = document.getElementById('st-pipeline');
+            const stPlan = document.getElementById('st-planner');
+            const stCtrl = document.getElementById('st-controller');
+            const stFall = document.getElementById('st-fallback');
+            const stClr = document.getElementById('st-clear');
+            const stSpin = document.getElementById('st-spin');
+
+            if (btStep === 1) {
+                rootSt.innerText = "RUNNING"; rootSt.className = "text-brand-400 font-bold";
+                stRec.innerText = "RUNNING"; stRec.className = "px-2 py-0.5 rounded bg-brand-900 text-brand-300 font-bold";
+                stPipe.innerText = "RUNNING";
+                stPlan.innerText = "SUCCESS"; stPlan.className = "text-emerald-400 font-bold";
+                stCtrl.innerText = "RUNNING"; stCtrl.className = "text-brand-400 font-bold";
+                stFall.innerText = "IDLE";
+                stClr.innerText = "IDLE"; stSpin.innerText = "IDLE";
+            } else if (btStep === 2) {
+                // Obstacle encountered -> FollowPath fails -> Pipeline fails -> Recovery Fallback triggers
+                stCtrl.innerText = "FAILURE"; stCtrl.className = "text-rose-400 font-bold";
+                stPipe.innerText = "FAILURE"; stPipe.className = "px-2 py-0.5 rounded bg-rose-950 text-rose-300 font-bold";
+                stFall.innerText = "RUNNING"; stFall.className = "px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold";
+                stClr.innerText = "RUNNING"; stClr.className = "text-amber-400 font-bold";
+            } else if (btStep === 3) {
+                // Clearing costmaps succeeded -> spinning to clear local laser buffer
+                stClr.innerText = "SUCCESS"; stClr.className = "text-emerald-400 font-bold";
+                stSpin.innerText = "RUNNING"; stSpin.className = "text-amber-400 font-bold";
+            } else if (btStep === 4) {
+                // Recovery complete -> Retry Pipeline
+                stSpin.innerText = "SUCCESS"; stSpin.className = "text-emerald-400 font-bold";
+                stFall.innerText = "SUCCESS"; stFall.className = "px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold";
+                rootSt.innerText = "RETRYING PIPELINE"; rootSt.className = "text-emerald-400 font-bold";
+            }
+        }
+
+        function resetBT() {
+            btStep = 0;
+            document.getElementById('bt-tick-count').innerText = 0;
+            document.getElementById('bt-root-status').innerText = "IDLE";
+            document.getElementById('bt-root-status').className = "text-amber-400 font-bold";
+            ['st-recovery', 'st-pipeline', 'st-fallback'].forEach(id => {
+                const el = document.getElementById(id);
+                el.innerText = "IDLE"; el.className = "px-2 py-0.5 rounded bg-slate-700 text-slate-300 text-[10px]";
+            });
+            ['st-planner', 'st-controller', 'st-clear', 'st-spin'].forEach(id => {
+                const el = document.getElementById(id);
+                el.innerText = "IDLE"; el.className = "text-slate-400 font-bold";
+            });
+        }
+
+        // Costmap Inflation Curve Plotter
+        let inflationChart;
+        function initInflationChart() {
+            const ctx = document.getElementById('inflationChart').getContext('2d');
+            inflationChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Cost Value (0 - 255)',
+                        data: [],
+                        borderColor: '#e11d48',
+                        backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'Distance from Obstacle r (meters)' } },
+                        y: { min: 0, max: 255, title: { display: true, text: 'Cost Value' } }
+                    }
+                }
+            });
+            updateInflationChart();
+        }
+
+        function updateInflationChart() {
+            const decay = parseFloat(document.getElementById('decay-val').value);
+            const radius = parseFloat(document.getElementById('radius-val').value);
+
+            document.getElementById('decay-disp').innerText = decay.toFixed(1);
+            document.getElementById('radius-disp').innerText = radius.toFixed(2) + "m";
+
+            const labels = [];
+            const data = [];
+
+            for (let r = 0; r <= 1.2; r += 0.05) {
+                labels.push(r.toFixed(2));
+                if (r <= radius) {
+                    data.push(254); // Lethal / Inscribed boundary
+                } else {
+                    const cost = 253 * Math.exp(-decay * (r - radius));
+                    data.push(Math.max(0, Math.round(cost)));
+                }
+            }
+
+            inflationChart.data.labels = labels;
+            inflationChart.data.datasets[0].data = data;
+            inflationChart.update();
+        }
+
+        // CLI Commands Reference Database
+        const cliCommands = [
+            { cmd: "ros2 node list", tag: "topic", desc: "Lists all actively discovered nodes registered on local ROS_DOMAIN_ID." },
+            { cmd: "ros2 topic echo /scan", tag: "topic", desc: "Prints real-time laser scan telemetry payload in the active shell." },
+            { cmd: "ros2 topic hz /scan", tag: "topic", desc: "Measures publishing frequency rate to verify sensor throughput." },
+            { cmd: "ros2 service call /global_costmap/clear_entirely_global_costmap std_srvs/srv/Empty", tag: "nav2", desc: "Triggers immediate clearing of global costmap layers." },
+            { cmd: "ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \"{pose: ...}\"", tag: "nav2", desc: "Issues navigation action goal explicitly from command scripts." },
+            { cmd: "ros2 run tf2_tools view_frames", tag: "tf", desc: "Generates an active coordinate frame tree diagram PDF." },
+            { cmd: "ros2 run tf2_ros tf2_echo odom base_link", tag: "tf", desc: "Monitors dynamic transformation offsets between odom and base_link." }
+        ];
+
+        function renderCLI(items) {
+            const container = document.getElementById('cli-container');
+            container.innerHTML = '';
+            items.forEach(c => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded uppercase font-bold ${c.tag === 'nav2' ? 'bg-purple-100 text-purple-800' : (c.tag === 'tf' ? 'bg-emerald-100 text-emerald-800' : 'bg-brand-100 text-brand-800')}">${c.tag}</span>
+                    </div>
+                    <code class="block bg-slate-900 text-emerald-400 p-2.5 rounded text-xs font-mono code-scroll overflow-x-auto">${c.cmd}</code>
+                    <p class="text-xs text-slate-600 leading-relaxed">${c.desc}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterCLI() {
+            const query = document.getElementById('cli-search').value.toLowerCase();
+            const filtered = cliCommands.filter(c => c.cmd.toLowerCase().includes(query) || c.desc.toLowerCase().includes(query));
+            renderCLI(filtered);
+        }
+
+        function filterCLITag(tag) {
+            if (tag === 'all') {
+                renderCLI(cliCommands);
+            } else {
+                renderCLI(cliCommands.filter(c => c.tag === tag));
+            }
+        }
+
+        // Tab Navigation Logic
+        function switchTab(tabId) {
+            ['arch', 'comm', 'tf', 'nav2', 'edu', 'cli'].forEach(id => {
+                const sec = document.getElementById(`sec-${id}`);
+                const btn = document.getElementById(`tab-${id}`);
+                if (id === tabId) {
+                    sec.classList.remove('hidden');
+                    if (btn) btn.className = "px-3 py-2 tab-active transition-colors";
+                } else {
+                    sec.classList.add('hidden');
+                    if (btn) btn.className = "px-3 py-2 text-slate-600 hover:text-brand-600 transition-colors";
+                }
+            });
+
+            // Trigger canvas resizes on visibility
+            if (tabId === 'arch') drawLifecycleCanvas();
+            if (tabId === 'comm' && qosChart) qosChart.resize();
+            if (tabId === 'tf') calculateTransforms();
+            if (tabId === 'nav2' && inflationChart) inflationChart.resize();
+        }
+
+        // Window Initialization
+        window.onload = function() {
+            calculateMulticastPort();
+            drawLifecycleCanvas();
+            initQosChart();
+            calculateTransforms();
+            initInflationChart();
+            renderCLI(cliCommands);
+
+            window.addEventListener('resize', () => {
+                drawLifecycleCanvas();
+                calculateTransforms();
+            });
+        };
+    </script>
+</body>
+</html>

@@ -2,8 +2,9 @@
 
 - ROS system for robotics
 
-- [link](https://docs.ros.org/en/humble/index.html)
+- [link for more resources](https://docs.ros.org/en/humble/index.html)
 
+- [interactive webpage for understanding concepts](ros_2_navigation_interactive_explorer.html)
 
 ---
 
