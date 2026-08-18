@@ -11,6 +11,8 @@
 - PID Proportional Integrative Derivative controller
 - does that remind you of anything? a machine learning algorithm?
 
+- path planning: strategic / long-term
+- obstacle avoidance: short term goals
 
 
 
