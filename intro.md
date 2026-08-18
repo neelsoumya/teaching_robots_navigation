@@ -1,5 +1,20 @@
 # Introduction to Robotics
 
+
+- path planning
+- where you are now?
+- `self localisation`: establish own position with respect to a frame of reference
+
+- `controller`
+- generate left velocity and right velocity and from that the angle of the robot
+
+- PID Proportional Integrative Derivative controller
+- does that remind you of anything? a machine learning algorithm?
+
+
+
+
+
 ## Learning Objectives
 
 After this chapter you should understand
