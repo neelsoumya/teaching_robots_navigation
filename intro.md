@@ -14,7 +14,16 @@
 - path planning: strategic / long-term
 - obstacle avoidance: short term goals
 
+- reinforcememt learning for controller: positive reinforcement
 
+
+- `Occupancy map`
+
+-  artificial potential field
+
+- grid based techniques
+
+- sample based planning
 
 
 ## Learning Objectives
