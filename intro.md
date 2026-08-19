@@ -30,6 +30,8 @@
 
 - Read the article on [autonomous mining robots](https://www.bbc.co.uk/news/articles/cgej7gzg8l0o)
 
+- [Lecture on Rio Tinto](riotinto.md)
+
 - how are obstacles detected?
 
 - fixed roads
