@@ -26,6 +26,31 @@
 - sample based planning
 
 
+## Activity
+
+- Read the article on [autonomous mining robots](https://www.bbc.co.uk/news/articles/cgej7gzg8l0o)
+
+- how are obstacles detected?
+
+- fixed roads
+
+- base station has map and each vehicle has GPS
+
+-  what is this `virtual bubble`?
+
+-  artificial potential field
+
+- GPS denied (see notes on GPS)
+
+- if you put a new obstacle, then map regenerated and potential field
+
+- disadvantages?
+
+-   
+
+
+
+
 ## Learning Objectives
 
 After this chapter you should understand
