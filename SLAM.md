@@ -27,7 +27,9 @@
 
 - odometry: key to robotics platforms
 
+- odometry assumption: robot should know where is origin (0,0,0)
 
+- for vacuum cleaner, it is charging point. can self localize from there
 
 ## Particle Filters
 
