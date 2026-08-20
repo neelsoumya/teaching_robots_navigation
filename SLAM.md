@@ -14,6 +14,8 @@
 
 ![image](images/slam.png)
 
+- simultaneously map and simultaneously localize
+
 ## Workflow
 
 ![image](images/workflow.png)
