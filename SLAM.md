@@ -18,6 +18,17 @@
 
 ![image](images/workflow.png)
 
+
+- wheels -> odometry
+
+- if humanoid robot then joints
+
+- IMU inertial measurement unit
+
+- odometry: key to robotics platforms
+
+
+
 ## Particle Filters
 
 
