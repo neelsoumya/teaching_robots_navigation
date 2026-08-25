@@ -13,6 +13,12 @@ While Gazebo and ROS (Robot Operating System) are both heavily supported by the 
 * **World & Model Building:** Allows creation of complex indoor or outdoor settings (houses, offices, rugged terrains) populated with objects and obstacles.
 * **SDF Format:** Natively reads Simulation Description Format (SDF) to construct robot profiles, environments, and ambient properties.
 
+
+## 📚 📝 🎥 Video and Tutorial
+
+- [🎥 video](https://www.youtube.com/watch?v=laWn7_cj434)
+- [📚 📝 tutorial](https://articulatedrobotics.xyz/tutorials/ready-for-ros/urdf/)
+
 ---
 
 ## 🔄 How Gazebo Integrates with ROS
