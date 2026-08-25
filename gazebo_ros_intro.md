@@ -19,7 +19,12 @@ While Gazebo and ROS (Robot Operating System) are both heavily supported by the 
 - [🎥 video](https://www.youtube.com/watch?v=laWn7_cj434)
 - [📚 📝 tutorial](https://articulatedrobotics.xyz/tutorials/ready-for-ros/urdf/)
 
+
+![image](images/gazebo.png)
+
 ---
+
+
 
 ## 🔄 How Gazebo Integrates with ROS
 
