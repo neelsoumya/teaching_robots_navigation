@@ -1,0 +1,25 @@
+{
+  // This tells VS Code's "Dev Containers" extension what environment to build.
+  // Docker Desktop does the heavy lifting: it downloads a ready-made Ubuntu +
+  // ROS 2 image, so you never have to install ROS directly on macOS (which
+  // isn't officially supported and is a pain to get working).
+  "name": "ROS 2 Jazzy Hello World",
+
+  // ros-base includes rclpy (the Python client library) and core ROS tools,
+  // without the full GUI/simulation stack (-desktop), which would be a much
+  // bigger download and isn't needed for this practical.
+  "image": "ros:jazzy-ros-base",
+
+  // Runs once, right after the container is created.
+  // ROS needs its "setup.bash" sourced in every shell before any ros2 command
+  // will work. Appending it to .bashrc means every new terminal you open in
+  // VS Code already has ROS ready to go, so you don't have to remember to do
+  // this by hand each time.
+  "postCreateCommand": "echo 'source /opt/ros/jazzy/setup.bash' >> ~/.bashrc",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  }
+}

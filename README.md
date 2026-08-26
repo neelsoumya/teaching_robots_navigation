@@ -21,6 +21,9 @@ Teaching robot navigation
 - [Safety and Ethics](safety_ethics.md)
 
 
+- [Practical `hello world`](hello_ros/README.md)
+
+
 ## Additional material (TBD)
 
 01_Introduction_to_Robotics.md
