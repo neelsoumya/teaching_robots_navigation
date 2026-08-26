@@ -61,6 +61,24 @@
 
 - greater the distance between landmarks, the greater the drift
 
+- can miss landmark
+
+![image](images/dead_reckoning.png)
+
+- static 
+
+- vacuum robot : not move chairs
+
+- distinct landmarks and unique locations (QR codes, colours)
+
+- database of landmarks with locations
+
+- weights landmark more than odometry and then update location
+
+- equations
+
+![image](images/dead_equations.png)
+
 
 
 
