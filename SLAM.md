@@ -90,7 +90,9 @@
 
 - design issues in industry: vacuum robot in glass offices, but office may have glass
 
+- combinations of sensors
 
+- landmarks may look similar
 
 
 ## Particle Filters
