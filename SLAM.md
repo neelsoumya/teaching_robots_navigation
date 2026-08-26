@@ -79,6 +79,17 @@
 
 ![image](images/dead_equations.png)
 
+- 🤔 ❓ imagine you have been asked to design a vacuum robot that will work in an office with glass doors. what problems will you face?
+
+- problem with _laser_: can shine through, narrow beam
+
+
+- glass may refract
+
+- with glass room, use _ultrasound_
+
+- design issues in industry: vacuum robot in glass offices, but office may have glass
+
 
 
 
