@@ -22,7 +22,7 @@ Teaching robot navigation
 
 
 - [Practical `hello world`](hello_ros/README.md)
-
+- [Practical with 3 nodes](hello_ros2/part2_pipeline.md)
 
 ## Additional material (TBD)
 
