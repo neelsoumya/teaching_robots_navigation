@@ -33,6 +33,37 @@
 
 - for vacuum cleaner, it is charging point. can self localize from there
 
+- all sensor input goes to build occupancy map
+
+- 🤔 ❓ what is the problem?
+
+- relying too much on odomtery
+
+- can be slippage, etc
+
+- self localizing due to odometry can be problematic
+
+- every rotation adds up
+
+- map can be erroneous
+
+- dead reckoning (early days of flight)
+
+- `v = d/t` has a clock, how much distance travelled in a time period
+
+- look for a particular direction on compass
+
+- and then look for a landmark
+
+- _LondonEye_ is a landmark for flights
+
+- correct for drift
+
+- greater the distance between landmarks, the greater the drift
+
+
+
+
 ## Particle Filters
 
 
