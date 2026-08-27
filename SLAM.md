@@ -1,4 +1,17 @@
-# SLAM
+# SLAM and other algorithms
+
+## Occupancy map
+
+- exploration of environment
+
+- position estimation using robot pose
+
+- sensor values interpret (LIDAR, sonar, vision, etc.)
+
+- integration of sensor values into map (based on distance from robot and pose estimation of robot)
+
+
+## SLAM
 
 - Simultaneous Localization and Mapping (SLAM)
 
@@ -94,6 +107,10 @@
 
 - landmarks may look similar
 
+
+## Rvis
+
+- Rvis will show lasers as dots
 
 ## Particle Filters
 
