@@ -113,7 +113,9 @@
 
 ![image](images/slam_pose.png)
 
+- waypoint navigation using landmarks
 
+![image](images/waypoint.png)
 
 ## Rvis
 
