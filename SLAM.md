@@ -125,5 +125,15 @@
 
 - particles generated
 
+- Initialization: The robot starts with no prior knowledge, so it scatters potential positions (particles) uniformly across the map.
 
+- Prediction: As the robot moves, it uses its motion model, combined with added random noise to account for uncertainty, to propagate all particles.
+
+- Correction: The robot takes sensor measurements (e.g., via Lidar). Each particle predicts what it would measure. Particles whose predictions closely match the actual measurements are given a high "importance weight."
+
+- Resampling: A new set of particles is formed, favoring those with high weights. This effectively eliminates unlikely hypotheses and duplicates the most plausible ones
+
+- Convergence: The process repeats, and over multiple cycles, the cloud of particles converges on the robot's actual pose.
+
+![image](images/particlefilters.png)
  
