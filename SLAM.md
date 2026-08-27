@@ -107,6 +107,9 @@
 
 - landmarks may look similar
 
+- building a robotic tour guide (in _Legoland_)
+
+- landmarks locations known and do not move
 
 ## Rvis
 
