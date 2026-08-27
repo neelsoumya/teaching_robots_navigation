@@ -111,12 +111,17 @@
 
 - landmarks locations known and do not move
 
+![image](images/slam_pose.png)
+
+
+
 ## Rvis
 
 - Rvis will show lasers as dots
 
 ## Particle Filters
 
+- particles generated
 
 
  
