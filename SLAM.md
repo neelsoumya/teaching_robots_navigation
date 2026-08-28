@@ -136,4 +136,8 @@
 - Convergence: The process repeats, and over multiple cycles, the cloud of particles converges on the robot's actual pose.
 
 ![image](images/particlefilters.png)
+
+- constantly resample and refine positions
+
+- do you have a particle filter in your brain?
  
