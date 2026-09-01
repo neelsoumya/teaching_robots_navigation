@@ -156,6 +156,15 @@
 - also generates an occupancy grid topic
 - `LIDAR` node also created
 
+- 🤔 ❓what if there is a featureless environment (marine/ocean)?	
+
+- clock (sun), compass, weather, underwater features, celestial navigation
+
+- picture of celestial navigation object from TWZ
+
+- underwater autonomous mapping
+
+
 ## Visual SLAM
 
 
