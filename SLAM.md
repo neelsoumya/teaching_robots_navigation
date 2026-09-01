@@ -160,9 +160,15 @@
 
 - clock (sun), compass, weather, underwater features, celestial navigation
 
-- picture of celestial navigation object from TWZ
+- [picture of celestial navigation object from TWZ](https://www.twz.com/17207/sr-71s-r2-d2-could-be-the-key-to-winning-future-fights-in-gps-denied-environments)
 
-- underwater autonomous mapping
+- underwater autonomous mapping, drill through ice, collect data on ecosystems
+
+- how do you solve this problem?
+
+- rely on _IMU_
+
+- sonic/acoustic signals localize underwater
 
 
 ## Visual SLAM
