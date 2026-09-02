@@ -170,6 +170,13 @@
 
 - sonic/acoustic signals localize underwater
 
+- [SLAM using sonar for underwater vehicles](https://cordis.europa.eu/article/id/152143-sonar-localisation-and-mapping-for-underwater-vehicles)
+
+- [vision augmented navigation](https://cordis.europa.eu/article/id/465198-vision-augmented-navigation-resolves-satellite-blind-spots)
+
+- [paper on SLAM underwater (see figure 7)](https://www.researchgate.net/publication/257523153_Scan_Matching_SLAM_in_Underwater_Environments)
+
+![image](images/underwater_slam.png)
 
 ## Visual SLAM
 
