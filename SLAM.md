@@ -135,7 +135,11 @@
 
 - Convergence: The process repeats, and over multiple cycles, the cloud of particles converges on the robot's actual pose.
 
+- [🎥 Very good explanation video of particle filters](https://www.youtube.com/watch?v=ydC0mE0ZYSA)
+
 - [🎥 Particle filters explained without equations simply](https://www.youtube.com/watch?v=aUkBa1zMKv4)
+
+- [Video explanation created using AI by Soumya Banerjee](https://youtube.com/shorts/ooLKpnAjm3U)
 
 ![image](images/particlefilters.png)
 
@@ -152,6 +156,8 @@
 - generate hypotheses, get data and test these hypotheses
 
 - geometry of the environment becomes _features_ that the particle filter will use
+
+- [🤔 ❓ How is this robot navigating](https://youtube.com/shorts/2biHFlMQmrE)
 
 
 ## Back to `NAVIGATION2`
