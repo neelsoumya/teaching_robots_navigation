@@ -135,9 +135,13 @@
 
 - Convergence: The process repeats, and over multiple cycles, the cloud of particles converges on the robot's actual pose.
 
+- [🎥 Particle filters explained without equations simply](https://www.youtube.com/watch?v=aUkBa1zMKv4)
+
 ![image](images/particlefilters.png)
 
 - constantly resample and refine positions
+
+![image](images/Robot_Localization_and_Particle_Filters.png)
 
 - 🤔 ❓do you have a particle filter in your brain?
 
