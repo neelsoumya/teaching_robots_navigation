@@ -209,3 +209,11 @@
 
 - with binocular system, you can use disparity between two images to get depth of objects 
 
+
+## Differences between visual odometry and visual SLAM
+
+- [Differences between visual odometry and visual SLAM](visual_odometry_vs_slam_guide.md)
+
+
+
+
