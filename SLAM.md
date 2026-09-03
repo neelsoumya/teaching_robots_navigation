@@ -215,5 +215,20 @@
 - [Differences between visual odometry and visual SLAM](visual_odometry_vs_slam_guide.md)
 
 
+## Back too visual SLAM
 
+- IR camera
 
+- An IR time-of-flight (ToF) camera emits infrared light and measures how long it takes for the light to travel to an object and back to the sensor. Since light travels at a known speed, the measured travel time gives the distance:
+
+- `Depth = (speed of light × round-trip time) / 2`
+
+- The camera therefore produces a depth map, where each pixel contains the distance to the corresponding point in the scene. In visual SLAM, this depth information helps the robot estimate 3D structure and its own position without relying solely on stereo correspondence or monocular scale estimation.
+
+![image](images/timeoflight.png)
+
+- these are called _RGBD_ cameras (D for depth)
+
+- IMU has accelerometer and gyroscope
+
+- by combining them you can have visual inertial SLAM or visual inertial odometry
