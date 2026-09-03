@@ -190,5 +190,22 @@
 
 ## Visual SLAM
 
+- visual odometry
+
+![image](images/visual_odometry.png)
+
+- AR codes
+
+- Detect features like corners
+
+- Look at same object from different frames and infer
+
+- motion of object (while tracking AR code)
+
+- similar to augmented reality where you are (say) visualizing a dinosaur from different directions as you move around the room
 
  
+- `monocular SLAM` (one camera system)
+
+- with binocular system, you can use disparity between two images to get depth of objects 
+
