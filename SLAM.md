@@ -215,7 +215,7 @@
 - [Differences between visual odometry and visual SLAM](visual_odometry_vs_slam_guide.md)
 
 
-## Back too visual SLAM
+## Back to visual SLAM
 
 - IR camera
 
