@@ -66,6 +66,11 @@
 ![image](https://arxiv.org/html/2505.04769v2/ARpdf.png)
 
 
+## World models Fei-Fei Li lab
+
+- [World Labs](https://www.worldlabs.ai/blog/atlas)
+- [Marble](https://marble.worldlabs.ai/)
+
 ## Link to competence and performance
 
 - Explainability important
