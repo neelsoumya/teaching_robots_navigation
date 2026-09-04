@@ -257,3 +257,9 @@
 
 - Recap: visual SLAM builds a map using visual features and self-localizes in the map
 
+- by moving the camera, we can detect the depth of objects
+
+- you can then project things into the environment (_Pokemon_)
+
+- [🎥 video of augmented reality and tracking](https://www.youtube.com/watch?v=Y9HMn6bd-v8)
+
