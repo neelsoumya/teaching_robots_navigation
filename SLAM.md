@@ -232,3 +232,28 @@
 - IMU has accelerometer and gyroscope
 
 - by combining them you can have visual inertial SLAM or visual inertial odometry
+
+- distance between two cameras in binocular must be known
+
+## MonoSLAM
+
+- opencv
+
+- initialization step known target
+
+- smooth motion model
+
+- feature tracking
+
+- direct method use all information from frame to infer which direction camera is moving and infer `odometry`
+
+![image](directmethod.png)
+
+- feature based: use feature like corner
+
+![image](images/featurebased.png)
+ 
+- there are different kinds of SLAM that uses direct or indirect method
+
+- Recap: visual SLAM builds a map using visual features and self-localizes in the map
+
