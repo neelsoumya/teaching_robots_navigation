@@ -247,7 +247,7 @@
 
 - direct method use all information from frame to infer which direction camera is moving and infer `odometry`
 
-![image](directmethod.png)
+![image](images/directmethod.png)
 
 - feature based: use feature like corner
 
