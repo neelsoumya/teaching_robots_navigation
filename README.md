@@ -12,7 +12,7 @@ Teaching robot navigation
 - [odometry](odometry.md)
 - [SLAM](SLAM.md)
 - [humanoid robots](humanoid_robots.md)
-- [drones](drones_indoor.md)
+- [indoor drones and GPS denied](drones_indoor.md)
 - [LLMs and robots](LLM_robots.md)
 - [Competence vs. Performance in robotics](competence_vs_performace_robotics.md)
 
@@ -24,6 +24,7 @@ Teaching robot navigation
 - [Practical `hello world`](hello_ros/README.md)
 - [Practical with 3 nodes](hello_ros2/part2_pipeline.md)
 
+<!--
 ## Additional material (TBD)
 
 01_Introduction_to_Robotics.md
@@ -61,3 +62,5 @@ Teaching robot navigation
 17_Classic_Papers.md
 
 18_Interactive_Resources.md
+
+-->
