@@ -8,9 +8,17 @@
 
 - classic approach of throwing sensors at the problem
 
-- optical flow
+- optical flow sensor
 
-- 2.5D LIDAR
+- An optical flow sensor is a vision-based device that captures sequential images of the ground to calculate relative velocity and movement direction for stabilization and navigation
+
+-  They function similarly to an optical computer mouse, taking rapid low-resolution images of the surface below and measuring pixel displacement between frames. [1] (https://www.unmannedtechshop.co.uk/blogs/knowledge-base/optical-flow-sensors-drones-autonomous-indoor-flight)
+
+- Distance Pairing: Because raw pixel shift only indicates angular movement, the sensor must be paired with a distance rangefinder (such as a ToF or LiDAR module) to calculate actual ground speed and altitude
+
+- Sensor Fusion: Flight controllers combine optical flow data with inertial measurement units (IMUs), barometers, and gyroscopes to achieve stable hovering in GNSS-denied or indoor environments.
+
+- 🤔 the winning team used a simple 2.5D LIDAR and very cheap compute
 
 - NASA Ingenuity drone has black and white camera, laser altimeter and on-chip gyroscope
 
