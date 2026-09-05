@@ -2,7 +2,7 @@
 
 - Drones
 
-- GPS denied
+- [GPS denied ISRO competition](https://www.youtube.com/watch?v=AhzXfSeWL_c)
 
 - Indian drones used to water plants indoor in GPS denied environments
 
