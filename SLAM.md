@@ -273,3 +273,12 @@
 - visual odometry: direct vs. indirect
 
 ![image](images/direct_vs_indirect_odometry.jpeg)
+
+
+- monocular SLAM. need key frame
+
+![image](images/direct_vs_indirect_odometry2.jpeg)
+
+
+- 🤔 ❓what problems can occur if you use odometry to build a map?
+
