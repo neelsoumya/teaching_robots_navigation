@@ -270,4 +270,6 @@
 
 
 - with two cameras infer depth (if distance between cameras known)
-- visual odometry
+- visual odometry: direct vs. indirect
+
+![image](images/direct_vs_indirect_odometry.jpeg)
