@@ -263,5 +263,11 @@
 
 - [🎥 video of augmented reality and tracking](https://www.youtube.com/watch?v=Y9HMn6bd-v8)
 
+- parallel tracking and mapping (PTAM)
+- tracking key frames
+- then project virtual objects into that environment
+- if features removed, then system will get confused
 
 
+- with two cameras infer depth (if distance between cameras known)
+- visual odometry
