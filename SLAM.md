@@ -282,3 +282,4 @@
 
 - 🤔 ❓what problems can occur if you use odometry to build a map?
 
+![image](images/odometry_map_problem.jpeg)
