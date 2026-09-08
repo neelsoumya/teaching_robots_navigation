@@ -311,3 +311,8 @@
 
 - filter based approach (Kalman filters, extended Kalman filters)
 
+- filter based vs optimisation based (see figure below)
+
+![image](filter_based.jpeg)
+
+
