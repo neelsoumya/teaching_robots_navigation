@@ -315,4 +315,6 @@
 
 ![image](filter_based.jpeg)
 
+- lecture material on filters vs. optimisation [here](assets/filters_vs_optimisation.pdf)
+
 
