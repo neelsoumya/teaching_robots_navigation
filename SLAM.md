@@ -299,11 +299,12 @@
 - get better estimate of odometry
 
 
-### Real time appearance based mapping
+### Real time appearance based mapping (RTAB-MAP)
 
 - STM short term memory
 
 - occupancy map in 3D
+
 
 ### Backend
 
@@ -316,5 +317,27 @@
 ![image](images/filter_based.jpeg)
 
 - lecture material on filters vs. optimisation [here](assets/filters_vs_optimisation.pdf)
+
+
+### Motion models
+
+- odometry sensors to estimate camera motion
+
+- constant velocity model: assumes that the camera moves at constant velocity
+
+- loop closure detection
+
+- backend and frontend and map
+
+
+### 🤔 ❓Case studies
+
+- autonomous SLAM
+- indoor
+- city navigation
+- mining
+
+
+
 
 
