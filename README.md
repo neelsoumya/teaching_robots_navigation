@@ -73,6 +73,13 @@ Run Stella-VSLAM and RTAB-Map demos
 - L25
 
 
+## VLE
+
+- Link to the 2025 VLE [site](https://vle.york.ac.uk/ultra/courses/_116069_1/outline)
+
+- The new one will be here, but needs updates [here](https://vle.york.ac.uk/ultra/courses/_118524_1/outline)
+
+
 <!--
 ## Additional material (TBD)
 
