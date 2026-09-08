@@ -1,5 +1,9 @@
 # teaching_robots_navigation
+
 Teaching robot navigation
+
+
+## Table of contents
 
 
 - [installation](installation.md)
@@ -23,6 +27,51 @@ Teaching robot navigation
 
 - [Practical `hello world`](hello_ros/README.md)
 - [Practical with 3 nodes](hello_ros2/part2_pipeline.md)
+
+
+## Timetable
+
+### Week 8 - Navigation and path planning (Soumya) [3 lectures]
+
+- w/c 23/November
+- L18
+- L19
+- P9 (Thursday): Mapping, localisation, and navigation
+- Creating a map with ROS2 SLAM Toolbox
+- Use Nav2 stack for localisation and navigation of TurtleBots in simulation
+- Create maps and use Nav2 for multi-robot systems in simulation
+- L20
+
+
+### Week 9 - SLAM (Soumya) [2 lectures]
+
+- w/c 30/November
+- L21
+- L22
+- P10 (Thursday): Autonomous navigation
+- Use of Nav2 Simple Commander API for navigation
+- Use of ROS2 TF API to listen and query transforms
+- Change parameters of ROS nodes at runt-ime using CLI and Python API
+
+### Week 10 - vSLAM/LLMs (Soumya) [3 lectures]
+
+- w/c 7/December
+
+- Module evaluation survey will come out around this time
+
+- L23
+
+- L24
+
+
+- P11 (Thursday): Visual SLAM
+
+Run Stella-VSLAM and RTAB-Map demos
+
+- Visualise vSLAM data using RViz
+
+- L25
+
 
 <!--
 ## Additional material (TBD)
