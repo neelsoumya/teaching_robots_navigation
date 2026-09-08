@@ -65,6 +65,9 @@
 
 ![image](https://arxiv.org/html/2505.04769v2/ARpdf.png)
 
+## Humanoid robots India and VLA models
+
+- [Humanoid robots India and VLA models](https://www.youtube.com/watch?v=6Y9UJTi1auE&t=1068s)
 
 ## World models Fei-Fei Li lab
 
