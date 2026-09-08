@@ -283,3 +283,8 @@
 - 🤔 ❓what problems can occur if you use odometry to build a map?
 
 ![image](images/odometry_map_problem.jpeg)
+
+- use landmarks
+
+
+- 🤔 ❓what challenges can come up when you are building semi-autonomous robots doing navigation on Mars?
