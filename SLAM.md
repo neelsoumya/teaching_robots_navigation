@@ -313,7 +313,7 @@
 
 - filter based vs optimisation based (see figure below)
 
-![image](filter_based.jpeg)
+![image](images/filter_based.jpeg)
 
 - lecture material on filters vs. optimisation [here](assets/filters_vs_optimisation.pdf)
 
