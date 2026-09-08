@@ -287,4 +287,4 @@
 - use landmarks
 
 
-- 🤔 ❓what challenges can come up when you are building semi-autonomous robots doing navigation on Mars?
+- 🤔 ❓what challenges can come up when you are building semi-autonomous robots doing navigation on [Mars](https://www.youtube.com/watch?v=n7uYOmTZJ6A)?
