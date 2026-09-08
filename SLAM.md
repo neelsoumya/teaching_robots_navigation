@@ -286,5 +286,27 @@
 
 - use landmarks
 
+- you track a particular feature and you know that it is (0,0) origin
+
+- refine the estimate and correct drift
+
 
 - 🤔 ❓what challenges can come up when you are building semi-autonomous robots doing navigation on [Mars](https://www.youtube.com/watch?v=n7uYOmTZJ6A)?
+
+
+- filter based and motion model (Kalman filter)
+
+- get better estimate of odometry
+
+
+### Real time appearance based mapping
+
+- STM short term memory
+
+- occupancy map in 3D
+
+### Backend
+
+- optimisation based approach
+
+- filter based approach
