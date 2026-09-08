@@ -309,4 +309,5 @@
 
 - optimisation based approach
 
-- filter based approach
+- filter based approach (Kalman filters, extended Kalman filters)
+
