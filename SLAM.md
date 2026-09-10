@@ -332,6 +332,8 @@
 
 ### 🤔 ❓Case studies
 
+Discuss the following with your peers
+
 - autonomous SLAM
 - indoor
 - city navigation
