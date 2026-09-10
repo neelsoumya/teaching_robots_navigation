@@ -25,8 +25,8 @@ Teaching robot navigation
 - [Safety and Ethics](safety_ethics.md)
 
 
-- [Practical `hello world`](hello_ros/README.md)
-- [Practical with 3 nodes](hello_ros2/part2_pipeline.md)
+- [Practical `hello world`](hello_ros/README.md) and Python [code](https://github.com/neelsoumya/teaching_robots_navigation/blob/main/hello_ros/listener.py) and [here](https://github.com/neelsoumya/teaching_robots_navigation/blob/main/hello_ros/talker.py)
+- [Practical with 3 nodes](hello_ros2/part2_pipeline.md) and Python [code](https://github.com/neelsoumya/teaching_robots_navigation/tree/main/hello_ros2)
 
 
 ## Timetable
