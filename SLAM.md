@@ -332,7 +332,7 @@
 
 ### 🤔 ❓Case studies
 
-Discuss the following with your peers
+Discuss the following with your peers (class discussion)
 
 - autonomous SLAM
 - indoor
