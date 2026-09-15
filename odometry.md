@@ -1,6 +1,10 @@
 # Odometry
 
+
+
 Odometry is the use of motion sensor data (such as wheel encoders or IMUs) to estimate how an object’s position and orientation change over time, usually relative to a starting point.[1][5][8]
+
+![image](images/pid.jpeg)
 
 ## Basic idea
 
