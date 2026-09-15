@@ -7,3 +7,6 @@
 - path planning
 
 - self localisation
+
+![image](images/intro_navigation.jpeg)
+
