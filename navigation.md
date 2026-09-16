@@ -36,3 +36,5 @@
 - path planning is different from trajectory planning
 
 - aerial drones have 6 degrees of freedom pitch, roll and yaw
+
+![image](images/uav_degrees.jpeg)
