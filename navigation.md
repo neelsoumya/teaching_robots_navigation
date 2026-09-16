@@ -24,3 +24,12 @@
 - these get translated to right and left wheel velocities
 
 - this is what guides the robot from where it is to where it needs to go
+
+- generate a series of _x, y_ values to guide a robot
+
+- `self localization`
+
+- path planner
+
+![image](images/path_planner.jpeg)
+
