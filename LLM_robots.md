@@ -27,7 +27,7 @@
 - [VLA models](https://arxiv.org/pdf/2505.04769)
 
 
-- [Video: India VLA model testing iHub robotics](https://youtu.be/6Y9UJTi1auE?si=wYIYIEMKn7Uy41pl&t=1081)
+- [🎥 Video: India VLA model testing iHub robotics](https://youtu.be/6Y9UJTi1auE?si=wYIYIEMKn7Uy41pl&t=1081)
 
 ![image](https://arxiv.org/html/2505.04769v2/Figure1.png)
 
