@@ -8,6 +8,7 @@
 
 - Takesa Ikegami robot mirror test with LLMs providing controls code in Python
 
+- [How to train humanoid robots: iHub robotcs India](https://youtu.be/6Y9UJTi1auE?si=iGmskjyb3RndbCKe&t=923)
 
 Humanoid navigation in home environments introduces distinct constraints over traditional wheeled robots due to camera oscillations from bipedal walking and complex 3D obstacles. This 35-to-40-minute lecture plan focuses on how simple visual odometry (VO) and feature-based SLAM algorithms enable home navigation.
 
