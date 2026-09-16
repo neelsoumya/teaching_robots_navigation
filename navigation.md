@@ -33,3 +33,4 @@
 
 ![image](images/path_planner.jpeg)
 
+- path planning is different from trajectory planning
