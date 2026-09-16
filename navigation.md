@@ -20,3 +20,7 @@
 
 ![image](images/pid.jpeg)
 
+
+- these get translated to right and left wheel velocities
+
+- this is what guides the robot from where it is to where it needs to go
