@@ -10,6 +10,10 @@
 
 - [How to train humanoid robots: iHub robotcs India](https://youtu.be/6Y9UJTi1auE?si=iGmskjyb3RndbCKe&t=923)
 
+- navigation using LIDAR and depth cameras
+
+- [Video: VLA model testing iHub robotics](https://youtu.be/6Y9UJTi1auE?si=wYIYIEMKn7Uy41pl&t=1081)
+
 Humanoid navigation in home environments introduces distinct constraints over traditional wheeled robots due to camera oscillations from bipedal walking and complex 3D obstacles. This 35-to-40-minute lecture plan focuses on how simple visual odometry (VO) and feature-based SLAM algorithms enable home navigation.
 
 **Lecture Structure (35–40 Minutes)**
