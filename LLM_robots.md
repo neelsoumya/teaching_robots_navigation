@@ -47,6 +47,7 @@
 
 ![image](https://arxiv.org/html/2505.04769v2/humanoidHelix.png)
 
+- [🎥 Video explaining how state and prompt is encoded](https://www.youtube.com/shorts/zfZE4hZ8efE)
 
 - [Tesla drive to you](https://www.tesla.com/en_gb/fsd)
 
