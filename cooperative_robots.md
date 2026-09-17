@@ -1,5 +1,7 @@
 # Co-operative robots and multi-robot systems
 
+![image](images/cooperative_robots.jpeg)
+
 - definition of multi-robot systems
 - distributed
 - work as team even if one fails
