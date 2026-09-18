@@ -49,3 +49,24 @@
 
 ![image](images/path_planning_techniques.jpeg)
 
+- reinforcement learning: control strategies that work get reinforced
+
+## What is required 
+
+- a global map
+- robot must know where it is in the map
+- start
+- goal
+
+
+## Occupancy map
+
+- exploration of environment
+
+- position estimation using robot pose
+
+- sensor values interpret (LIDAR, sonar, vision, etc.)
+
+- integration of sensor values into map (based on distance from robot and pose estimation of robot)
+
+- now see [SLAM resource](SLAM.md)
