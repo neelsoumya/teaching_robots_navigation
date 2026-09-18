@@ -55,7 +55,7 @@
 
 ![image](images/memory_VLA.png)
 
-- [video of drying the counter and using a sponge and memory](https://youtu.be/cRZNwgvcWUg?si=aT2L5OcnGmgzf4cT&t=1235)
+- [🤔 ❓video of drying the counter and using a sponge and memory](https://youtu.be/cRZNwgvcWUg?si=aT2L5OcnGmgzf4cT&t=1235)
 
 - [Tesla drive to you](https://www.tesla.com/en_gb/fsd)
 
