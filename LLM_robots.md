@@ -47,9 +47,13 @@
 
 ![image](https://arxiv.org/html/2505.04769v2/humanoidHelix.png)
 
-- [🎥 Video explaining how state and prompt is encoded](https://www.youtube.com/shorts/zfZE4hZ8efE)
+- [🎥 Video explaining how state and prompt is encoded VLA](https://www.youtube.com/shorts/zfZE4hZ8efE)
 
 - [🎥 Video on end to end training](https://www.youtube.com/watch?v=cRZNwgvcWUg)
+
+- how memory is used in VLA models for robots
+
+![image](images/memory_VLA.png)
 
 - [Tesla drive to you](https://www.tesla.com/en_gb/fsd)
 
