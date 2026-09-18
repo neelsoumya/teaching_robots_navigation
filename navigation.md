@@ -69,6 +69,13 @@
 
 - integration of sensor values into map (based on distance from robot and pose estimation of robot)
 
+
+- what happens to table? robot can go underneath. the choice is with you
+
+![image](images/dormroom_occupancy_map.jpeg)
+
+- divide into grids
+
 ## Next resource
 
 - now see [SLAM resource](SLAM.md)
