@@ -49,6 +49,8 @@
 
 - [🎥 Video explaining how state and prompt is encoded](https://www.youtube.com/shorts/zfZE4hZ8efE)
 
+- [🎥 Video on end to end training](https://www.youtube.com/watch?v=cRZNwgvcWUg)
+
 - [Tesla drive to you](https://www.tesla.com/en_gb/fsd)
 
 >consider ’Helix’, a state-of-the-art humanoid robot equipped with a next-generation VLA model. When instructed verbally, “Please take the water bottle from the fridge,” Helix activates its integrated perception system, where a foundation vision-language model (e.g., SigLIP or DINOv2) segments the visual scene to identify the refrigerator, its handle, and the bottle. The language input is processed by an LLM such as LLaMA-4, which tokenizes the instruction and fuses it with the visual context. This fused representation is passed to a hierarchical controller: the high-level policy plans the task sequence (locate handle, pull door, identify bottle, grasp), while a mid-level planner defines motor primitives, such as grasp type and joint trajectories
