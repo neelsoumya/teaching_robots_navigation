@@ -38,3 +38,14 @@
 - aerial drones have 6 degrees of freedom pitch, roll and yaw
 
 ![image](images/uav_degrees.jpeg)
+
+- balance shorter term goals with long term for path planning
+
+- path planning is a subset of trajectory planning
+
+![image](images/trajectory.jpeg)
+
+- some path planning techniques 
+
+![image](images/path_planning_techniques.jpeg)
+
