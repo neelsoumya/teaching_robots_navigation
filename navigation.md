@@ -69,4 +69,7 @@
 
 - integration of sensor values into map (based on distance from robot and pose estimation of robot)
 
+## Next resource
+
 - now see [SLAM resource](SLAM.md)
+
