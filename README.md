@@ -11,7 +11,10 @@ Teaching robot navigation
 - [ROS](ROS.md)
 - [Gazebo and Rviz](gazebo_ros_intro.md)
 
+<!--
 - [notes](notes.md)
+-->
+
 - [how does a submarine navigate underwater without GPS](inertial_navigation.md)
 
 - [navigation](navigation.md)

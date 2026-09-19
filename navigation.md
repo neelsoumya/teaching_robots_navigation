@@ -59,6 +59,12 @@
 - goal
 
 
+## Challenge question
+
+- [how does a submarine navigate underwater without GPS?](inertial_navigation.md)
+
+
+
 ## Occupancy map
 
 - exploration of environment
