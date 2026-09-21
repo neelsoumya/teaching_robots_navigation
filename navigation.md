@@ -117,11 +117,13 @@ B = length between the wheels
 
 - number of cells required ; how will this scale as you go to bigger environments 
 
-- [video of delivery robot](https://youtube.com/shorts/2biHFlMQmrE)
+- [🎥 video of delivery robot](https://youtube.com/shorts/2biHFlMQmrE)
 
 - 🤔 ❓how does this delivery robot navigate?
 
 ![image](images/delivery_robot.jpeg)
+
+- [🎥 video explaining how delivery robots navigate using artificial magnets](https://youtube.com/shorts/0ZC6JxeRvh4)
 
 ## Grid based techniques 
 
