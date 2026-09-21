@@ -17,6 +17,7 @@
 
 - divide into grids
 
+- binary (occupied/not occupied) within each cell
 
 ## SLAM
 

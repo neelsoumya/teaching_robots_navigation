@@ -82,6 +82,42 @@
 
 - divide into grids
 
+- binary (occupied/not occupied) within each cell
+
+
+## Artificial potential fields
+
+- force that will push it away
+
+![image](images/apf.jpeg)
+
+
+$$V_{Left} = V_{des} - \frac{B \theta_{des}}{2}$$
+
+$$V_{Right} = V_{des} + \frac{B \theta_{des}}{2}$$
+
+$$V_{des} = k F_{linear}$$
+
+$$\omega_{des} = k F_{angular}$$
+
+B = length between the wheels
+
+
+* In the APF approach for mobile robot navigation, the goal and obstacles act like charged surfaces and the total potential creates the imaginary force on the robot.
+* This imaginary force attracts the robot towards the goal and keeps it away from the obstacle as shown above.
+* The robot follows the negative gradient of the total potential field, effectively moving along the path of least resistance, avoiding the obstacle and seeking the target point.
+
+- 🤔 ❓disadvantage
+
+- need to know map before you setup potential field 
+
+- what will happen when you change target
+
+- all stored in memory 
+
+- number of cells required ; how will this scale as you go to bigger environments 
+
+
 ## Next resource
 
 - now see [SLAM resource](SLAM.md)
