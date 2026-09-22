@@ -125,6 +125,7 @@ B = length between the wheels
 
 - [🎥 video explaining how delivery robots navigate using artificial magnets](https://youtube.com/shorts/0ZC6JxeRvh4)
 
+
 ## Grid based techniques 
 
 
