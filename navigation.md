@@ -128,6 +128,13 @@ B = length between the wheels
 
 ## Grid based techniques 
 
+- A* algorithm
+
+- Dijkstra
+
+- compute path that avoids obstacles 
+
+
 
 ## Next resource
 
