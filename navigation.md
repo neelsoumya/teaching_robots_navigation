@@ -136,6 +136,7 @@ B = length between the wheels
 
 
 
+
 ## Next resource
 
 - now see [SLAM resource](SLAM.md)
