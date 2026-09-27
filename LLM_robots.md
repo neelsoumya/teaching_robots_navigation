@@ -62,6 +62,21 @@
 >consider ’Helix’, a state-of-the-art humanoid robot equipped with a next-generation VLA model. When instructed verbally, “Please take the water bottle from the fridge,” Helix activates its integrated perception system, where a foundation vision-language model (e.g., SigLIP or DINOv2) segments the visual scene to identify the refrigerator, its handle, and the bottle. The language input is processed by an LLM such as LLaMA-4, which tokenizes the instruction and fuses it with the visual context. This fused representation is passed to a hierarchical controller: the high-level policy plans the task sequence (locate handle, pull door, identify bottle, grasp), while a mid-level planner defines motor primitives, such as grasp type and joint trajectories
 
 
+## Safety
+
+- Safety in Vision-Language-Action Models for Robot Control
+
+- These systems translate visual inputs and natural language prompts straight into physical motor commands
+
+- safely integrating these models into unpredictable, open-world settings requires robust behavioral safety guards
+
+- Existing VLA models currently lack these safeguards, remaining vulnerable to adversarial image tampering, jailbreak attempts, and the execution of dangerous or unsafe commands.
+
+- more reading: Paul Kroeger and [Simos Gerasimou](https://www-users.york.ac.uk/~sg778/)
+
+![image](images/safety_vla.jpeg)
+
+
 ## Other applications
 
 - healthcare
