@@ -114,12 +114,7 @@
 
 
 
-## 🎮 🛠️Practicals
-
-
----
-
-## 1. Theoretical Foundations: VLMs vs. VLAs
+##  Theoretical Foundations: VLMs vs. VLAs
 
 - 💡 When introducing multimodal _embodied_ AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
 
@@ -129,6 +124,8 @@
 - 💡 They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
 
 
+
+## 🎮 🛠️Practicals
 
 ---
 
