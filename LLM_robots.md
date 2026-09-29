@@ -114,22 +114,19 @@
 
 
 
-## Practicals
-
-Here is the complete set of resources, theoretical foundations, code examples, and Google Colab notebook structure formatted in standard Markdown. You can copy and paste this text directly into your course repository or `README.md` file.
-
----
-
+## 🎮 🛠️Practicals
 
 
 ---
 
 ## 1. Theoretical Foundations: VLMs vs. VLAs
 
-When introducing multimodal embodied AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
+- 💡 When introducing multimodal _embodied_ AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
 
 * **Vision-Language Models (VLMs):** Models like GPT-4o, Gemini, or SayCan take images and text prompts as input and output high-level textual descriptions, symbolic plans, or code (e.g., generating Python scripts for MoveIt 2). They operate in symbolic/discrete space and rely on downstream controllers to execute physical motion.
-* **Vision-Language-Action (VLA) Models:** Models like OpenVLA, Octo, and $\pi_0$ process camera frames and text instructions to directly output continuous motor control parameters—typically $7\text{-DoF}$ continuous pose deltas $(x, y, z, \text{roll}, \text{pitch}, \text{yaw}, \text{gripper})$. They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
+* **Vision-Language-Action (VLA) Models:** Models like OpenVLA, Octo, and $\pi_0$ process camera frames and text instructions to directly output continuous motor control parameters—typically $7\text{-DoF}$ continuous pose deltas $(x, y, z, \text{roll}, \text{pitch}, \text{yaw}, \text{gripper})$. 
+
+- 💡 They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
 
 
 
@@ -155,7 +152,7 @@ When introducing multimodal embodied AI to students, it is critical to distingui
 
 ---
 
-## 3. Standalone Python Practical Scripts
+## 3. 🎮 🛠️Standalone Python Practical Scripts
 
 ### Script A: Conceptual Minimal VLA Model (Zero-GPU Required)
 
