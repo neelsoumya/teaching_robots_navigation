@@ -79,21 +79,6 @@
 ![image](images/safety_vla.jpeg)
 
 
-## Other applications
-
-- healthcare
-
-![image](https://arxiv.org/html/2505.04769v2/Healthcare.png)
-
-- agriculture
-
-![image](https://arxiv.org/html/2505.04769v2/agricultureVLA.png)
-
-
-- disability
-
-![image](https://arxiv.org/html/2505.04769v2/ARpdf.png)
-
 
 ## Humanoid robots India and VLA models
 
@@ -111,6 +96,22 @@
 - But LLMs may hallucinate
 
 - See [competence vs performance lecture](competence_vs_performace_robotics.md)
+
+## Other applications
+
+- healthcare
+
+![image](https://arxiv.org/html/2505.04769v2/Healthcare.png)
+
+- agriculture
+
+![image](https://arxiv.org/html/2505.04769v2/agricultureVLA.png)
+
+
+- disability
+
+![image](https://arxiv.org/html/2505.04769v2/ARpdf.png)
+
 
 
 ## Practicals
