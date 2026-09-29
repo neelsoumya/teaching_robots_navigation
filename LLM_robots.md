@@ -114,7 +114,7 @@
 
 
 
-##  VLMs vs. VLAs
+##  💡 VLMs vs. VLAs
 
 - 💡 When introducing multimodal _embodied_ AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
 
