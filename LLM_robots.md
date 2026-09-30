@@ -126,11 +126,10 @@
 
 
 
-## 🎮 🛠️Practicals
 
 ---
 
-## 1. Curated Open-Source Teaching Resources
+## Curated Open-Source Teaching Resources
 
 | Resource / Framework | Maintainer / Institution | Key Educational Utility | Primary Focus |
 | --- | --- | --- | --- |
@@ -150,7 +149,10 @@
 
 ---
 
-## 2. 🎮 🛠️Standalone Python Practical Scripts
+## 🎮 🛠️Practicals
+
+
+## 🎮 🛠️Standalone Python Practical Scripts
 
 ### Script A: Conceptual Minimal VLA Model (Zero-GPU Required)
 
