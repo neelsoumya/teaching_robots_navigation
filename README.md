@@ -25,6 +25,7 @@ Teaching robot navigation
 - [Co-operative robots and multi-robot systems](cooperative_robots.md)
 - [LLMs and robots](LLM_robots.md)
 
+- additional material
 
 - [Competence vs. Performance in robotics](competence_vs_performace_robotics.md)
 
