@@ -24,6 +24,8 @@ Teaching robot navigation
 - [indoor drones and GPS denied](drones_indoor.md)
 - [Co-operative robots and multi-robot systems](cooperative_robots.md)
 - [LLMs and robots](LLM_robots.md)
+
+
 - [Competence vs. Performance in robotics](competence_vs_performace_robotics.md)
 
 
