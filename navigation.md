@@ -128,6 +128,8 @@ B = length between the wheels
 
 ## Grid based techniques for robot navigation 
 
+- [🎥 video explanation](https://youtube.com/shorts/P6xDDc4QUp4)
+
 - A* algorithm
 
 - Dijkstra
