@@ -20,8 +20,10 @@ Teaching robot navigation
 - [navigation](navigation.md)
 - [odometry](odometry.md)
 - [SLAM](SLAM.md)
+
 - [humanoid robots](humanoid_robots.md)
 - [indoor drones and GPS denied](drones_indoor.md)
+
 - [LLMs and robots](LLM_robots.md)
 
 - Additional material
