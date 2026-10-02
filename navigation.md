@@ -126,7 +126,7 @@ B = length between the wheels
 - [🎥 video explaining how delivery robots navigate using artificial magnets](https://youtube.com/shorts/0ZC6JxeRvh4)
 
 
-## Grid based techniques 
+## Grid based techniques for robot navigation 
 
 - A* algorithm
 
@@ -134,6 +134,24 @@ B = length between the wheels
 
 - compute path that avoids obstacles 
 
+- grid size depends on lots of factors
+
+- [wavefront Dijkstra](https://www.youtube.com/watch?v=BuvKtCh0SKk&t=30s)
+
+- 🤔 ❓what are the advantages of grid based vs. potential methods
+
+- more flexible
+
+- if there is new obstacle, then recompute all vectors/fields
+
+- 🤔 ❓what is the most important thing to have in order to have a successful navigating robot?
+
+- you need a _map_
+
+- without a map, there is no way to navigate and collide with object
+
+
+## Sample based planning
 
 
 
