@@ -6,8 +6,8 @@ Teaching robot navigation
 ## Table of contents
 
 
-- [installation](installation.md)
-- [introduction](intro.md)
+- [Installation](installation.md)
+- [Introduction](intro.md)
 - [ROS](ROS.md)
 - [Gazebo and Rviz](gazebo_ros_intro.md)
 
