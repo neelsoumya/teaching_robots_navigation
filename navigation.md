@@ -150,6 +150,8 @@ B = length between the wheels
 
 - without a map, there is no way to navigate and collide with object
 
+![image](images/grid_vs_potential.jpeg)
+
 
 ## Sample based planning
 
