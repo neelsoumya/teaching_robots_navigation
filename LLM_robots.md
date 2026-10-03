@@ -80,6 +80,30 @@
 
 
 
+
+##  💡 VLMs vs. VLAs
+
+- 💡 When introducing multimodal _embodied_ AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
+
+* **Vision-Language Models (VLMs):** Models like GPT-4o, Gemini, or SayCan take images and text prompts as input and output high-level textual descriptions, symbolic plans, or code (e.g., generating Python scripts for MoveIt 2). They operate in symbolic/discrete space and rely on downstream controllers to execute physical motion.
+
+* **Vision-Language-Action (VLA) Models:** Models like OpenVLA, Octo, and $\pi_0$ process camera frames and text instructions to directly output continuous motor control parameters—typically $7\text{-DoF}$ continuous pose deltas $(x, y, z, \text{roll}, \text{pitch}, \text{yaw}, \text{gripper})$. 
+
+- 💡 They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
+
+![image](images/vla_vs_vlm.jpeg)
+
+## Agents controlling robots?
+
+- [🎥 video: Robot-Use Agents](https://www.youtube.com/watch?v=Jv5B5CEaPJI)
+
+>MIT professor Philip Isola argued that we may be entering the era of robot-use agents: general-purpose models that can control different robots, write policies, and learn new physical tasks with little or no robot-specific training.
+
+- [📝 reading essay by Philip Isola](https://web.mit.edu/phillipi/www/writing/robot-use-agents.html)
+
+![image](images/The_Era_of_Robot-Use_Agents.png)
+
+
 ## Humanoid robots India and VLA models
 
 - [Humanoid robots India and VLA models](https://www.youtube.com/watch?v=6Y9UJTi1auE&t=1068s)
@@ -88,6 +112,8 @@
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Marble](https://marble.worldlabs.ai/)
+
+
 
 ## Link to competence and performance
 
@@ -113,28 +139,6 @@
 ![image](https://arxiv.org/html/2505.04769v2/ARpdf.png)
 
 
-
-##  💡 VLMs vs. VLAs
-
-- 💡 When introducing multimodal _embodied_ AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
-
-* **Vision-Language Models (VLMs):** Models like GPT-4o, Gemini, or SayCan take images and text prompts as input and output high-level textual descriptions, symbolic plans, or code (e.g., generating Python scripts for MoveIt 2). They operate in symbolic/discrete space and rely on downstream controllers to execute physical motion.
-
-* **Vision-Language-Action (VLA) Models:** Models like OpenVLA, Octo, and $\pi_0$ process camera frames and text instructions to directly output continuous motor control parameters—typically $7\text{-DoF}$ continuous pose deltas $(x, y, z, \text{roll}, \text{pitch}, \text{yaw}, \text{gripper})$. 
-
-- 💡 They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
-
-![image](images/vla_vs_vlm.jpeg)
-
-## Agents controlling robots?
-
-- [🎥 video: Robot-Use Agents](https://www.youtube.com/watch?v=Jv5B5CEaPJI)
-
->MIT professor Philip Isola argued that we may be entering the era of robot-use agents: general-purpose models that can control different robots, write policies, and learn new physical tasks with little or no robot-specific training.
-
-- [📝 reading essay by Philip Isola](https://web.mit.edu/phillipi/www/writing/robot-use-agents.html)
-
-![image](images/The_Era_of_Robot-Use_Agents.png)
 
 ---
 
