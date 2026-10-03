@@ -148,7 +148,7 @@ B = length between the wheels
 
 - 🤔 ❓what is the most important thing to have in order to have a successful navigating robot?
 
-- you need a _map_
+- _Answer_: you need a _map_
 
 - without a map, there is no way to navigate and collide with object
 
