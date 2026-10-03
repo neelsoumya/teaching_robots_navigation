@@ -132,6 +132,8 @@
 
 >MIT professor Philip Isola argued that we may be entering the era of robot-use agents: general-purpose models that can control different robots, write policies, and learn new physical tasks with little or no robot-specific training.
 
+![image](images/The_Era_of_Robot-Use_Agents.png)
+
 ---
 
 ## Curated Open-Source Teaching Resources
