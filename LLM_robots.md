@@ -127,7 +127,7 @@
 
 ## Agents controlling robots?
 
-- [video: Robot-Use Agents](https://www.youtube.com/watch?v=Jv5B5CEaPJI)
+- [🎥 video: Robot-Use Agents](https://www.youtube.com/watch?v=Jv5B5CEaPJI)
 
 >MIT professor Philip Isola argued that we may be entering the era of robot-use agents: general-purpose models that can control different robots, write policies, and learn new physical tasks with little or no robot-specific training.
 
