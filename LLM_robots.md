@@ -111,7 +111,10 @@
 ## World models Fei-Fei Li lab
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
-- [Marble](https://marble.worldlabs.ai/)
+- [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
+
+
+
 
 
 
