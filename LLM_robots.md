@@ -124,6 +124,7 @@
 
 - 💡 They unify visual perception, semantic instruction understanding, and low-level control end-to-end within a single neural network architecture.
 
+![image](images/vla_vs_vlm.jpeg)
 
 ## Agents controlling robots?
 
