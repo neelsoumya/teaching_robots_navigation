@@ -137,9 +137,11 @@
 
 
 
+##  🤔❓What about explainability?
 
+- is it important to have explainability for these robots?
 
-## Link to competence and performance
+- Link to competence and performance
 
 - Explainability important
 
