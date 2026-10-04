@@ -103,7 +103,7 @@
 
 ![image](images/The_Era_of_Robot-Use_Agents.png)
 
-- this is a shift from traditional hardware to LLM agents with hardware in the loop
+- _Concept_ 🧩 🚀 this is a shift from traditional hardware to LLM agents with hardware in the loop
 
 ![image](images/Shift_to_Cloud_LLM_Puppeteering.png)
 
