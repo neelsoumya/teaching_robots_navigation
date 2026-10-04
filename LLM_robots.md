@@ -109,7 +109,14 @@
 
 ![image](images/Shift_to_Cloud_LLM_Puppeteering.png)
 
-- 
+>If LLMs can competently control robots, then robotic abilities may take off more quickly than has been anticipated. Every robot with an internet connection becomes a potential tool for Fable, Astra, and other AIs.
+
+>Claude-as-puppeteer could lead to a rather different future. This kind of intelligence runs in the cloud, is not specially tuned to any one kind of robot, and has a mature infrastructure ready to support it. In this paradigm, the robots themselves do not necessarily need to change. 
+
+>A device that is not intelligent today could tomorrow become AI-enabled, with just a software update
+
+⚠️
+>Puppeteering may be less reliable than tried-and-true robotic systems; this matters especially for high-stakes and safety-critical use cases. 
 
 
 ## Humanoid robots India and VLA models
