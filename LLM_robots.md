@@ -119,14 +119,17 @@
 >Puppeteering may be less reliable than tried-and-true robotic systems; this matters especially for high-stakes and safety-critical use cases. 
 
 
-## Humanoid robots India and VLA models
-
-- [Humanoid robots India and VLA models](https://www.youtube.com/watch?v=6Y9UJTi1auE&t=1068s)
-
 ## World models Fei-Fei Li lab
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
+
+
+## Humanoid robots India and VLA models
+
+- [Humanoid robots India and VLA models](https://www.youtube.com/watch?v=6Y9UJTi1auE&t=1068s)
+
+
 
 
 
