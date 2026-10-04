@@ -121,6 +121,7 @@
 
 - [Gemini robotics trash bag task](https://www.youtube.com/watch?v=4lSQnrMC6nY)
 
+
 ## World models Fei-Fei Li lab
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
