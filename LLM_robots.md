@@ -95,6 +95,8 @@
 
 ## Agents controlling robots?
 
+- [🎥 short video: how can general agents control a variety of machines/robots](https://youtube.com/shorts/LSVwZMQ2aZo)
+
 - [🎥 video: Robot-Use Agents](https://www.youtube.com/watch?v=Jv5B5CEaPJI)
 
 >MIT professor Philip Isola argued that we may be entering the era of robot-use agents: general-purpose models that can control different robots, write policies, and learn new physical tasks with little or no robot-specific training.
@@ -106,6 +108,8 @@
 - _Concept_ 🧩 🚀 this is a shift from traditional hardware to LLM agents with hardware in the loop
 
 ![image](images/Shift_to_Cloud_LLM_Puppeteering.png)
+
+- 
 
 
 ## Humanoid robots India and VLA models
