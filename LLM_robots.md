@@ -123,9 +123,33 @@
 
 - [📝 Claude plays robotics](https://www.anthropic.com/research/claude-plays-robotics)
 
->We built a suite of eleven navigation and spatial-reasoning tasks ranging from simple goal-seeking (find_x: walk to the table with the blue X) through search, mazes, and waypoint sequences, to tasks that explicitly probe self-monitoring (drift_detection: notice that your commands are being silently corrupted) and spatial mental-model building (explore_report: roam an arena, then answer layout questions from memory). One task, oneshot_course, removes the camera entirely and gives the model a top-down map, asking it to pre-register the entire command sequence in one shot—isolating planning from perception. Each task is scored on success or normalized progress, and we report a composite over all eleven, scaled between 0 and 100 
+>We built a suite of eleven navigation and spatial-reasoning tasks ranging from simple goal-seeking (find_x: walk to the table with the blue X) through search, mazes, and waypoint sequences, to tasks that explicitly probe self-monitoring (drift_detection: notice that your commands are being silently corrupted) and spatial mental-model building (explore_report: roam an arena, then answer layout questions from memory). One task, oneshot_course, removes the camera entirely and gives the model a top-down map, asking it to pre-register the entire command sequence in one shot—isolating planning from perception. Each task is scored on success or normalized progress, and we report a composite over all eleven, scaled between 0 and 100 (High-Level Locomotion Composite Evaluation)
+
+The table below lists the 11 tasks included in the high-level locomotion composite evaluation.
+
+| **Task**          | **Description**                                                                                                                                  |
+| :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `find_x`          | Locate and walk to a table 25 ft away marked with a large blue X, starting from a random heading.                                                |
+| `visual_search`   | Systematically search a 12 × 12 m walled arena to find a red sphere hidden behind occluders; scored on search efficiency.                        |
+| `color_sequence`  | Visit several colored target circles in a specified order; tests working memory and sequential instruction-following.                            |
+| `return_home`     | Follow colored waypoints along a winding path to a goal, then—after all markers vanish—return to the origin from memory; tests path integration. |
+| `procedural_maze` | Navigate a procedurally generated maze using only the forward camera, with no map.                                                               |
+| `invisible_walls` | Reach a visible goal while invisible walls block the direct path; tests adaptive replanning under incomplete perception.                         |
+| `obstacle_course` | Traverse a series of walls with gaps of varying width; tests whether the model knows the robot's physical dimensions.                            |
+| `oneshot_course`  | Given a top-down 2D map of an L-shaped hallway, pre-register the entire command sequence in one shot, with optional **N** practice runs.         |
+| `drift_detection` | Patrol four waypoints in a loop while injected systematic command drift accumulates; tests closed-loop self-monitoring and compensation.         |
+| `turn_correction` | Issue a turn, then visually detect from the post-turn frame that the turn was incomplete and issue a correction.                                 |
+| `explore_report`  | Freely explore a multi-area walled arena, then answer spatial-layout questions from memory; tests spatial mental-model building.                 |
+
+*Table: All 11 tasks in the high-level locomotion composite evaluation.*
+
+
 
 ## World models Fei-Fei Li lab
+
+- 🤔❓Will LLMs struggle to solve spatial reasoning?
+
+- [This is what Fei-Fei Li says](https://www.linkedin.com/posts/a16z_dr-fei-fei-li-on-why-llms-will-struggle-activity-7370936594012430336-Bv5t)
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
