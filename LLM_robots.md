@@ -155,6 +155,16 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 - [🎥video](https://openai.robocurve.org/gpt-6-astra/video/bowl-astra-vs-fable51-cost.mp4)
 
 
+>Fold the T-shirt
+
+- _Concept_ 🧩 🚀give this prompt to Waddle Labs and it will create a policy for any robot. Use skills and write code to create a working policy
+
+- [🎥video of Waddle Labs](https://www.youtube.com/watch?v=fGRYBtmzwoI)
+
+>pick up all 3 cups in the room
+
+- [long horizon tasks](https://www.waddlelabs.ai/research/introducing-waddle)
+
 
 ## World models Fei-Fei Li lab
 
@@ -164,6 +174,15 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
+
+
+## Open source evals for physical AI
+
+- Run any LLM/VLA on any arm/humanoid against any real/sim benchmark.
+
+- [https://github.com/robocurve/inspect-robots](https://github.com/robocurve/inspect-robots)
+
+
 
 
 ## Humanoid robots India and VLA models
