@@ -143,12 +143,17 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 *Table: All 11 tasks in the high-level locomotion composite evaluation.*
 
+- [🎥 Fable video](https://anthropic.robocurve.org/fable-5.1/video/rerun-loop.mp4)
+
+- _Concept_ 🧩 🚀 the video above shows three camera views the model receives each turn, its own notes as it decides, and the end‑effector targets it commands
+
 - [GPT-6 Astra](https://openai.robocurve.org/gpt-6-astra/)
 
 >“Pick up the round blue puzzle piece by the knob at its center and place it into the matching circular groove in the board.”
 
 
-- [video](https://openai.robocurve.org/gpt-6-astra/video/bowl-astra-vs-fable51-cost.mp4)
+- [🎥video](https://openai.robocurve.org/gpt-6-astra/video/bowl-astra-vs-fable51-cost.mp4)
+
 
 
 ## World models Fei-Fei Li lab
