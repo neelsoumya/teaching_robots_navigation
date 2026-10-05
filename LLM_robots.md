@@ -225,7 +225,9 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 ---
 
-## Curated Open-Source Teaching Resources
+## 📚 📝Curated Open-Source Teaching Resources
+
+- [📚YC paper club why robotics is not solved](https://www.youtube.com/watch?v=myDCd0hNqQU)
 
 | Resource / Framework | Maintainer / Institution | Key Educational Utility | Primary Focus |
 | --- | --- | --- | --- |
