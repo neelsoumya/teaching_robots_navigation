@@ -243,6 +243,7 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
  |
 
+- [The primary awesome-list repository tracking recent papers, codebases, and benchmarks combining LLMs/VLMs and robotics](https://github.com/GT-RIPL/Awesome-LLM-Robotics)
 ---
 
 ## 🎮 🛠️Practicals
