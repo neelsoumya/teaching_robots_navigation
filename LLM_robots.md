@@ -123,6 +123,7 @@
 
 - [📝 Claude plays robotics](https://www.anthropic.com/research/claude-plays-robotics)
 
+>We built a suite of eleven navigation and spatial-reasoning tasks ranging from simple goal-seeking (find_x: walk to the table with the blue X) through search, mazes, and waypoint sequences, to tasks that explicitly probe self-monitoring (drift_detection: notice that your commands are being silently corrupted) and spatial mental-model building (explore_report: roam an arena, then answer layout questions from memory). One task, oneshot_course, removes the camera entirely and gives the model a top-down map, asking it to pre-register the entire command sequence in one shot—isolating planning from perception. Each task is scored on success or normalized progress, and we report a composite over all eleven, scaled between 0 and 100 
 
 ## World models Fei-Fei Li lab
 
