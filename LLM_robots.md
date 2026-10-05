@@ -121,6 +121,8 @@
 
 - [Gemini robotics trash bag task](https://www.youtube.com/watch?v=4lSQnrMC6nY)
 
+- [📝 Claude plays robotics](https://www.anthropic.com/research/claude-plays-robotics)
+
 
 ## World models Fei-Fei Li lab
 
