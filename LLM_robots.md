@@ -175,6 +175,13 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
 
+## Bottleneck for robotics (~ca. 2026)
+
+![image](images/bottlenecks_robotics.png)
+
+- [📚YC paper club why robotics is not solved](https://www.youtube.com/watch?v=myDCd0hNqQU)
+
+
 
 ## Open source evals for physical AI
 
