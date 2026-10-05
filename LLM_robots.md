@@ -206,6 +206,7 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 - See [competence vs performance lecture](competence_vs_performace_robotics.md)
 
+
 ## Other applications
 
 - healthcare
