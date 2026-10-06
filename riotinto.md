@@ -65,6 +65,15 @@ and:
 
 ---
 
+#  🤔❓Class discussion 
+
+![image](images/rioavoid.jpeg)
+
+>Giant trucks the size of townhouses, capable of hauling 300 tonnes, criss-cross red-earth roads in various sections of this open-pit mine complex. During a tour of the site in a normal-sized company vehicle, one of the trucks comes into view, approaching from a side road. I sigh with relief as it deftly turns and continues in the direction we have just come.
+
+-  🤔❓how did this happen?
+
+
 # 2. A useful way to map Rio Tinto onto your robotics lectures
 
 I would actually structure the case study around the standard autonomous-robot pipeline:
