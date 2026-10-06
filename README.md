@@ -23,10 +23,10 @@ Teaching robot navigation
 
 - [SLAM](SLAM.md)
 
-- [humanoid robots](humanoid_robots.md)
 - [LLMs and robots](LLM_robots.md)
 
 - Additional material
+- [humanoid robots](humanoid_robots.md)
 - [Co-operative robots and multi-robot systems](cooperative_robots.md)
 - [Competence vs. Performance in robotics](competence_vs_performace_robotics.md)
 
