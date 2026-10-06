@@ -16,7 +16,7 @@
 
 - PID controller Proportional Integrative and Derivative 
 
-- [odometry](odometry.md)
+- See resource on [odometry](odometry.md)
 
 ![image](images/pid.jpeg)
 
@@ -217,6 +217,8 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 
 
 ## Next resource
+
+- now see [drones indoor](drones_indoor.md)
 
 - now see [SLAM resource](SLAM.md)
 
