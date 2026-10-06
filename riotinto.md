@@ -21,6 +21,11 @@
 
 ![image](images/rio.jpeg)
 
+- mines do not change a lot
+
+- GPS geofencing: GPS will work since it is a large mine
+
+
 ## 1. The Rio Tinto "Mine of the Future"
 
 Rio Tinto's Pilbara operations are probably the best case study to introduce.
