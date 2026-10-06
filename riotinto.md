@@ -2,8 +2,14 @@
 
 ![image](images/riointo.png)
 
+![image](images/openpitmines.jpeg)
 
-One important teaching point is that **Rio Tinto does not primarily use the kind of reactive grid-potential-field obstacle avoidance students might implement in a small mobile robot**. Its mining vehicles operate in a highly structured environment, so autonomy is based heavily on **predefined routes, high-precision positioning, fleet-level coordination, sensing, geofencing and safety rules**, with obstacle detection and emergency stopping layered on top.
+
+-  🤔❓what techniques would you use to operate a robot here?
+
+>As you look at these massive autonomous haul trucks operating in the remote, high-heat, and dust-heavy environment of Western Australia's Pilbara region—monitored from control centers over a thousand kilometers away in Perth—what specific combination of sensor fusion, edge-based perception, path-planning, and dynamic communication techniques would you implement to ensure safe, uninterrupted navigation through blinding dust storms, abrasive terrain, and intermittent GPS signal degradation, and how must standard robotics strategies be reimagined when moving from controlled, indoor environments to unpredictable, heavy-industrial open-pit mines?
+
+- One important point is that **Rio Tinto does not primarily use the kind of reactive grid-potential-field obstacle avoidance students might implement in a small mobile robot**. Its mining vehicles operate in a highly structured environment, so autonomy is based heavily on **predefined routes, high-precision positioning, fleet-level coordination, sensing, geofencing and safety rules**, with obstacle detection and emergency stopping layered on top.
 
 ## 1. The Rio Tinto "Mine of the Future"
 
