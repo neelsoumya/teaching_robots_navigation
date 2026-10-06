@@ -119,6 +119,11 @@
 >Puppeteering may be less reliable than tried-and-true robotic systems; this matters especially for high-stakes and safety-critical use cases. 
 
 
+_Concept_ 🧩 🚀 Link to the [Bitter Lesson by Sutton](https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf)
+
+>The _Bitter Lesson_ is that if you give it enough data, computers can solve this task
+
+
 - [Gemini robotics trash bag task](https://www.youtube.com/watch?v=4lSQnrMC6nY)
 
 - [📝 Claude plays robotics](https://www.anthropic.com/research/claude-plays-robotics)
