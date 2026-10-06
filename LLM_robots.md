@@ -172,6 +172,12 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 - [This is what Fei-Fei Li says](https://www.linkedin.com/posts/a16z_dr-fei-fei-li-on-why-llms-will-struggle-activity-7370936594012430336-Bv5t)
 
+- [this what Yann LeCun says](https://x.com/ylecun/status/2047636569767419951?s=20)
+
+>A robot-rich future can't be built with AIs that don't understand the physical world and don't anticipate the consequences of their actions. And LLMs really don't
+
+- 🤔❓do you agree? discuss.
+
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
 
