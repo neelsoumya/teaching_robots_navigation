@@ -1,5 +1,13 @@
 # Drones and indoor navigation and GPS denied
 
+
+## 🤔 ❓Rio Tinto case study
+
+- you can also control the environment (if you can), see [Rio Tinto](riotinto.md)
+
+
+## Drones and GPS denied
+
 - Drones
 
 - [GPS denied ISRO competition](https://www.youtube.com/watch?v=AhzXfSeWL_c)
@@ -26,7 +34,6 @@
 
 - 🤔 ❓study the design decisions
 
-- you can also control the environment (if you can), see [Rio Tinto](riotinto.md)
 
 - Indian drones used to water plants indoor in GPS denied environments
 
