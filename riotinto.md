@@ -53,13 +53,15 @@ At its Gudai-Darri mine, for example, Rio Tinto operates:
 
 Rio Tinto describes the trucks as being controlled by a supervisory system and central controller rather than a driver. The trucks use **predefined GPS courses** to navigate haul roads and intersections, while the system maintains knowledge of vehicle locations, speeds and directions. ([riotinto.com][1])
 
+- [📚, 📝BBC Article](https://www.bbc.co.uk/news/articles/cgej7gzg8l0o)
+
 A particularly useful official overview is:
 
-[Rio Tinto — Look inside a mine of the future](https://www.riotinto.com/en/news/stories/look-inside-future-mine?utm_source=chatgpt.com)
+[Rio Tinto — Look inside a mine of the future](https://www.riotinto.com/en/news/stories/look-inside-future-mine)
 
 and:
 
-[Rio Tinto — Western Australia autonomous operations](https://www.riotinto.com/operations/anz/western-australia?utm_source=chatgpt.com)
+[Rio Tinto — Western Australia autonomous operations](https://www.riotinto.com/operations/anz/western-australia)
 
 ---
 
