@@ -123,6 +123,10 @@ _Concept_ 🧩 🚀 Link to the [Bitter Lesson by Sutton](https://www.cs.utexas.
 
 >The _Bitter Lesson_ is that if you give it enough data, computers can solve this task
 
+>Leverage all kinds of data
+
+>Leverage LLM ability to write code and transfer that to another domain
+
 
 - [Gemini robotics trash bag task](https://www.youtube.com/watch?v=4lSQnrMC6nY)
 
