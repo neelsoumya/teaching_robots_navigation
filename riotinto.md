@@ -19,6 +19,8 @@
 
 - One important point is that **Rio Tinto does not primarily use the kind of reactive grid-potential-field obstacle avoidance students might implement in a small mobile robot**. Its mining vehicles operate in a highly structured environment, so autonomy is based heavily on **predefined routes, high-precision positioning, fleet-level coordination, sensing, geofencing and safety rules**, with obstacle detection and emergency stopping layered on top.
 
+![image](images/rio.jpeg)
+
 ## 1. The Rio Tinto "Mine of the Future"
 
 Rio Tinto's Pilbara operations are probably the best case study to introduce.
