@@ -159,6 +159,63 @@ B = length between the wheels
 
 
 
+![image](images/sample_based_planning.jpeg)
+
+
+Sampling-based motion planning is a fundamental approach in modern robotics used to find collision-free paths in complex or high-dimensional environments. Rather than explicitly computing the exact boundaries of all obstacles, sampling-based algorithms approximate the reachable space by probing it with discrete random points.
+
+---
+
+## 1. The Configuration Space ($C\text{-Space}$)
+
+Before planning a path, the robot's physical body and environment are represented within a mathematical space called the **Configuration Space** ($C\text{-Space}$):
+
+* **Configuration ($q$):** A complete specification of the position and orientation of the robot.
+* **Forbidden Space ($C_{obs}$):** The set of configurations where the robot collides with obstacles or violates constraints.
+* **Free Space ($C_{free}$):** The set of valid configurations where the robot can safely exist ($C_{free} = C \setminus C_{obs}$).
+
+> **Goal:** Find a continuous trajectory $P(t) \in C_{free}$ connecting a start configuration $q_{start}$ to a goal configuration $q_{goal}$.
+
+---
+
+## 2. Core Sampling Algorithms
+
+### A. Probabilistic Roadmaps (PRM)
+PRM is a **multi-query** algorithm best suited for static environments where multiple path queries will be performed.
+
+1. **Learning Phase:**
+   * Sample $N$ random configurations (milestones) across $C$.
+   * Retain samples that lie within $C_{free}$.
+   * Connect neighboring milestones with straight line segments $PQ$, keeping only those lines that lie entirely within $C_{free}$ (collision checking).
+2. **Query Phase:**
+   * Connect $q_{start}$ and $q_{goal}$ to the generated roadmap graph.
+   * Run standard graph search algorithms (e.g., $A^*$ or Dijkstra's) to find the shortest path.
+
+### B. Rapidly-exploring Random Trees (RRT)
+RRT is a **single-query** algorithm designed to quickly discover paths from a specific start state by growing a tree into unexplored areas.
+
+1. Initialize a tree root at $q_{start}$.
+2. Sample a random point $q_{rand} \in C$.
+3. Find the nearest existing node $q_{near}$ in the tree.
+4. Extend a short step from $q_{near}$ toward $q_{rand}$ to form $q_{new}$.
+5. If the edge between $q_{near}$ and $q_{new}$ is within $C_{free}$, add $q_{new}$ and the edge to the tree.
+6. Repeat until the tree reaches $q_{goal}$.
+
+---
+
+## 3. The Central Trade-Off: Sample Count ($N$)
+
+The performance of sampling-based planners depends heavily on the chosen sample density ($N$)
+---
+
+## 4. Key Advantages
+
+* **High Scalability:** Scales efficiently to high-dimensional spaces (e.g., multi-joint robotic arms) where explicit obstacle modeling is computationally intractable.
+* **Probabilistic Completeness:** If a valid path exists, the probability that the algorithm finds it approaches $100\%$ as the number of samples increases.
+* **Efficiency:** Avoids costly geometric calculations by relying on fast point-wise collision checking.
+
+
+
 ## Next resource
 
 - now see [SLAM resource](SLAM.md)
