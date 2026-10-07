@@ -101,11 +101,11 @@ It is a **semi-structured world designed to make autonomy tractable**.
 
 # 3. Obstacle avoidance is particularly interesting
 
-This is where I would be careful with the terminology in your lecture.
-
 Rio Tinto says that its autonomous trucks use **pre-defined GPS courses** and know the positions, speeds and directions of vehicles around them. ([riotinto.com][1])
 
 So conceptually you can think of the problem as:
+
+![image](images/riotinto_avoidance.jpeg)
 
 [
 \text{known road network}
