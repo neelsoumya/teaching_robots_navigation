@@ -41,11 +41,9 @@ At its Gudai-Darri mine, for example, Rio Tinto operates:
 
 ![Image](https://images.openai.com/static-rsc-4/NuW-2uPlszT9ylhpeXBqT9gRlQtmyllNQjRbc8uvKdLSjxlQ5XBuim5Ao5Ks82iRoyFlUHmYY0ny8RgLAPNJK0yo9zxybAAxJXBcmW4IY0KqU-Bh6jFtALiMFAR4r2aeS_-0Bi2l9jtZpDdrjYphOqwhaSkRcRZE9SraIDRrGU4yHXTi8rvvLs2Zf42DUX1s?purpose=fullsize)
 
-![Image](https://images.openai.com/static-rsc-4/pKFLiYsaZ2y7oFXg564dhDtpax1_zdQA-ftot_2rTs3AajAx-XJwTWNHv1amFpv625Yhl41SSiOyBZiXODnS7LXDkgMTMVMCKhdxScUdeegJEMqP_-4mhSEzDGE_LX2IqsOU5KPW4RmimsPCq7-F4hzGANACJqeKeuXmTNWUWEjqsq6LFwFEEejcnuoKLmG6?purpose=fullsize)
 
 ![Image](https://images.openai.com/static-rsc-4/JgUnaS5vlTvtIxgMu_pWmr_xwOSDOyrybzu9iTpzDYo1Fbe9YFXAqAWXlZYaS7CzjKkLPAcOnXlvxDdihPYXzyRKbLgBnOvpS17sIaZeEyVaKUiWX61zARML3Ek8SZaMKwK9VqKldtb7sPkkk_LMyc4beauV7FpkScgyy9fBTFprSNac5VMow-U1O1JknWoD?purpose=fullsize)
 
-![Image](https://images.openai.com/static-rsc-4/1_JkJLgHGD-VspO-R0RJnljmDtRB0gPsVGW5M1eQqy6Sjfg-3dY1FpUwclHCaiHR0xMtfORvpoI5fJhqs6x2GDehizWj6LEOg34C0FixkZr8v4h5fP9PwXlTt_khMTlLDdVSlj6_ckM9th-mLy-omshDVLTkXhayIYWyu9Rp0prMTQNfhvEoGhohm-NnRGdS?purpose=fullsize)
 
 
 Rio Tinto describes the trucks as being controlled by a supervisory system and central controller rather than a driver. The trucks use **predefined GPS courses** to navigate haul roads and intersections, while the system maintains knowledge of vehicle locations, speeds and directions. ([riotinto.com][1])
