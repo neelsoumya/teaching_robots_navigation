@@ -549,7 +549,8 @@ That takes the students from:
 
 using a single real-world system.
 
-And, importantly, it demonstrates why **industrial autonomy is not simply "put an AI into a robot."** The autonomy is distributed across the robot, sensors, map, infrastructure, communications, fleet-management system and human supervisory layer.
+_Concept_ 🧩 🚀 *And, importantly, it demonstrates why **industrial autonomy is not simply "put an AI into a robot."** The autonomy is distributed across the robot, sensors, map, infrastructure, communications, fleet-management system and human supervisory layer.*
+
 
 [1]: https://www.riotinto.com/en/mn/about/innovation/automation?utm_source=chatgpt.com "Automation | Mongolia"
 [2]: https://www.riotinto.com/en/news/releases/2018/world-first-autonomous-trains-deployed?utm_source=chatgpt.com "World-first autonomous trains deployed at Rio Tinto’s iron ore operations | Global"
