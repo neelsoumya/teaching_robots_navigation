@@ -19,6 +19,8 @@ Teaching robot navigation
 
 - [navigation](navigation.md)
 - [odometry](odometry.md)
+- [Rio Tinto case study](riotinto.md)
+
 - [indoor drones and GPS denied](drones_indoor.md)
 
 - [SLAM](SLAM.md)
@@ -26,6 +28,7 @@ Teaching robot navigation
 - [LLMs and robots](LLM_robots.md)
 
 - Additional material
+
 - [humanoid robots](humanoid_robots.md)
 - [Co-operative robots and multi-robot systems](cooperative_robots.md)
 - [Competence vs. Performance in robotics](competence_vs_performace_robotics.md)
