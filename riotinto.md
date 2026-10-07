@@ -147,7 +147,7 @@ The really interesting part is that **the environment itself is engineered to si
 
 # A useful way to map Rio Tinto onto your robotics lectures
 
-Structure the case study around the standard autonomous-robot pipeline:
+Let us structure the case study around the standard autonomous-robot pipeline:
 
 **Perception → localisation → world representation → planning → control → safety → fleet coordination**
 
@@ -173,6 +173,18 @@ Structure the case study around the standard autonomous-robot pipeline:
 
 
 - _Concept_ 🧩 🚀 It is a **semi-structured world designed to make autonomy tractable**.
+
+
+- Mapping: While an indoor robot must create its map dynamically (SLAM), an autonomous mine uses a pre-defined digital representation of the entire site, including haul roads and geometry.
+
+- Planning: The chaotic nature of a home requires constant dynamic re-planning for an indoor robot, but the mine allows for global path planning based on predefined routes and intersection priorities.
+
+- Safety Layer: In the mine, safety is not reactive; it is architectural, using rigid geofencing and exclusive zones to ensure safe operations at a massive scale.
+
+
+- Structured vs. Unstructured world
+
+![image](images/structured_vs_unstructured.jpeg)
 
 
 ---
