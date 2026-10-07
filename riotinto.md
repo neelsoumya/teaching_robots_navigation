@@ -54,7 +54,7 @@ Rio Tinto describes the trucks as being controlled by a supervisory system and c
 
 A particularly useful official overview is:
 
-[Rio Tinto — Look inside a mine of the future](https://www.riotinto.com/en/news/stories/look-inside-future-mine)
+[Rio Tinto - Look inside a mine of the future](https://www.riotinto.com/en/news/stories/look-inside-future-mine)
 
 ---
 
@@ -165,11 +165,15 @@ Structure the case study around the standard autonomous-robot pipeline:
 | Safety layer               | Geofencing, alarms, stopping, exclusion zones                      |
 | Planning under uncertainty | Changing mine geometry, traffic and environmental conditions       |
 
-This gives you a nice contrast with the usual **TurtleBot/Roomba-style autonomy problem**.
 
-The environment is not an arbitrary unknown world.
+- A nice contrast with the usual **TurtleBot/Roomba-style autonomy problem**.
 
-It is a **semi-structured world designed to make autonomy tractable**.
+- The environment is not an arbitrary unknown world.
+
+
+
+- _Concept_ 🧩 🚀 It is a **semi-structured world designed to make autonomy tractable**.
+
 
 ---
 
