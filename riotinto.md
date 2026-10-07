@@ -56,10 +56,6 @@ A particularly useful official overview is:
 
 [Rio Tinto — Look inside a mine of the future](https://www.riotinto.com/en/news/stories/look-inside-future-mine)
 
-and:
-
-[Rio Tinto — Western Australia autonomous operations](https://www.riotinto.com/operations/anz/western-australia)
-
 ---
 
 #  🤔❓Class discussion 
@@ -71,41 +67,16 @@ and:
 -  🤔❓how did this happen?
 
 
-# 2. A useful way to map Rio Tinto onto your robotics lectures
+#  Obstacle avoidance is particularly interesting
 
-I would actually structure the case study around the standard autonomous-robot pipeline:
-
-**Perception → localisation → world representation → planning → control → safety → fleet coordination**
-
-| Your robotics topic        | Rio Tinto example                                                  |
-| -------------------------- | ------------------------------------------------------------------ |
-| Sensors                    | GPS, cameras, vehicle sensors, monitoring systems                  |
-| Localisation               | GPS + infrastructure/network information                           |
-| Mapping                    | Digital representation of haul roads, intersections, mine geometry |
-| Path planning              | Predefined haul routes and intersection plans                      |
-| Obstacle avoidance         | Vehicle tracking, cameras, collision-avoidance/safety systems      |
-| Motion planning            | Speed, braking, turning and road constraints                       |
-| Multi-robot systems        | Fleet of autonomous trucks interacting with one another            |
-| Remote supervision         | Perth Operations Centre                                            |
-| SLAM                       | Less central than in an indoor mobile robot                        |
-| Safety layer               | Geofencing, alarms, stopping, exclusion zones                      |
-| Planning under uncertainty | Changing mine geometry, traffic and environmental conditions       |
-
-This gives you a nice contrast with the usual **TurtleBot/Roomba-style autonomy problem**.
-
-The environment is not an arbitrary unknown world.
-
-It is a **semi-structured world designed to make autonomy tractable**.
-
----
-
-# 3. Obstacle avoidance is particularly interesting
-
-Rio Tinto says that its autonomous trucks use **pre-defined GPS courses** and know the positions, speeds and directions of vehicles around them. ([riotinto.com][1])
+Rio Tinto says that its autonomous trucks use **pre-defined GPS courses** and know the positions, speeds and directions of vehicles around them.
 
 So conceptually you can think of the problem as:
 
 ![image](images/riotinto_avoidance.jpeg)
+
+- _Concept_ 🧩 🚀 The really interesting part is that **the environment itself is engineered to simplify the planning problem**.
+
 
 [
 \text{known road network}
@@ -172,6 +143,36 @@ That distinction could make a very good lecture discussion.
 The really interesting part is that **the environment itself is engineered to simplify the planning problem**.
 
 ---
+
+
+# A useful way to map Rio Tinto onto your robotics lectures
+
+Structure the case study around the standard autonomous-robot pipeline:
+
+**Perception → localisation → world representation → planning → control → safety → fleet coordination**
+
+| Your robotics topic        | Rio Tinto example                                                  |
+| -------------------------- | ------------------------------------------------------------------ |
+| Sensors                    | GPS, cameras, vehicle sensors, monitoring systems                  |
+| Localisation               | GPS + infrastructure/network information                           |
+| Mapping                    | Digital representation of haul roads, intersections, mine geometry |
+| Path planning              | Predefined haul routes and intersection plans                      |
+| Obstacle avoidance         | Vehicle tracking, cameras, collision-avoidance/safety systems      |
+| Motion planning            | Speed, braking, turning and road constraints                       |
+| Multi-robot systems        | Fleet of autonomous trucks interacting with one another            |
+| Remote supervision         | Perth Operations Centre                                            |
+| SLAM                       | Less central than in an indoor mobile robot                        |
+| Safety layer               | Geofencing, alarms, stopping, exclusion zones                      |
+| Planning under uncertainty | Changing mine geometry, traffic and environmental conditions       |
+
+This gives you a nice contrast with the usual **TurtleBot/Roomba-style autonomy problem**.
+
+The environment is not an arbitrary unknown world.
+
+It is a **semi-structured world designed to make autonomy tractable**.
+
+---
+
 
 # 4. AutoHaul is another fantastic case study
 
