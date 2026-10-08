@@ -6,6 +6,8 @@
 
 - [interactive webpage for understanding concepts](ros_2_navigation_interactive_explorer.html)
 
+- [🎥short video introduction to ROS](https://www.youtube.com/shorts/cmMK5278GOU)
+
 ---
 
 # Autonomous Mobile Robotics with ROS 2: Operating Principles, Architecture, and Educational Notes
