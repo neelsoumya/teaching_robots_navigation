@@ -185,10 +185,20 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 >A robot-rich future can't be built with AIs that don't understand the physical world and don't anticipate the consequences of their actions. And LLMs really don't
 
+- [world model paper](https://worldmodels.github.io/)
+
+![image](https://worldmodels.github.io/assets/world_model_comic.jpeg)
+
+- [what is a world model by Fei-Fei Li](https://youtu.be/qRG19DKT3MA?si=N84h0GBmzTMGbfJB&t=517)
+
+>a fully consistent 3D world is required for navigation
+
 - 🤔❓do you agree? discuss.
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
 - [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
+
+- _NVIDIA_ using Marble world models to augment training of robots
 
 ## Bottleneck for robotics (~ca. 2026)
 
