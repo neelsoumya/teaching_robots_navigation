@@ -59,9 +59,9 @@
 - goal
 
 
-## Challenge question
+## 🤔❓Challenge question (discussion in class)
 
-- [how does a submarine navigate underwater without GPS?](inertial_navigation.md)
+- 🤔❓[how does a submarine navigate underwater without GPS?](inertial_navigation.md)
 
 
 
