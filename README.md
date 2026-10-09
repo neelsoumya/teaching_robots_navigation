@@ -93,6 +93,9 @@ Run Stella-VSLAM and RTAB-Map demos
 
 - The new one will be here, but needs updates [here](https://vle.york.ac.uk/ultra/courses/_118524_1/outline)
 
+## Solutions
+
+- [Solutions](https://github.com/UoY-RoboStar/AURO2026-solutions)
 
 <!--
 ## Additional material (TBD)
