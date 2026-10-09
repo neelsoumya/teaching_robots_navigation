@@ -215,6 +215,23 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 
 
+##  🤔❓What about explainability?
+
+- is it important to have explainability for these robots?
+
+- Link to competence and performance
+
+- Explainability important
+
+- But LLMs may hallucinate
+
+- See [competence vs performance lecture](competence_vs_performace_robotics.md)
+
+![image](images/explainability_robotics.jpeg)
+
+
+
+
 ## Open source evals for physical AI
 
 - Run any LLM/VLA on any arm/humanoid against any real/sim benchmark.
@@ -232,18 +249,6 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 
 
-
-##  🤔❓What about explainability?
-
-- is it important to have explainability for these robots?
-
-- Link to competence and performance
-
-- Explainability important
-
-- But LLMs may hallucinate
-
-- See [competence vs performance lecture](competence_vs_performace_robotics.md)
 
 
 ## Other applications
