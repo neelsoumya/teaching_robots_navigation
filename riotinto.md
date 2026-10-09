@@ -552,6 +552,16 @@ using a single real-world system.
 _Concept_ 🧩 🚀 *And, importantly, it demonstrates why **industrial autonomy is not simply "put an AI into a robot."** The autonomy is distributed across the robot, sensors, map, infrastructure, communications, fleet-management system and human supervisory layer.*
 
 
+## Virtual bubble
+
+- a vehicle has a virtual bubble 
+
+-  🤔❓does that remind you of anything?
+
+- _artificial potential field_ 
+
+- whenever an obstacle appears or something changes, you need to _recompute_ the field 
+
 [1]: https://www.riotinto.com/en/mn/about/innovation/automation?utm_source=chatgpt.com "Automation | Mongolia"
 [2]: https://www.riotinto.com/en/news/releases/2018/world-first-autonomous-trains-deployed?utm_source=chatgpt.com "World-first autonomous trains deployed at Rio Tinto’s iron ore operations | Global"
 [3]: https://www.riotinto.com/en/about/innovation/rd-and-technology?utm_source=chatgpt.com "R&D and technology | Global"
