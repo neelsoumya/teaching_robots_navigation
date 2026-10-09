@@ -218,6 +218,8 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 
 ## Next resource
 
+- now see [Rio Tinto case study](riotinto.md)
+
 - now see [drones indoor](drones_indoor.md)
 
 - now see [SLAM resource](SLAM.md)

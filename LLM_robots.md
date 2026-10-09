@@ -189,7 +189,7 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 ![image](https://worldmodels.github.io/assets/world_model_comic.jpeg)
 
-- [what is a world model by Fei-Fei Li](https://youtu.be/qRG19DKT3MA?si=N84h0GBmzTMGbfJB&t=517)
+- [🎥 what is a world model by Fei-Fei Li video](https://youtu.be/qRG19DKT3MA?si=N84h0GBmzTMGbfJB&t=517)
 
 >a fully consistent 3D world is required for navigation
 
