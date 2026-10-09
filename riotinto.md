@@ -564,7 +564,8 @@ _Concept_ 🧩 🚀 *And, importantly, it demonstrates why **industrial autonomy
 
 - this means you need a lot of compute!
 
-- _assumptions_ can control the environment, lots of compute, lots of high bandwidth connectivity and persistent connectivity
+_Concept_ 🧩 🚀 _assumptions_ can control the environment, lots of compute, lots of high bandwidth connectivity and persistent connectivity
+
 
 [1]: https://www.riotinto.com/en/mn/about/innovation/automation?utm_source=chatgpt.com "Automation | Mongolia"
 [2]: https://www.riotinto.com/en/news/releases/2018/world-first-autonomous-trains-deployed?utm_source=chatgpt.com "World-first autonomous trains deployed at Rio Tinto’s iron ore operations | Global"
