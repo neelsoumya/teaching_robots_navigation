@@ -200,6 +200,11 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 - _NVIDIA_ using Marble world models to augment training of robots
 
+- _Summary_ LLMs may struggle with spatial reasoning because they are symbolic rather than physical simulations. A text-based intelligence lacks the 'grounding' in 3D physics necessary for complex, dynamic navigation.
+
+- _Summary_ A consistent 3D world model is essential for functional robotics because it allows the agent to hallucinate, test, and safely execute plans in a simulated mirror of reality, preventing the disastrous mistakes that an 'unplugged' conceptual AI might make when trying to manipulate the physical world.
+
+
 ## Bottleneck for robotics (~ca. 2026)
 
 ![image](images/bottlenecks_robotics.png)
