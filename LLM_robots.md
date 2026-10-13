@@ -231,12 +231,18 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 
 
+## Summary
+
+![image](images/Embodied_AI_Models_and_Challenges.png)
+
+
 
 ## Open source evals for physical AI
 
 - Run any LLM/VLA on any arm/humanoid against any real/sim benchmark.
 
 - [https://github.com/robocurve/inspect-robots](https://github.com/robocurve/inspect-robots)
+
 
 
 

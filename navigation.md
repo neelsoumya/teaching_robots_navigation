@@ -229,3 +229,5 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 - To navigate, you need a map, self-localisation, and path planning
 - many techniques exist for navigation and planning
 - _grid based_, _sample based_, and _potential field techniques_
+
+
