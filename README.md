@@ -43,6 +43,9 @@ Teaching robot navigation
 - [Practicals with LLMs and robots](LLM_robots.md)
 
 
+- practical sheet for this [week](https://docs.google.com/document/d/1Nsm17r9Wk6KULK7uLW_vB2qaCVmSZ_DpETBK71OQnV8/edit?tab=t.0#heading=h.wdr1zscfuo7) available to students. Model answers to the tasks are available here as the [week_3_solution package](https://github.com/UoY-RoboStar/AURO2026-solutions/tree/solutions/week_3_solution), and answers for exercises can be found [here](https://docs.google.com/document/d/1mjnO6KhDu7mxYVGZaic_pQbcvdp-20UjaV_SVHbMWFg/edit?tab=t.0#heading=h.377x1dz4hxtf)
+
+
 ## Timetable
 
 ### Week 8 - Navigation and path planning (Soumya) [3 lectures]
