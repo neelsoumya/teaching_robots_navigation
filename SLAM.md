@@ -27,6 +27,9 @@
 
 - This is due to using the diameter D which is in physical units (e.gcm, meters etc) to get the distance travelled in the x, y coordinates of the world.
 
+- what is [odometry](odometry.md)
+
+>Odometry is the use of motion sensor data (such as wheel encoders or IMUs) to estimate how an object’s position and orientation change over time, usually relative to a starting point
 
 
 ## Occupancy map
@@ -75,7 +78,7 @@
 
 - if _humanoid robot_ then joints
 
-- IMU inertial measurement unit
+- IMU: inertial measurement unit
 
 - odometry: key to robotics platforms
 
