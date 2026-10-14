@@ -73,7 +73,7 @@
 
 - wheels -> odometry
 
-- if humanoid robot then joints
+- if _humanoid robot_ then joints
 
 - IMU inertial measurement unit
 
