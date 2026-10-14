@@ -23,13 +23,15 @@
 
 ## Odometry based SLAM
 
+- what is [odometry?](odometry.md)
+
+>Odometry is the use of motion sensor data (such as wheel encoders or IMUs) to estimate how an object’s position and orientation change over time, usually relative to a starting point
+
+
 - This involves the use of odometry to self localise and to build maps.
 
 - This is due to using the diameter D which is in physical units (e.gcm, meters etc) to get the distance travelled in the x, y coordinates of the world.
 
-- what is [odometry](odometry.md)
-
->Odometry is the use of motion sensor data (such as wheel encoders or IMUs) to estimate how an object’s position and orientation change over time, usually relative to a starting point
 
 
 ## Occupancy map
