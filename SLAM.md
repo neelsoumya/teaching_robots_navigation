@@ -2,7 +2,7 @@
 
 - need a map and need to know where we are
 
-- chicken and egg problem
+- without a map you have a _chicken_ and _egg_ problem
 
 ## Occupancy map
 
