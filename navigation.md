@@ -216,12 +216,9 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 
 
 
-## Next resource
+## Next resource for class discussion
 
 - now see [Rio Tinto case study](riotinto.md)
-
-
-- then see [SLAM resource](SLAM.md)
 
 
 ## Summary
@@ -231,3 +228,6 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 - _grid based_, _sample based_, and _potential field techniques_
 
 
+## Next resource
+
+- see [SLAM resource](SLAM.md)
