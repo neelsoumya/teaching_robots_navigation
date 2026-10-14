@@ -1,5 +1,9 @@
 # SLAM and other algorithms
 
+- need a map and need to know where we are
+
+- chicken and egg problem
+
 ## Occupancy map
 
 - exploration of environment
