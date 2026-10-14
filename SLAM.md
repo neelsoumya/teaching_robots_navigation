@@ -4,6 +4,13 @@
 
 - without a map you have a _chicken_ and _egg_ problem
 
+- without a map you do not know where you are
+
+- if you do not where you are, you cannot construct a map
+
+- the solution is to simultaneously create a map and localize
+
+
 ## Occupancy map
 
 - exploration of environment
