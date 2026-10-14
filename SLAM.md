@@ -14,6 +14,20 @@
 
 - use odometry
 
+- _map_
+
+- _self-localisation_
+
+- _path planning_
+
+
+## Odometry based SLAM
+
+- This involves the use of odometry to self localise and to build maps.
+
+- This is due to using the diameter D which is in physical units (e.gcm, meters etc) to get the distance travelled in the x, y coordinates of the world.
+
+
 
 ## Occupancy map
 
