@@ -11,6 +11,10 @@
 - the solution is to simultaneously create a map and localize
 
 
+
+- use odometry
+
+
 ## Occupancy map
 
 - exploration of environment
