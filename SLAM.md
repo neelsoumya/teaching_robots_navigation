@@ -107,6 +107,19 @@
 
 ![image](images/global_coordinate_transformation.png) 
 
+- **Typical SLAM loop**
+
+1. **Predict** the new pose from odometry (wheel encoders, IMU).
+2. **Sense** the environment with range sensors or a camera.
+3. **Match** the new scan against the current map to correct the pose.
+4. **Update** the map using the corrected pose (Section 3).
+5. **Close loops**: when the robot returns to a known place, correct accumulated drift across the whole trajectory.
+
+
+- 🤔 ❓ how does a new robot vacuum cleaner navigate in a new room?
+
+![image](images/slam_roomba.jpeg)
+
 - 🤔 ❓ what is the problem?
 
 - relying too much on odomtery

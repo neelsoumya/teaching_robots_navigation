@@ -110,7 +110,7 @@ A side effect of the distance convention is that the robot drives slower in open
 
 ## 5. Braitenberg vehicles
 
-The wiring above is an example of a **Braitenberg vehicle**, from Valentino Braitenberg's 1984 book *Vehicles: Experiments in Synthetic Psychology*. These are thought experiments in which sensors are connected directly to motors, with no map, memory or planning. Different wiring produces behaviour an observer would describe in psychological terms.
+The wiring above is an example of a [**Braitenberg vehicle**](https://en.wikipedia.org/wiki/Braitenberg_vehicle), from Valentino Braitenberg's 1984 book *Vehicles: Experiments in Synthetic Psychology*. These are thought experiments in which sensors are connected directly to motors, with no map, memory or planning. Different wiring produces behaviour an observer would describe in psychological terms.
 
 | Vehicle | Wiring | Behaviour |
 |---|---|---|
