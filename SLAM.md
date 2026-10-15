@@ -53,6 +53,7 @@
 
 - binary (occupied/not occupied) within each cell
 
+
 ## SLAM
 
 - Simultaneous Localization and Mapping (SLAM)
@@ -70,6 +71,7 @@
 ![image](images/slam.png)
 
 - simultaneously map and simultaneously localize
+
 
 ## Workflow
 
