@@ -32,6 +32,8 @@
 
 - This is due to using the diameter D which is in physical units (e.gcm, meters etc) to get the distance travelled in the x, y coordinates of the world.
 
+![image](images/pid.jpeg)
+
 
 
 ## Occupancy map
