@@ -66,6 +66,8 @@
 
 - 🤔❓What are the safety implications of VLA models? Discuss
 
+- [🎥 video of _rogue_ robot launching kungfu 🦵 kicks](https://www.youtube.com/watch?v=2QeiImR_CNA&pp=ugUEEgJlbg%3D%3D)
+
 - Safety in Vision-Language-Action Models for Robot Control
 
 - These systems translate visual inputs and natural language prompts straight into physical motor commands
