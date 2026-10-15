@@ -46,6 +46,11 @@
 
 - integration of sensor values into map (based on distance from robot and pose estimation of robot)
 
+- robot starts from origin (charging point)
+
+- fires off laser and use trigonometry to figure out location of object (based on returns from laser)
+
+- _reactive explorer_
 
 - what happens to table? robot can go underneath. the choice is with you
 
@@ -93,6 +98,10 @@
 - for vacuum cleaner, it is charging point. can self localize from there
 
 - all sensor input goes to build occupancy map
+
+- use the equations to build an occupancy grid for the environment 
+
+- more detailed notes [here](robot-navigation-and-slam.md)
 
 - 🤔 ❓ what is the problem?
 
