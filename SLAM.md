@@ -103,6 +103,10 @@
 
 - more detailed notes [here](robot-navigation-and-slam.md)
 
+- global coordinate transformation equations
+
+![image](images/global_coordinate_transformation.png) 
+
 - 🤔 ❓ what is the problem?
 
 - relying too much on odomtery
