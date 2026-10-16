@@ -415,3 +415,6 @@ Discuss the following with your peers (class discussion)
 
 
 
+## Cleaning robots using SLAM in India
+
+- [Jammu-based URC Robotics has unveiled X40, their autonomous floor-cleaning robot for commercial facilities. It uses LiDAR SLAM and ROS 2 for navigation](https://x.com/RuntimeBRT/status/2111002114264830319)
