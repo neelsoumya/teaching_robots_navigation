@@ -110,7 +110,7 @@ A side effect of the distance convention is that the robot drives slower in open
 
 ## 5. Braitenberg vehicles
 
-The wiring above is an example of a [**Braitenberg vehicle**](https://en.wikipedia.org/wiki/Braitenberg_vehicle), from Valentino Braitenberg's 1984 book *Vehicles: Experiments in Synthetic Psychology*. These are thought experiments in which sensors are connected directly to motors, with no map, memory or planning. Different wiring produces behaviour an observer would describe in psychological terms.
+The wiring above is an example of a [**Braitenberg vehicle**](https://en.wikipedia.org/wiki/Braitenberg_vehicle), from Valentino Braitenberg's 1984 book *Vehicles: Experiments in Synthetic Psychology*. These are thought experiments in which sensors are connected directly to motors, with no map, memory or planning. Different wiring produces behaviour an observer would describe in [psychological terms](https://www.neuwritewest.org/blog/5107).
 
 | Vehicle | Wiring | Behaviour |
 |---|---|---|
@@ -120,6 +120,10 @@ The wiring above is an example of a [**Braitenberg vehicle**](https://en.wikiped
 | 3b "explorer" | Opposite-side sensor inhibits wheel | Turns away and slows near the stimulus |
 
 **Teaching point.** Useful, apparently purposeful behaviour needs almost no computation. This is also the clearest way to show what reactive control cannot do: it has no memory, no goals and no model of the world.
+
+>In vehicles of Type 2a, the two sensors and two wheels are connected by ipsilateral excitatory wires. If a stimulus is located in front of the vehicle and to its left, it will activate both of the vehicle's sensors, but unequally; the left sensor is closer to the stimulus and will therefore be activated more strongly. This increased activation leads to increased activation in both wheels, but unequally; the left wheel is activated more strongly than the right. Thus the vehicle turns to the right, suggesting to Braitenberg that it "fears" the stimulus.
+
+![image](https://en.wikipedia.org/wiki/File:Braitenberg_Vehicle_3b.png)
 
 ---
 
