@@ -125,6 +125,8 @@ The wiring above is an example of a [**Braitenberg vehicle**](https://en.wikiped
 
 ![image](https://en.wikipedia.org/wiki/File:Braitenberg_Vehicle_3b.png)
 
+- [also connects to why nerves criss-cross the hemispheres in our brain](https://www.neuwritewest.org/blog/5107)
+
 ---
 
 ## 6. Why reactive control is not enough: motivating SLAM
