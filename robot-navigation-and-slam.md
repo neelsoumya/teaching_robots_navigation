@@ -76,6 +76,11 @@ Repeated consistent readings push a cell firmly toward occupied or free, while o
 
 ![Differential-drive obstacle avoidance](images/braitenberg-control.svg)
 
+_Concept_ 🧩 🚀
+
+![obstacle_avoidance_reactive](images/obstacle_avoidance_reactive.png)
+
+
 A **differential-drive** robot has two independently driven wheels. Let $V_L$ and $V_R$ be the left and right wheel speeds.
 
 - Equal speeds: the robot drives straight.
