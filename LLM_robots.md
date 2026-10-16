@@ -238,6 +238,13 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 ![image](images/Embodied_AI_Models_and_Challenges.png)
 
 
+## Benchmarks for VLAs
+
+- [🤗 Libero environment for spatial datasets](https://huggingface.co/docs/lerobot/en/libero)
+- [OpenVLA open model for VLA](https://arxiv.org/html/2406.09246v3)
+
+![image](https://arxiv.org/html/2406.09246v3/openvla_teaser.png)
+
 
 ## Open source evals for physical AI
 
