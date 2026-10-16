@@ -107,9 +107,15 @@ where $L_L$ and $L_R$ are the left and right sensor readings.
 | **Distance** (small when close) | $L_R$ is small | Right wheel slowed *less* than left | Turns **left**, away from the obstacle |
 | **Proximity** (large when close) | $L_R$ is large | Right wheel slowed *more* than left | Turns **right**, toward the obstacle |
 
-For obstacle avoidance with the equations above, use a distance reading. With a proximity reading, flip the sign (add $k\,L$ instead of subtracting) or cross the wiring between sensors and wheels.
+_Concept_ 🧩 🚀
 
-A side effect of the distance convention is that the robot drives slower in open space, because $L$ is large there. Many implementations clamp $L$ to a maximum range or subtract $k\,(L_{\max} - L)$ instead.
+- For obstacle avoidance with the equations above, use a distance reading. With a proximity reading, flip the sign (add $k\,L$ instead of subtracting) 
+
+- or cross the wiring between sensors and wheels. see diagram below to use cross wiring to find _food_ etc.
+
+![image](images/cross_wiring.png)
+
+- A side effect of the distance convention is that the robot drives slower in open space, because $L$ is large there. Many implementations clamp $L$ to a maximum range or subtract $k\,(L_{\max} - L)$ instead.
 
 ---
 
