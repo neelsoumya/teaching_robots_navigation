@@ -117,6 +117,8 @@ _Concept_ 🧩 🚀
 
 - A side effect of the distance convention is that the robot drives slower in open space, because $L$ is large there. Many implementations clamp $L$ to a maximum range or subtract $k\,(L_{\max} - L)$ instead.
 
+- this is called a _reactive controller_
+
 ---
 
 ## 5. Braitenberg vehicles
