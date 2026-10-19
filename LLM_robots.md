@@ -253,6 +253,61 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 - [https://github.com/robocurve/inspect-robots](https://github.com/robocurve/inspect-robots)
 
 
+## VLA Engineer roadmap
+
+- from Learn Robotics and AI Linkedin post
+
+1. Learn the core tools 🧠
+🔹 PyTorch https://pytorch.org/
+🔹 Hugging Face https://huggingface.co/
+🔹 LeRobot https://lnkd.in/gRjwQCeA
+🔹 Isaac Lab / Isaac Sim https://lnkd.in/dzpJQxFu https://lnkd.in/dmw6DPqt
+🔹 PINK IK Solver https://lnkd.in/dcnr5EDc
+
+2. Build simulation environments 
+🧪 Create manipulation environments in Isaac Sim / Isaac Lab. 
+Start with: 
+🔹 myCobot 280 https://lnkd.in/dryT-hD5
+🔹 SO-100 / SO-101 https://lnkd.in/dExvnGUk
+Goal: 
+🔹 Import robot embodiments 
+🔹 Add sensors 
+🔹 Create manipulation tasks 
+🔹 Prepare environments for data collection 
+
+3. Build teleoperation + data collection 
+🎮 Use SO-100 / SO-101 with LeRobot and LeIsaac. 
+🔹 Collect demonstrations 
+🔹 Use leader-follower or VR teleoperation 
+🔹 Export data into LeRobot format 
+🔹 Prepare datasets for supervised fine-tuning Resources: https://lnkd.in/dX9uWqKa https://lnkd.in/giPaQCGM
+
+4. Fine-tune VLA models 
+🚀 Work with models such as: 
+🔹 GR00T N1.7 https://lnkd.in/eHCdxVQp
+🔹 π₀.₅ / Pi-0.5 https://lnkd.in/dcDCTezN
+
+Learn: 
+🔹 VLA input formats 
+🔹 Action chunking 
+🔹 Demonstration datasets 
+🔹 Supervised fine-tuning 
+🔹 Policy inference 
+🔹 Failure modes 
+
+5. Evaluate on benchmarks 
+📊 Do not just train models. 
+Evaluate them. Use: 
+🔹 LIBERO https://lnkd.in/gNZPDPpe
+🔹 DROID https://lnkd.in/gdbZ3vxV
+🔹 RoboCasa https://robocasa.ai/
+🔹 BEHAVIOR-1K https://lnkd.in/escp99mq
+Measure: 
+🔹 Generalization 
+🔹 Task success 
+
+The real roadmap: 
+Vision → Language → Action → Data → Training → Evaluation → Deployment
 
 
 
