@@ -30,7 +30,7 @@
 
 - This involves the use of odometry to self localise and to build maps.
 
-- This is due to using the diameter D which is in physical units (e.gcm, meters etc) to get the distance travelled in the x, y coordinates of the world.
+- This is due to using the diameter D which is in physical units (e.g cm, meters etc) to get the distance travelled in the x, y coordinates of the world.
 
 ![image](images/pid.jpeg)
 
@@ -101,6 +101,8 @@
 
 - use the equations to build an occupancy grid for the environment 
 
+- all sensor measurements (such as LIDAR) feed into forming _map_
+
 - more detailed notes [here](robot-navigation-and-slam.md)
 
 - global coordinate transformation equations
@@ -126,11 +128,17 @@
 
 - can be slippage, etc
 
+- error adds up; bigger the building, bigger the problem 
+
 - self localizing due to odometry can be problematic
 
 - every rotation adds up
 
 - map can be erroneous
+
+## How do you fix this? 
+
+- let us go back to early days of flight
 
 - dead reckoning (early days of flight)
 
