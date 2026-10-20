@@ -136,6 +136,7 @@
 
 - map can be erroneous
 
+
 ## How do you fix this? 
 
 - let us go back to early days of flight
@@ -149,6 +150,9 @@
 - and then look for a landmark
 
 - _LondonEye_ is a landmark for flights
+
+![image](images/waypoint.jpeg)
+
 
 - correct for drift
 
