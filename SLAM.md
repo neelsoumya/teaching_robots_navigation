@@ -141,7 +141,7 @@
 
 - let us go back to early days of flight
 
-- dead reckoning (early days of flight)
+- dead reckoning
 
 - `v = d/t` has a clock, how much distance travelled in a time period
 
