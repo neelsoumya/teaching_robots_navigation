@@ -162,9 +162,12 @@ _Concept_ 🧩 🚀  the greater the distance between landmarks, the greater the
 
 ![image](images/dead_reckoning.png)
 
-- static 
+- charger could be potential landmark
 
-- vacuum robot : not move chairs
+_Concept_ 🧩 🚀landmark should be static 
+
+- that is why when you buy a vacuum robot and it is mapping: move chairs 🪑 
+
 
 - distinct landmarks and unique locations (QR codes, colours)
 
