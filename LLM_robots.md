@@ -7,7 +7,9 @@
 - [PPT Slides](slides_LLMs_Robotics.pptx)
 - [HTML Slides](slides_LLMs_Robotics.html)
 
-## 🤔❓A puzzle: can a robot recognize itself?
+## 🤔❓A puzzle: can a robot recognize itself in the mirror?
+
+- The mirror test of _intelligence_ and _consciousness_
 
 - [Giving claude a body](https://www.youtube.com/watch?v=zrvFgxxDrIU)
 - [Takesha Ikegami paper on robotics with LLMs and mirror test](https://arxiv.org/abs/2406.11420)
