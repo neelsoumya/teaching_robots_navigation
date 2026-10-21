@@ -168,6 +168,8 @@ _Concept_ 🧩 🚀landmark should be static
 
 - that is why when you buy a vacuum robot and it is mapping: move chairs 🪑 
 
+- vacuum robot setup guides (such as those from Roborock, iRobot, and Ecovacs) routinely recommend tucking in or removing dining chairs, picking up floor clutter, and opening all doors before running an initial mapping cycle.
+
 
 - distinct landmarks and unique locations (QR codes, colours)
 
