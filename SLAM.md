@@ -156,7 +156,7 @@
 
 - correct for drift
 
-- greater the distance between landmarks, the greater the drift
+_Concept_ 🧩 🚀  the greater the distance between landmarks, the greater the drift
 
 - can miss landmark
 
