@@ -213,11 +213,25 @@ _Concept_ 🧩 🚀landmark should be static
 
 Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
+- LANDMARK RECOGNISER: Processes raw sensory data to identify distinct environmental features and landmarks.
+
+- DEAD RECKONER: Uses wheel encoders or similar odometry to estimate the robot's movement over time.
+
+- MAP BUILDER: The central engine that combines features from the landmark recogniser with dead reckoning data to construct and update the MAP.
+
+- Evidence-based Localiser: Uses recognised landmarks to accurately calculate and refine the robot's position.
+
+- MAP: The stored spatial data representing the mapped environment.
+
+- REACTIVE EXPLORER: Handles immediate motor actions and collision avoidance using direct sensory input.
+
+- Deliberate planning: Uses the built map to perform high-level path planning and goal-oriented navigation.
+
 ![image](images/slam_variations.jpeg)
 
 - [All variations of SLAM explained simply](slam_simplified_variations_overview.md)
 
-- [All variations of SLAM](slam_algorithm_variations_technical_breakdown.md)
+- [All variations of SLAM (technical detail)](slam_algorithm_variations_technical_breakdown.md)
 
 
 
@@ -228,6 +242,8 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 
 ## Particle Filters
+
+![image](images/particle_filter_explained_simply.jpeg)
 
 - particles generated
 
