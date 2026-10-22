@@ -211,7 +211,11 @@ _Concept_ 🧩 🚀landmark should be static
 
 ![image](images/slam_variations.jpeg)
 
+- [All variations of SLAM explained simply](slam_simplified_variations_overview.md)
+
 - [All variations of SLAM](slam_algorithm_variations_technical_breakdown.md)
+
+
 
 ## Rvis
 
