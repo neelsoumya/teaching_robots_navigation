@@ -207,6 +207,11 @@ _Concept_ 🧩 🚀landmark should be static
 ![image](images/waypoint.png)
 
 
+## Variations of SLAM
+
+![image](images/slam_variations.jpeg)
+
+
 ## Rvis
 
 - Rvis will show lasers as dots
