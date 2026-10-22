@@ -209,6 +209,10 @@ _Concept_ 🧩 🚀landmark should be static
 
 ## Variations of SLAM
 
+![image](images/slam_variation_diagram.jpeg)
+
+Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
+
 ![image](images/slam_variations.jpeg)
 
 - [All variations of SLAM explained simply](slam_simplified_variations_overview.md)
