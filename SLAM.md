@@ -237,6 +237,8 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 ## Rvis
 
+- [Rviz](https://github.com/ros2/rviz): 3D robot visualizer for Robot Operating System 2 (ROS 2), used to inspect sensor data, robot models, transform frames (TF), and navigation states in real time
+
 - Rvis will show lasers as dots
 
 
