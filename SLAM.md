@@ -202,6 +202,9 @@ _Concept_ 🧩 🚀landmark should be static
 
 ![image](images/slam_pose.png)
 
+
+## Waypoint navigation using landmarks
+
 - waypoint navigation using landmarks
 
 ![image](images/waypoint.png)
