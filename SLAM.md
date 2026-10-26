@@ -205,6 +205,8 @@ _Concept_ 🧩 🚀landmark should be static
 
 ## Waypoint navigation using landmarks
 
+![image](images/waypoint.png)
+
 - waypoint navigation using landmarks
 
 - unique locations, each location must be unique
@@ -229,8 +231,7 @@ _Concept_ 🧩 🚀landmark should be static
 
 - you can put more weight on whichever you trust more
 
-
-![image](images/waypoint.png)
+![image](images/simple_odometry_tikz.png)
 
 
 - landmarks can help with self-localisation
