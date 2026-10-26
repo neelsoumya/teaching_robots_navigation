@@ -223,6 +223,8 @@ _Concept_ 🧩 🚀landmark should be static
 
 - use _alpha_ _beta_ filter to find an average of both
 
+- see interactive webpage [here](Fixing_Odometry_with_Landmarks_and_Alpha-Beta_Filter.html)
+
 - do not rely too much on landmark or returns from LIDAR
 
 - you can put more weight on whichever you trust more

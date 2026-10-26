@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fixing Odometry with Landmarks and an Alpha-Beta Filter</title>
+<style>
+:root{--bg:#fafaf7;--fg:#1d1d1b;--mut:#66665f;--card:#fff;--line:#dcdcd4;--acc:#2f6fdb;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17171a;--fg:#ececea;--mut:#9a9a94;--card:#222226;--line:#38383e;--acc:#6b9bff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17171a;--fg:#ececea;--mut:#9a9a94;--card:#222226;--line:#38383e;--acc:#6b9bff;color-scheme:dark}
+*{box-sizing:inherit}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.6rem;margin:.2em 0}h2{font-size:1.2rem;margin:1.6em 0 .5em}
+p.sub{color:var(--mut);margin-top:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 12px;cursor:pointer}
+button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.pane{display:none}.pane.on{display:block}
+code,pre{font-family:ui-monospace,Menlo,monospace;font-size:.88rem}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 18px;margin:10px 0}
+.ctl label{display:block;font-size:.88rem}.ctl input[type=range]{width:100%}
+.ctl b{font-variant-numeric:tabular-nums}
+canvas{width:100%;height:auto;display:block;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.stats{display:flex;gap:16px;flex-wrap:wrap;font-size:.92rem;margin:8px 0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.mut{color:var(--mut);font-size:.9rem}
+ol li,ul li{margin:.3em 0}
+</style></head><body><main>
+<h1>Fixing odometry with landmarks and an alpha-beta filter</h1>
+<p class="sub">A teaching page: four ways to understand the idea, then a simulator to play with.</p>
+
+<div class="card">
+<div class="tabs" id="tabs">
+<button data-p="p1" class="on">1. Story</button><button data-p="p2">2. Picture</button><button data-p="p3">3. Maths</button><button data-p="p4">4. Code</button>
+</div>
+
+<div class="pane on" id="p1">
+<p><b>Walking along a dark corridor.</b> You count your steps to know where you are. But your steps are not exactly the length you think they are, so the error slowly builds up. This is <b>odometry drift</b>.</p>
+<p>Every so often you pass a door with a number on it. You know exactly where that door is on the map. You glance at it and say: “my step counting says I’m at 9.4 m, but the door says I’m at 9.0 m.” You now have a disagreement. Who do you believe?</p>
+<p>The <b>alpha-beta filter</b> says: believe a bit of both. Move your estimate <i>part of the way</i> toward the landmark (that’s <b>α</b>), and also use the disagreement to learn that your steps are systematically too long (that’s <b>β</b>), so future steps are corrected before they drift.</p>
+</div>
+
+<div class="pane" id="p2">
+<p>Each time step has three beats: <b>predict, look, correct</b>.</p>
+<pre>
+ predict (from odometry)      look (landmark)        correct
+ ─────────────●────────▶      ──────────●             ───────●───▶
+  old estimate  + step         measured position       blend:  pred + α · (measured − pred)
+
+ residual r = measured − predicted    (the "surprise")
+ r large and positive → odometry is under-reporting; r negative → over-reporting
+</pre>
+<ul>
+<li><b>Odometry</b> = smooth but drifts forever. Great short-term, bad long-term.</li>
+<li><b>Landmark</b> = noisy but never drifts, and only available sometimes. Bad short-term, great long-term.</li>
+<li>The filter combines each one’s strength. α sets how much you trust a single landmark reading; β sets how fast you learn the odometry’s habitual error.</li>
+</ul>
+</div>
+
+<div class="pane" id="p3">
+<p>State: position estimate <code>x</code> and a per-step odometry error estimate <code>b</code>. Odometry gives a step <code>u</code>. A landmark fix gives a position <code>z</code> (landmark position minus the measured offset to it).</p>
+<pre>
+Predict:   x⁻ = x + u + b
+Residual:  r  = z − x⁻            (only when a landmark is visible)
+Correct:   x  = x⁻ + α r
+           b  = b  + β r
+
+No landmark visible?  x = x⁻, b unchanged.  (pure odometry, with the learned fix)
+</pre>
+<p class="mut">Textbook form: predict <code>x⁻ = x + v·dt</code>, then <code>x = x⁻ + α r</code> and <code>v = v + (β/dt) r</code>. Here <code>b</code> plays the role of the velocity-error term, so it is the same filter, with the velocity state replaced by the odometry error. Typical values: 0 &lt; β ≤ α ≤ 1, and β is much smaller than α.</p>
+<ul>
+<li>α = 0: ignore landmarks completely (pure odometry). α = 1: jump straight to the landmark reading, noise and all.</li>
+<li>β = 0: never learn the drift, so each landmark only resets the position. β too big: the filter chases noise and wobbles.</li>
+<li>It is a fixed-gain cousin of the Kalman filter: the Kalman filter computes α and β from the noise levels; here you tune them by hand.</li>
+</ul>
+</div>
+
+<div class="pane" id="p4">
+<pre>
+x, b = 0.0, 0.0
+alpha, beta = 0.3, 0.02
+
+for u, z in zip(odometry_steps, landmark_fixes):  # z is None if no landmark seen
+    x_pred = x + u + b                 # 1. predict
+    if z is not None:
+        r = z - x_pred                 # 2. residual
+        x = x_pred + alpha * r         # 3. correct position
+        b = b + beta * r               #    learn odometry error
+    else:
+        x = x_pred
+</pre>
+<p class="mut">In ROS 2 the same logic sits in a node that subscribes to <code>/odom</code> and a landmark detection topic, and publishes the corrected pose (often as the <code>map→odom</code> transform).</p>
+</div>
+</div>
+
+<h2>Play with it</h2>
+<p class="mut">A robot drives along a 20 m corridor. Its odometry over-reports each step (wheel-size error) and adds noise. Landmarks (▲) at fixed, known positions can be seen only when the robot is within sensing range (shaded).</p>
+<div class="card">
+<div class="row" id="presets">
+<button data-a="0" data-b="0">No landmarks used (α=0)</button>
+<button data-a="1" data-b="0">Trust landmark fully (α=1, β=0)</button>
+<button data-a="0.3" data-b="0">Position fix only (β=0)</button>
+<button data-a="0.3" data-b="0.02">Balanced (α=0.3, β=0.02)</button>
+<button data-a="0.3" data-b="0.3">β too high</button>
+</div>
+<div class="ctl">
+<label>α (position gain): <b id="va"></b><input type="range" id="alpha" min="0" max="1" step="0.01" value="0.3"></label>
+<label>β (drift-learning gain): <b id="vb"></b><input type="range" id="beta" min="0" max="0.3" step="0.005" value="0.02"></label>
+<label>Odometry scale error: <b id="vs"></b><input type="range" id="scale" min="0" max="20" step="1" value="8"></label>
+<label>Landmark noise σ (m): <b id="vn"></b><input type="range" id="noise" min="0" max="1" step="0.05" value="0.2"></label>
+<label>Landmark sensing range (m): <b id="vr"></b><input type="range" id="rng" min="0.5" max="4" step="0.5" value="1.5"></label>
+</div>
+<div class="row"><button id="play">Pause</button><button id="reset">Restart</button></div>
+<canvas id="cv" width="900" height="460"></canvas>
+<div class="stats">
+<span><span class="dot" style="background:#2a9d5c"></span>True</span>
+<span><span class="dot" style="background:#d1495b"></span>Odometry only: error <b id="eo">0</b> m</span>
+<span><span class="dot" style="background:#2f6fdb"></span>Filter: error <b id="ef">0</b> m</span>
+<span>Learned step fix b: <b id="eb">0</b> m (true: <b id="et">0</b>)</span>
+</div>
+</div>
+
+<h2>Things to try with students</h2>
+<ol>
+<li>Set α = 0. Predict what the blue line will do, then run it. (It matches the red one.)</li>
+<li>Set α = 1 and raise landmark noise. Why does the blue error become jittery?</li>
+<li>Keep α = 0.3 and compare β = 0 with β = 0.02. Watch the error between landmarks: the drift slope flattens once b is learned.</li>
+<li>Raise β to 0.3. What goes wrong, and why?</li>
+<li>Shrink the sensing range to 0.5 m. How long can the filter coast between landmarks?</li>
+<li>Discussion: when would you want the Kalman filter’s adaptive gains instead of fixed α, β?</li>
+</ol>
+
+<script>
+// tabs
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===b.dataset.p));
+});
+const $=id=>document.getElementById(id);
+const L=[5,10,15], DT=0.1, V=0.5, LEN=20;
+let S, running=true, seed=7;
+function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
+function gauss(){return Math.sqrt(-2*Math.log(rnd()+1e-12))*Math.cos(2*Math.PI*rnd())}
+function reset(){seed=7;S={t:0,x:0,xo:0,xe:0,b:0,eo:[0],ef:[0],hits:[]}}
+function step(){
+  if(S.x>=LEN)return;
+  const sc=$('scale').value/100, a=+$('alpha').value, be=+$('beta').value;
+  const d=V*DT, u=d*(1+sc)+gauss()*0.004;
+  S.x+=d; S.xo+=u; S.t++;
+  let pred=S.xe+u+S.b, z=null;
+  const near=L.find(l=>Math.abs(l-S.x)<=+$('rng').value);
+  if(near!==undefined) z=S.x+gauss()*(+$('noise').value);
+  if(z!==null){const r=z-pred;S.xe=pred+a*r;S.b+=be*r;S.hits.push([S.t,z])}else S.xe=pred;
+  S.eo.push(S.xo-S.x);S.ef.push(S.xe-S.x);
+}
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n)}
+function draw(){
+  const c=$('cv'),g=c.getContext('2d'),W=900,fg=css('--fg').trim(),mut=css('--mut').trim(),line=css('--line').trim();
+  g.clearRect(0,0,W,460);g.font='13px system-ui';g.fillStyle=fg;g.strokeStyle=line;
+  const X=m=>40+m*(820/LEN);
+  // corridor
+  g.beginPath();g.moveTo(X(0),110);g.lineTo(X(LEN),110);g.stroke();
+  for(let m=0;m<=LEN;m+=5){g.fillStyle=mut;g.fillText(m+' m',X(m)-10,150)}
+  L.forEach(l=>{const r=+$('rng').value;g.fillStyle='rgba(120,120,120,0.15)';g.fillRect(X(l-r),30,X(l+r)-X(l-r),80);
+    g.fillStyle=fg;g.beginPath();g.moveTo(X(l),38);g.lineTo(X(l)-8,54);g.lineTo(X(l)+8,54);g.fill()});
+  const dot=(m,y,col,ring)=>{g.beginPath();g.arc(X(m),y,9,0,7);if(ring){g.lineWidth=3;g.strokeStyle=col;g.stroke();g.lineWidth=1}else{g.fillStyle=col;g.fill()}};
+  dot(S.xo,76,'#d1495b');dot(S.xe,76,'#2f6fdb',true);dot(S.x,96,'#2a9d5c');
+  g.fillStyle=mut;g.fillText('landmarks ▲, shaded = visible zone',X(0),22);
+  // error plot
+  const top=185,bot=440,h=bot-top;
+  const mx=Math.max(0.5,...S.eo.map(Math.abs),...S.ef.map(Math.abs))*1.1;
+  const Y=e=>top+h/2-(e/mx)*(h/2), T=i=>40+i*(820/(LEN/V/DT));
+  g.strokeStyle=line;g.strokeRect(40,top,820,h);g.beginPath();g.moveTo(40,Y(0));g.lineTo(860,Y(0));g.stroke();
+  g.fillStyle=mut;g.fillText('position error (m) vs time',44,top-6);g.fillText('+'+mx.toFixed(1),8,top+10);g.fillText('−'+mx.toFixed(1),8,bot);
+  const pl=(arr,col)=>{g.strokeStyle=col;g.lineWidth=2;g.beginPath();arr.forEach((e,i)=>i?g.lineTo(T(i),Y(e)):g.moveTo(T(i),Y(e)));g.stroke();g.lineWidth=1};
+  S.hits.forEach(([i])=>{g.fillStyle='rgba(120,120,120,0.12)';g.fillRect(T(i)-1,top,2,h)});
+  pl(S.eo,'#d1495b');pl(S.ef,'#2f6fdb');
+  $('eo').textContent=S.eo.at(-1).toFixed(2);$('ef').textContent=S.ef.at(-1).toFixed(2);
+  $('eb').textContent=S.b.toFixed(4);$('et').textContent=(-V*DT*$('scale').value/100/(1+$('scale').value/100)*(1+$('scale').value/100)).toFixed(4);
+}
+function labels(){$('va').textContent=$('alpha').value;$('vb').textContent=$('beta').value;$('vs').textContent=$('scale').value+'%';$('vn').textContent=$('noise').value;$('vr').textContent=$('rng').value}
+['alpha','beta','scale','noise','rng'].forEach(id=>$(id).addEventListener('input',()=>{labels();reset()}));
+document.querySelectorAll('#presets button').forEach(b=>b.onclick=()=>{$('alpha').value=b.dataset.a;$('beta').value=b.dataset.b;labels();reset();running=true;$('play').textContent='Pause'});
+$('play').onclick=()=>{running=!running;$('play').textContent=running?'Pause':'Play'};
+$('reset').onclick=()=>{reset();running=true;$('play').textContent='Pause'};
+labels();reset();
+(function loop(){if(running)for(let i=0;i<2;i++)step();draw();requestAnimationFrame(loop)})();
+</script>
+</main></body></html>
