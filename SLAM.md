@@ -231,6 +231,11 @@ _Concept_ 🧩 🚀landmark should be static
 ![image](images/waypoint.png)
 
 
+- landmarks can help with self-localisation
+
+- _Concept_ 🧩 🚀 can do both self-localisation and mapping (using landmarks)
+
+
 ## Variations of SLAM
 
 ![image](images/slam_variation_diagram.jpeg)
