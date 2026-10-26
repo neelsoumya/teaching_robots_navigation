@@ -207,6 +207,27 @@ _Concept_ 🧩 🚀landmark should be static
 
 - waypoint navigation using landmarks
 
+- unique locations, each location must be unique
+
+- use QR codes
+
+- if the robot sees landmark 2, then it knows that it is at _x2_, _y2_
+
+- using LIDAR it can figure out how far it is from landmark 2
+
+- so it gets a new estimate of position
+
+- but say odometry is telling it, it is farther away
+
+- trust odometry (which collects error) or landmark (which never moves)?
+
+- use _alpha_ _beta_ filter to find an average of both
+
+- do not rely too much on landmark or returns from LIDAR
+
+- you can put more weight on whichever you trust more
+
+
 ![image](images/waypoint.png)
 
 
