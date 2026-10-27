@@ -181,7 +181,14 @@ _Concept_ 🧩 🚀landmark should be static
 
 ![image](images/dead_equations.png)
 
-- 🤔 ❓ imagine you have been asked to design a vacuum robot that will work in an office with glass doors. what problems will you face?
+
+## 🤔 ❓ imagine you have been asked to design a vacuum robot that will work in an office with glass doors. what problems will you face?
+
+- 🤔 ❓build occupancy map for this
+
+- 🤔 ❓ which sensor would you use? (LIDAR, ultrasound, vision)
+
+- would vision work? might detect some features
 
 - problem with _laser_: can shine through, narrow beam
 
@@ -190,7 +197,10 @@ _Concept_ 🧩 🚀landmark should be static
 
 - with glass room, use _ultrasound_
 
-- design issues in industry: vacuum robot in glass offices, but office may have glass
+- ultrasound would work best
+
+
+- ⚠️ design issues in industry: vacuum robot in glass offices, but office may have glass
 
 - combinations of sensors
 
