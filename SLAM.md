@@ -281,8 +281,20 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - [Rviz](https://github.com/ros2/rviz): 3D robot visualizer for Robot Operating System 2 (ROS 2), used to inspect sensor data, robot models, transform frames (TF), and navigation states in real time
 
-- Rviz will show lasers as dots
+- Rviz will show laser returns as dots
 
+- convert them to landmarks
+
+
+## Revision
+
+- reactive controller controls robot controller
+
+- odometry allows you to do self-localisation
+
+- use sensor data and create map
+
+- use landmarks to correct and build map 
 
 
 ## Particle Filters
