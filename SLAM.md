@@ -296,6 +296,12 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - use landmarks to correct and build map 
 
+- building a robotic tour guide (in _Legoland_ wonderland)
+
+- landmarks locations known and do not move
+
+- 💡if you encounter a landmark that you know in your databse, use probability and generate a hypothesis
+
 
 ## Particle Filters
 
