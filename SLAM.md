@@ -302,11 +302,12 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - 💡if you encounter a landmark that you know in your database, use probability and generate a hypothesis
 
+- _Concept_ 🧩 🚀  what is the probability that you are close to this landmark given that you are close to origin and odometry tells you a reading
+
 - this is the basic idea behind a _particle filter_
 
 ![image](images/legoland_particle_filters.jpeg)
 
-- what is the probability that you are close to this landmark given that you are close to origin and odometry tells you a reading
 
 
 ## Particle Filters
