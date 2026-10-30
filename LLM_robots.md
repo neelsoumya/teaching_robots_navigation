@@ -90,6 +90,7 @@
 
 ![image](images/safety_vla.jpeg)
 
+- [A Human–Agent Trust Calibration Model for HFE Practitioners in Partial Mission Capable Recovery](https://www.mdpi.com/2313-576x/12/5/117)
 
 
 
