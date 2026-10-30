@@ -363,6 +363,8 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 ![image](images/Robot_Localization_and_Particle_Filters.png)
 
+
+
 - 🤔 ❓do you have a particle filter in your brain?
 
 - you are in a room and you lose the power and lights. how would you navigate?
