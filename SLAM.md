@@ -248,6 +248,10 @@ _Concept_ 🧩 🚀landmark should be static
 
 - _Concept_ 🧩 🚀 can do both self-localisation and mapping (using landmarks)
 
+- ⚠️ but what if landmarks are too far apart? then errors will accumulate.
+
+- ⚠️landmarks need to be distinct
+
 
 ## Variations of SLAM
 
@@ -306,12 +310,32 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - _Concept_ 🧩 🚀  what is the probability that you are close to this landmark given that you are close to origin and odometry tells you a reading
 
+![image](images/particle_filter_simple.jpeg)
 
 ![image](images/legoland_particle_filters.jpeg)
 
+- which is the closest landmark given that you were at origin and odometry says you have gone 2.5 units?
+
+- ⚠️ but what if landmarks are too far apart? then errors will accumulate.
+
+- ⚠️landmarks need to be distinct
 
 
 ## Particle Filters
+
+- generate hypotheses and test hypotheses using sensors
+
+- distribute particles 
+
+- generate a hypothesis based on the _mathematical model_ of the robot
+
+- the mathematical model will change based on whether you have a humanoid robot or dog robot or wheeled robot
+
+- for example, if it is a wheeled robot it will use odometry to figure out where it thinks is (see example in previous section and figure)
+
+- constantly resample
+
+- over time you will get a better estimate of pose
 
 ![image](images/particle_filter_explained_simply.jpeg)
 
