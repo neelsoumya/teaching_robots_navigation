@@ -373,7 +373,13 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - generate hypotheses, get data and test these hypotheses
 
-- geometry of the environment becomes _features_ that the particle filter will use
+- and you _self-localize_
+
+- _Concept_ 🧩 🚀 The geometry of the environment becomes _features_ that the particle filter will use
+
+- resamples, anything that is below a threshold it fires it back into the environment and then says go back, and it keeps testing them
+
+- you can try developing your own variant of a particle filter
 
 - [🤔 ❓ How is this robot navigating](https://youtube.com/shorts/2biHFlMQmrE)
 
