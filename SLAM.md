@@ -461,7 +461,31 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 - Weather & Lighting Fluctuations: Heavy rain, snow, fog, and sun glare interfere with camera and LiDAR performance.
 
 
+## Recap/Summary
+
+![image](images/full_picture.jpeg)
+
+- robot controller uses a reactive explorer and dead reckoning
+
+- this controls the robot platform
+
+- this controls the wheels
+
+- this gives you odometry
+
+- you have sensors (LIDAR, camera, ultrasonics) which you can use to develop a map
+
+- use odometry to self-localise _and_ build a map
+
+- you can use landmarks to self-localise _and_ build a map
+
+
+
+
+
 ## Visual SLAM
+
+- pinhole camera
 
 - visual odometry
 
@@ -578,6 +602,25 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - occupancy map in 3D
 
+- RTAB-Map (Real-Time Appearance-Based Mapping) is a RGB-D SLAM approach based on a global loop closure detector with real-time constraints. 
+
+- RTAB-Map combines visual features and depth information for visual SLAM. This package can be used to generate 3D point clouds of the environment and/or to create a 2D occupancy grid map for navigation.
+
+- Specifically:
+When using RGB-D cameras, it uses both color images and depth data to estimate motion and build maps.
+
+- When running in stereo or monocular mode, it extracts visual features (commonly SURF, SIFT, ORB, or BRISK) to perform visual odometry and loop closure detection.
+
+- In monocular and stereo visual SLAM, SIFT, SURF, ORB, and BRISK are computer vision algorithms used to extract and describe visual features (distinctive points such as corners, edges, or textured blobs) from image frames.
+
+- It builds and maintains a graph-based map, where nodes represent keyframes and edges represent estimated transformations between them.
+
+- The loop closure detection relies on appearance-based matching — comparing visual features across frames to detect when the robot revisits a known area.
+
+![image](images/feature_detection_vslam.jpeg)
+
+![image](images/graph_slam.jpeg)
+
 
 ### Backend
 
@@ -613,6 +656,24 @@ Discuss the following with your peers (class discussion)
 - mining
 
 
+## Practical (notes) courtesy Pedo Ribeiro
+
+- Stella-VSLAM uses feature-based visual odometry and mapping.
+
+- Specifically:
+It extracts ORB features (Oriented FAST and Rotated BRIEF descriptors) from images.
+
+- It matches these features between consecutive frames to estimate camera motion.
+
+- It triangulates 3D points from matched features to build a map.
+
+- Implication
+Because of this:
+
+- Feature-poor environments (plain walls, uniform lighting, reflective or dark surfaces) can cause Stella-VSLAM to lose tracking.
+- Richly textured scenes (office spaces, outdoor environments, structured rooms) work best.
+
+- If you are running it in Gazebo with the TurtleBot3, note that the default world (flat floor, grey walls) lacks texture — which is why the camera often “sees nothing useful.”
 
 
 
