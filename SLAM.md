@@ -407,7 +407,17 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 
 
-## 🤔 ❓What if there is a featureless environment (marine/ocean)?	
+## 🤔 ❓How would you navigate in a featureless environment (marine/ocean)?	
+
+- ultrasound? seabed
+
+- particle filter?
+
+- look at where sun is (if you have a clock)
+
+- at night look at North Star 💫 (if not ☁️ cloudy)
+
+- 🧭 compass
 
 - clock (sun), compass, weather, underwater features, celestial navigation
 
@@ -417,7 +427,9 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - how do you solve this problem?
 
-- rely on _IMU_
+- rely on _IMU_ (essentially gives you odometry)
+
+- once you get further and further away, there will be drift
 
 - sonic/acoustic signals localize underwater
 
@@ -428,6 +440,25 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 - [paper on SLAM underwater (see figure 7)](https://www.researchgate.net/publication/257523153_Scan_Matching_SLAM_in_Underwater_Environments)
 
 ![image](images/underwater_slam.png)
+
+
+- Terrestrial Vehicles (e.g., Cruise AV): Utilize LiDAR (3D point clouds), optical cameras (RGB/depth), millimeter-wave Radar, inertial measurement units (IMUs), wheel encoders, and GNSS/GPS.   
+
+- Underwater/Sub-Ice Vehicles (AUVs): Rely primarily on acoustic sensors (Doppler Velocity Log (DVL), multibeam sonar, side-scan sonar), pressure/depth sensors, fiber-optic gyroscopes (IMU/FOG), and acoustic positioning systems (USBL/LBL), as GPS signals cannot penetrate water.   
+
+- _Concept_ 🧩 🚀 Raw sensor outputs are fused (_sensor fusion_) using probabilistic algorithms such as Extended Kalman Filters (EKF)
+
+- Point-Cloud / Grid Mapping: LiDAR or Sonar returns are converted into occupancy grid maps or 3D point cloud maps.
+
+- Visual Landmarks: Keypoint detection algorithms identify distinct visual markers in camera feeds to establish spatial correspondences.
+
+- Feature-Sparse & Dynamic Surroundings: Sea ice bottoms and open water columns often lack sharp visual or bathymetric features, making loop closure and scan matching difficult.   
+
+- Dynamic Agents: Navigating alongside unpredictably moving traffic, pedestrians, and cyclists requires real-time segmentation of static map elements versus dynamic obstacles.   
+
+- Multipath Signals & Urban Canyons: High-rise structures block or reflect GNSS/GPS signals, forcing systems to rely heavily on LiDAR and pre-built High-Definition (HD) maps.
+
+- Weather & Lighting Fluctuations: Heavy rain, snow, fog, and sun glare interfere with camera and LiDAR performance.
 
 
 ## Visual SLAM
