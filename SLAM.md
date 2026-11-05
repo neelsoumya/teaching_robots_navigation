@@ -489,6 +489,10 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 ![image](images/pinhole_camera.jpeg)
 
+- _egocentric view_
+
+- look at same object from different points of view
+
 - visual odometry
 
 ![image](images/visual_odometry.png)
@@ -501,8 +505,22 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - motion of object (while tracking AR code)
 
+- detect features on objects (such as edges/corners)
+
+- track the corner of the tree, and we can extract a patch
+
 - similar to augmented reality where you are (say) visualizing a dinosaur from different directions as you move around the room
 
+- _Concept_ 🧩 🚀 the patch becomes the _landmark_
+
+- if you can then find the x, y co-ordinate of the landmark you can then refer it to navigate
+
+- you can then self-localize
+
+![image](images/patch_detection_vslam.jpeg)
+
+
+- [edge detection demo](edge-detection-demo.html)
  
 - `monocular SLAM` (one camera system)
 
