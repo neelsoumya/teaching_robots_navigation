@@ -106,6 +106,10 @@ Run Stella-VSLAM and RTAB-Map demos
 
 - [Checkin codes](https://engagement.york.ac.uk/mytimetable)
 
+## Timetables and semesters
+
+- [Timetables and semesters](https://www.york.ac.uk/staff/teaching/semesters/)
+
 
 ## Declaration
 
