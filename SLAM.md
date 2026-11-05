@@ -487,6 +487,8 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - pinhole camera
 
+![image](images/pinhole_camera.jpeg)
+
 - visual odometry
 
 ![image](images/visual_odometry.png)
@@ -531,6 +533,7 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 - by combining them you can have visual inertial SLAM or visual inertial odometry
 
 - distance between two cameras in binocular must be known
+
 
 ## MonoSLAM
 
