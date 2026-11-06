@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cv_optical_flow: Lucas-Kanade corner tracking</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { max-width: 720px; margin: 1rem auto; padding: 0 1rem; }
+  canvas { width: 100%; background: #000; border-radius: 8px; display: block; }
+  .row { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: center; margin: .75rem 0; }
+  label { display: flex; gap: .5rem; align-items: center; font-size: .9rem; }
+  button { padding: .4rem .9rem; font-size: .9rem; }
+  #status { font-size: .85rem; opacity: .75; }
+  code { font-size: .85em; }
+</style>
+</head>
+<body>
+<h2>cv_optical_flow</h2>
+<p>Sparse optical flow: <code>goodFeaturesToTrack</code> finds corners, then
+<code>calcOpticalFlowPyrLK</code> (Lucas-Kanade) tracks them from frame to frame.
+Move your hand or the camera and watch the trails.</p>
+
+<div class="row">
+  <button id="start" disabled>Start webcam</button>
+  <button id="redetect" disabled>Re-detect corners</button>
+  <button id="clear" disabled>Clear trails</button>
+</div>
+<div class="row">
+  <label>Max corners <input id="maxCorners" type="range" min="10" max="300" value="100"><span id="maxCornersV">100</span></label>
+  <label>Trail length <input id="trailLen" type="range" min="2" max="60" value="20"><span id="trailLenV">20</span></label>
+  <label>LK window <input id="win" type="range" min="5" max="41" step="2" value="21"><span id="winV">21</span></label>
+</div>
+<div id="status">Loading OpenCV.js…</div>
+<canvas id="out" width="640" height="480"></canvas>
+<video id="video" playsinline muted hidden></video>
+
+<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const video = $('video'), canvas = $('out'), ctx = canvas.getContext('2d');
+const statusEl = $('status');
+
+// UI wiring
+for (const id of ['maxCorners', 'trailLen', 'win'])
+  $(id).oninput = () => $(id + 'V').textContent = $(id).value;
+
+let tracks = [];            // each: {id, pts: [[x,y], ...]}
+let nextId = 0, needDetect = false, running = false;
+let cap, frame, gray, prevGray, havePrev = false;
+let lastT = performance.now(), fps = 0;
+
+// Wait for OpenCV.js (handles both callback and Promise style builds)
+window.addEventListener('load', async () => {
+  let c = window.cv;
+  while (!c) { await new Promise(r => setTimeout(r, 100)); c = window.cv; }
+  if (typeof c.then === 'function') c = await c;
+  else if (!c.Mat) await new Promise(r => c.onRuntimeInitialized = r);
+  window.cv = c;
+  statusEl.textContent = 'OpenCV.js ready. Click "Start webcam".';
+  $('start').disabled = false;
+});
+
+$('start').onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+    video.srcObject = stream;
+    await video.play();
+  } catch (e) {
+    statusEl.textContent = 'Webcam error: ' + e.message + ' (needs https:// or localhost, and camera permission)';
+    return;
+  }
+  const w = video.videoWidth, h = video.videoHeight;
+  canvas.width = w; canvas.height = h;
+  video.width = w; video.height = h;
+  cap = new cv.VideoCapture(video);
+  frame = new cv.Mat(h, w, cv.CV_8UC4);
+  gray = new cv.Mat(h, w, cv.CV_8UC1);
+  prevGray = new cv.Mat(h, w, cv.CV_8UC1);
+  $('start').disabled = true;
+  $('redetect').disabled = false;
+  $('clear').disabled = false;
+  running = true;
+  requestAnimationFrame(loop);
+};
+$('redetect').onclick = () => needDetect = true;
+$('clear').onclick = () => tracks.forEach(t => t.pts = [t.pts[t.pts.length - 1]]);
+
+// Shi-Tomasi corners on the previous frame -> new tracks
+function detect(img) {
+  const corners = new cv.Mat();
+  cv.goodFeaturesToTrack(img, corners, +$('maxCorners').value, 0.01, 10);
+  tracks = [];
+  for (let i = 0; i < corners.rows; i++)
+    tracks.push({ id: nextId++, pts: [[corners.data32F[i * 2], corners.data32F[i * 2 + 1]]] });
+  corners.delete();
+}
+
+// Lucas-Kanade: where did each tracked point go in the new frame?
+function track(prev, next) {
+  const n = tracks.length;
+  const p0 = new cv.Mat(n, 1, cv.CV_32FC2), p1 = new cv.Mat(), st = new cv.Mat(), err = new cv.Mat();
+  tracks.forEach((t, i) => {
+    const [x, y] = t.pts[t.pts.length - 1];
+    p0.data32F[i * 2] = x; p0.data32F[i * 2 + 1] = y;
+  });
+  const wsz = +$('win').value;
+  const winSize = new cv.Size(wsz, wsz);
+  const criteria = new cv.TermCriteria(cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT, 10, 0.03);
+  cv.calcOpticalFlowPyrLK(prev, next, p0, p1, st, err, winSize, 3, criteria);
+
+  const keep = [], maxLen = +$('trailLen').value;
+  for (let i = 0; i < n; i++) {
+    if (st.data[i] !== 1) continue;                      // lost track
+    const x = p1.data32F[i * 2], y = p1.data32F[i * 2 + 1];
+    if (x < 0 || y < 0 || x >= next.cols || y >= next.rows) continue;
+    const t = tracks[i];
+    t.pts.push([x, y]);
+    while (t.pts.length > maxLen) t.pts.shift();
+    keep.push(t);
+  }
+  tracks = keep;
+  p0.delete(); p1.delete(); st.delete(); err.delete();
+}
+
+function draw() {
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.lineWidth = 2;
+  for (const t of tracks) {
+    const hue = (t.id * 47) % 360;
+    ctx.strokeStyle = `hsl(${hue} 90% 55%)`;
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.beginPath();
+    t.pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+    ctx.stroke();
+    const [x, y] = t.pts[t.pts.length - 1];
+    ctx.beginPath(); ctx.arc(x, y, 3, 0, 6.283); ctx.fill();
+  }
+}
+
+function loop() {
+  if (!running) return;
+  cap.read(frame);
+  cv.cvtColor(frame, gray, cv.COLOR_RGBA2GRAY);
+
+  if (!havePrev) { gray.copyTo(prevGray); havePrev = true; }
+  if (needDetect || tracks.length < 10) { detect(prevGray); needDetect = false; }
+  if (tracks.length) track(prevGray, gray);
+  gray.copyTo(prevGray);
+
+  draw();
+  const now = performance.now();
+  fps = fps * 0.9 + (1000 / (now - lastT)) * 0.1; lastT = now;
+  statusEl.textContent = `${tracks.length} tracked corners · ${fps.toFixed(0)} fps`;
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

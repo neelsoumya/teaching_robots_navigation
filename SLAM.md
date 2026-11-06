@@ -520,7 +520,43 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 ![image](images/patch_detection_vslam.jpeg)
 
 
-- [edge detection demo](edge-detection-demo.html)
+- [🎮 edge detection demo](edge-detection-demo.html)
+ 
+- you detect landmarks or keypoints
+
+- and start storing them in a database of landmarks
+
+- When I detect a new landmark, you can compare it to your entry in the database
+
+- _keyframes_
+
+- detect changes (differences) and called it a new frame (_keyframe_ 🖼 )
+
+- OpenCV has libraries for this
+
+- _optical flow_: keeps tracks of corners between frames. `cv_optical_flow`
+
+- you can find velocity _vx_ _vy_
+
+- [🎮 demo of optical flow using opencv in browser](cv_optical_flow.html)
+
+- 🤔❓what can you do with this?
+
+- you can find x and y
+
+- but you cannot get rotation
+
+- motion model will be needed
+
+- 🚙 cars like _Wyamo_ integrate cameras, radar (CANbus [Controller Area Network bus]) and other sensors to do `visual inertial odometry`
+
+- you can then self-localise
+
+- see flow diagram below (again)
+
+![image](images/localisation_pipeline_vslam.png)
+
+
  
 - `monocular SLAM` (one camera system)
 
@@ -529,10 +565,17 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 ## Differences between visual odometry and visual SLAM
 
-- [Differences between visual odometry and visual SLAM](visual_odometry_vs_slam_guide.md)
+- [Differences between `visual odometry` and visual SLAM](visual_odometry_vs_slam_guide.md)
+
+- basically a difference in how much memory
+
 
 
 ## Back to visual SLAM
+
+- How to get depth?
+
+- _Intellisense_ has accelerometers and can infer depth
 
 - IR camera
 
