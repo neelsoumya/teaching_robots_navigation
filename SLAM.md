@@ -563,6 +563,36 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 - with binocular system, you can use disparity between two images to get depth of objects 
 
 
+## Recap/Summary of VSLAM
+
+
+
+- camera gives us images
+
+- from those images infer motion
+
+- from that infer depth
+
+- from motion infer odometry
+
+- use that for self-localisation
+
+- use that to build a map
+
+- use features to use as patches landmarks
+
+- use that to build a map
+
+- those same features/patches can be used for odometry (`optical flow`)
+
+- getting intrinsic parameters of camera is important
+
+- extrinsic parameters (rotation, translation)
+
+- key frames (🖼 tracking difference between frames: if large difference then key frame and from that extract key features)
+
+
+
 ## Differences between visual odometry and visual SLAM
 
 - [Differences between `visual odometry` and visual SLAM](visual_odometry_vs_slam_guide.md)
@@ -597,6 +627,16 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 
 ## MonoSLAM
+
+- monocular SLAM
+
+- if you have two cameras, use differences between image (`disparity map`)
+
+- use this to infer _depth_
+
+- Intel Realsense cameras have two cameras and a time of flight IR sensor to infer depth
+
+- distance between two cameras must be known
 
 - opencv
 
@@ -744,3 +784,7 @@ Because of this:
 ## Cleaning robots using SLAM in India
 
 - [Jammu-based URC Robotics has unveiled X40, their autonomous floor-cleaning robot for commercial facilities. It uses LiDAR SLAM and ROS 2 for navigation](https://x.com/RuntimeBRT/status/2111002114264830319)
+
+## Unmanned vessels India
+
+- [Unmanned vessels doing autonomous 🧭 India](https://www.youtube.com/watch?v=MkkyJLP3e4w)
