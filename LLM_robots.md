@@ -32,6 +32,19 @@
 ![image](https://arxiv.org/html/2406.11420v1/extracted/5671667/fig3.png)
 
 
+## Very quick intro to transformers
+
+- Key idea: 💡 everything is a token
+
+- Key 💡🔑🔐 idea: you can _attend_ to this token (*attention* is all you need)
+
+- [quick intro material](https://neelsoumya.github.io/teaching_llm_applications/materials/transformers.html)
+
+![image](https://neelsoumya.github.io/teaching_llm_applications/images/head.png)
+
+![image](https://neelsoumya.github.io/teaching_llm_applications/images/multiple_heads_recap.png)
+
+
 ## Vision Language Action (VLA) models
 
 - [VLA models](https://arxiv.org/pdf/2505.04769)
@@ -57,7 +70,7 @@
 
 ![image](https://arxiv.org/html/2505.04769v2/humanoidHelix.png)
 
-- [🎥 Video explaining how state and prompt is encoded VLA](https://www.youtube.com/shorts/zfZE4hZ8efE)
+- [🎥 Short Video explaining how state and prompt is encoded VLA](https://www.youtube.com/shorts/zfZE4hZ8efE)
 
 - [🎥 Video on end to end training](https://www.youtube.com/watch?v=cRZNwgvcWUg)
 
@@ -96,7 +109,7 @@
 
 ##  💡 VLMs vs. VLAs
 
-- 💡 When introducing multimodal _embodied_ AI to students, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
+- 💡 When talking about multimodal _embodied_ AI, it is critical to distinguish between **Vision-Language Models (VLMs)** and **Vision-Language-Action (VLA) Models**:
 
 * **Vision-Language Models (VLMs):** Models like GPT-4o, Gemini, or SayCan take images and text prompts as input and output high-level textual descriptions, symbolic plans, or code (e.g., generating Python scripts for MoveIt 2). They operate in symbolic/discrete space and rely on downstream controllers to execute physical motion.
 
@@ -186,6 +199,10 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 >pick up all 3 cups in the room
 
 - [long horizon tasks](https://www.waddlelabs.ai/research/introducing-waddle)
+
+- philosophy proposed by Waddle Lab 🧫 (code as policy)
+
+![image](images/waddle_lab_philosophy.png)
 
 
 ## World models Fei-Fei Li lab
