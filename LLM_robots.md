@@ -40,9 +40,31 @@
 
 - [quick intro material](https://neelsoumya.github.io/teaching_llm_applications/materials/transformers.html)
 
+- [more intro (basic from a winter school on AI)](https://neelsoumya.github.io/winter_school_AI/)
+
 ![image](https://neelsoumya.github.io/teaching_llm_applications/images/head.png)
 
 ![image](https://neelsoumya.github.io/teaching_llm_applications/images/multiple_heads_recap.png)
+
+
+- 🤔 ❓ will _one-hot_ encoding work?
+
+- 🤔 all words will be equidistant from each other! _Aardvark_ is equidistant from _starship_ and _anemone_
+
+- this will not capture concepts
+
+- 🤔we need a representation that will capture meaning and _context_
+
+- 🤔context captures meaning
+
+![image](images/embeddings_concept.png)
+
+
+![image](images/embedding_3blue1brown.png)
+
+- 🔑🔐tokens that have similar meanings should have similar values
+
+![image](images/tokens_onehot_meaning.png)
 
 
 ## Vision Language Action (VLA) models
@@ -207,9 +229,11 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 ## World models Fei-Fei Li lab
 
-- 🤔❓Will LLMs struggle to solve spatial reasoning?
+- 🤔❓Will LLMs struggle to solve spatial reasoning? What do you think?
 
 - [This is what Fei-Fei Li says](https://www.linkedin.com/posts/a16z_dr-fei-fei-li-on-why-llms-will-struggle-activity-7370936594012430336-Bv5t)
+
+> Yes LLMs will struggle to model the 🗺 🌎 world
 
 - [this what Yann LeCun says](https://x.com/ylecun/status/2047636569767419951?s=20)
 
@@ -223,18 +247,24 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 >a fully consistent 3D world is required for navigation
 
+- Here is what Fei-Fei Li thinks is required for _spatial intelligence_
+
+![image](images/spatial_intelligence_feifeili.png)
+
 - 🤔❓do you agree? discuss.
 
 - [World Labs](https://www.worldlabs.ai/blog/atlas)
-- [Activity 🎮 : Marble](https://marble.worldlabs.ai/)
+- [Activity 🎮 : Play around with Marble](https://marble.worldlabs.ai/)
 
-- _NVIDIA_ using Marble world models to augment training of robots
+- _NVIDIA_ using Marble world models to `augment` training of robots
 
 - _Summary_ LLMs may struggle with spatial reasoning because they are symbolic rather than physical simulations. A text-based intelligence lacks the 'grounding' in 3D physics necessary for complex, dynamic navigation.
 
 - _Summary_ A consistent 3D world model is essential for functional robotics because it allows the agent to hallucinate, test, and safely execute plans in a simulated mirror of reality, preventing the disastrous mistakes that an 'unplugged' conceptual AI might make when trying to manipulate the physical world.
 
 ![image](images/summary_world_model.jpeg)
+
+
 
 
 ## Bottleneck for robotics (~ca. 2026)
