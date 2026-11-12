@@ -513,6 +513,8 @@ Image credit: Recreated using Google Gemini based on an image by Dr John Oyekan
 
 - _Concept_ 🧩 🚀 the patch becomes the _landmark_
 
+- [🎥 video of augmented reality and tracking](https://www.youtube.com/watch?v=Y9HMn6bd-v8)
+
 - if you can then find the x, y co-ordinate of the landmark you can then refer it to navigate
 
 - you can then self-localize
