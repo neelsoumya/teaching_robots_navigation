@@ -38,6 +38,8 @@
 
 - Key 💡🔑🔐 idea: you can _attend_ to this token (*attention* is all you need)
 
+- [quick intro `transformers`](https://neelsoumya.github.io/teaching_llm_applications/materials/week01_intro_and_history.html)
+
 - [quick intro material](https://neelsoumya.github.io/teaching_llm_applications/materials/transformers.html)
 
 - [more intro (basic from a winter school on AI)](https://neelsoumya.github.io/winter_school_AI/)
@@ -65,6 +67,14 @@
 - 🔑🔐tokens that have similar meanings should have similar values
 
 ![image](images/tokens_onehot_meaning.png)
+
+
+
+- 🤔 what is a token (and why I am I talking about tokens in a class of robotics)?
+
+- 🔑🔐 a token can be _anything_ . it can be audio, video, sensor input, state variables representing robot arm movement, wheel odometry, .......
+
+
 
 
 ## Vision Language Action (VLA) models
