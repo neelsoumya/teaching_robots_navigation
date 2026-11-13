@@ -761,6 +761,8 @@ Discuss the following with your peers (class discussion)
 - city navigation
 - mining
 
+- have landmarks and AR codes to help trucks self-localize
+
 
 ## Practical (notes) courtesy Pedo Ribeiro
 

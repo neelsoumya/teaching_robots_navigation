@@ -4,7 +4,7 @@
 
 - relative to other locations
 
-- path planning
+- _path planning_
 
 - self localisation
 
