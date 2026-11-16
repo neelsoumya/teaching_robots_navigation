@@ -35,6 +35,8 @@
 
 - path planning is different from trajectory planning
 
+- 💡 path planning techniques include artificial potential field, grid based techniques, and sampling based techniques
+
 - aerial drones have 6 degrees of freedom pitch, roll and yaw
 
 ![image](images/uav_degrees.jpeg)
@@ -58,6 +60,14 @@
 - start
 - goal
 
+
+-  🤔❓can you just connect a smartphone to a robot and ask it to navigate from one room to another in your 🏠 house?
+
+- the way a robot sees the world is very different from the way we _see_ the 🗺 world
+
+- a robot would see it as LIDAR scans (dots)
+
+![image](images/lidar_vs_human_map.svg)
 
 ## 🤔❓Challenge question (discussion in class)
 
