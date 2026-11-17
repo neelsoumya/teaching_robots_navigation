@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steering a two-wheeled robot with PID</title>
+<style>
+:root{--bg:#eef3f7;--panel:#ffffff;--ink:#12223a;--mute:#56657a;--line:#d3dce6;--grid:#e4eaf1;--left:#17808f;--right:#d9731a;--err:#b0384a;--trail:#9aa8ba;--accent:#12223a;--accentink:#ffffff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1520;--panel:#15202e;--ink:#e6edf5;--mute:#93a3b8;--line:#2a394c;--grid:#1d2a3a;--left:#4fc3d4;--right:#f29a4a;--err:#ff7b8c;--trail:#5d6f86;--accent:#e6edf5;--accentink:#0d1520}}
+:root[data-theme="dark"]{--bg:#0d1520;--panel:#15202e;--ink:#e6edf5;--mute:#93a3b8;--line:#2a394c;--grid:#1d2a3a;--left:#4fc3d4;--right:#f29a4a;--err:#ff7b8c;--trail:#5d6f86;--accent:#e6edf5;--accentink:#0d1520}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Avenir Next","Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.6rem;line-height:1.2;margin:0 0 6px}
+.lead{color:var(--mute);margin:0 0 18px;max-width:62ch}
+.grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+canvas{display:block;width:100%;height:auto;border-radius:6px}
+#arena{cursor:crosshair;touch-action:manipulation}
+.cap{color:var(--mute);font-size:.85rem;margin:8px 2px 0}
+h2{font-size:1rem;margin:0 0 8px}
+.ctl{margin:0 0 12px}
+.ctl label{display:flex;justify-content:space-between;font-weight:600}
+.ctl label span{font-variant-numeric:tabular-nums;color:var(--mute);font-weight:500}
+.ctl small{display:block;color:var(--mute);line-height:1.35}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+button{font:inherit;font-size:.88rem;padding:6px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--ink)}
+button.primary{background:var(--accent);color:var(--accentink);border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--left);outline-offset:2px}
+.wheel{display:grid;grid-template-columns:5.5em 1fr 4.5em;align-items:center;gap:8px;margin:4px 0;font-size:.9rem}
+.bar{position:relative;height:12px;background:var(--grid);border-radius:6px;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;left:50%;width:0}
+.bar::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--mute)}
+.wheel b{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+.eq{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;background:var(--grid);border-radius:6px;padding:8px 10px;margin:6px 0 0;line-height:1.6}
+.chk{display:flex;gap:8px;align-items:flex-start;margin:10px 0 0;font-size:.92rem}
+ul.how{margin:0;padding-left:1.1em;color:var(--mute);font-size:.9rem}
+ul.how b{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Steering a two-wheeled robot with PID</h1>
+  <p class="lead">The robot has no steering wheel. It turns only by running its left and right wheels at different speeds. A PID controller decides how different. Click the arena to place targets, then change the gains and watch.</p>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <canvas id="arena" width="640" height="400" aria-label="Robot arena. Click to add a target."></canvas>
+        <p class="cap">Click to add targets. The robot visits them in order (that is the simplest possible path plan). Dashed line = where it should be heading.</p>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <h2>Heading error over the last 6 seconds</h2>
+        <canvas id="chart" width="640" height="130" aria-label="Heading error chart"></canvas>
+        <p class="cap">Angle between where the robot points and where the target is. The controller tries to hold this at zero.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>Controller gains</h2>
+        <div class="ctl"><label for="kp">P: proportional <span id="kpv"></span></label>
+          <input id="kp" type="range" min="0" max="250" step="1" value="60">
+          <small>Turn harder the further off-course you are.</small></div>
+        <div class="ctl"><label for="ki">I: integral <span id="kiv"></span></label>
+          <input id="ki" type="range" min="0" max="100" step="1" value="0">
+          <small>Remember error that lingers and push against it.</small></div>
+        <div class="ctl"><label for="kd">D: derivative <span id="kdv"></span></label>
+          <input id="kd" type="range" min="0" max="60" step="1" value="0">
+          <small>Brake the turn when the error is shrinking fast.</small></div>
+        <label class="chk"><input id="bias" type="checkbox"> Right motor is 20% weak (a real-world flaw)</label>
+        <div class="row">
+          <button data-p="60,0,0,0">Gentle P</button>
+          <button data-p="220,0,0,0">Too much P</button>
+          <button data-p="220,0,28,0">Tamed with D</button>
+          <button data-p="60,0,0,1">Weak motor</button>
+          <button data-p="60,40,0,1">Weak motor + I</button>
+        </div>
+        <div class="row">
+          <button class="primary" id="reset">Restart run</button>
+          <button id="clear">Clear targets</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h2>Wheel speed commands</h2>
+        <div class="wheel"><span style="color:var(--left);font-weight:600">Left</span><div class="bar"><i id="bl" style="background:var(--left)"></i></div><b id="vl">0</b></div>
+        <div class="wheel"><span style="color:var(--right);font-weight:600">Right</span><div class="bar"><i id="br" style="background:var(--right)"></i></div><b id="vr">0</b></div>
+        <div class="eq">u = Kp·e + Ki·∫e + Kd·de/dt<br>left = speed − u<br>right = speed + u</div>
+        <p class="cap">Equal speeds: straight line. Right faster than left: turns left. The PID output u is the speed difference.</p>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h2>Things to try</h2>
+        <ul class="how">
+          <li>Start with <b>Gentle P</b>: it arrives smoothly.</li>
+          <li><b>Too much P</b>: it overreacts and wobbles. Motors take time to respond, so it overshoots.</li>
+          <li><b>Tamed with D</b>: same strong P, but the wobble is damped.</li>
+          <li><b>Weak motor</b>: P alone leaves a steady heading offset. Add <b>I</b> and it is removed.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const W=640,H=400,CH=130,L=40,BASE=80,MAXV=140,TAU=0.2,dpr=Math.min(window.devicePixelRatio||1,2);
+const $=id=>document.getElementById(id);
+const arena=$('arena'),chart=$('chart'),ax=arena.getContext('2d'),cx=chart.getContext('2d');
+arena.width=W*dpr;arena.height=H*dpr;chart.width=W*dpr;chart.height=CH*dpr;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
+let route=[{x:520,y:290}],wps,robot,trail,hist,integ,prevE,aL,aR,cmd=[0,0];
+const gains=()=>({kp:+$('kp').value,ki:+$('ki').value,kd:+$('kd').value});
+
+function restart(){robot={x:70,y:H/2,th:0};wps=route.map(p=>({...p}));trail=[];hist=[];integ=0;prevE=null;aL=0;aR=0;cmd=[0,0];}
+restart();
+
+function step(dt){
+  const {kp,ki,kd}=gains();let vL=0,vR=0,e=0;
+  const t=wps[0];
+  if(t){
+    const dx=t.x-robot.x,dy=t.y-robot.y,d=Math.hypot(dx,dy);
+    if(d<12){wps.shift();integ=0;prevE=null;}
+    else{
+      e=wrap(Math.atan2(dy,dx)-robot.th);          // heading error
+      integ=clamp(integ+e*dt,-2,2);                // accumulated error (clamped)
+      const de=prevE===null?0:(e-prevE)/dt;prevE=e;  // rate of change of error
+      const u=kp*e+ki*integ+kd*de;                 // PID output = speed difference
+      const v=BASE*clamp(d/60,0.4,1);              // slow down near the target
+      vL=clamp(v-u,-MAXV,MAXV);vR=clamp(v+u,-MAXV,MAXV);
+    }
+  }
+  cmd=[vL,vR];
+  aL+=(vL-aL)*dt/TAU;                              // motors respond with a lag
+  aR+=(vR*($('bias').checked?0.8:1)-aR)*dt/TAU;
+  const v=(aL+aR)/2,w=(aR-aL)/L;                   // differential-drive kinematics
+  robot.th=wrap(robot.th+w*dt);
+  robot.x=clamp(robot.x+v*Math.cos(robot.th)*dt,0,W);
+  robot.y=clamp(robot.y+v*Math.sin(robot.th)*dt,0,H);
+  hist.push(e);if(hist.length>360)hist.shift();
+  if(trail.length===0||Math.hypot(robot.x-trail[trail.length-1].x,robot.y-trail[trail.length-1].y)>4){trail.push({x:robot.x,y:robot.y});if(trail.length>600)trail.shift();}
+}
+
+function drawArena(C){
+  ax.setTransform(dpr,0,0,-dpr,0,H*dpr);        // y up, so angles run counter-clockwise
+  ax.clearRect(0,0,W,H);
+  ax.strokeStyle=C.grid;ax.lineWidth=1;ax.beginPath();
+  for(let x=0;x<=W;x+=40){ax.moveTo(x,0);ax.lineTo(x,H);}
+  for(let y=0;y<=H;y+=40){ax.moveTo(0,y);ax.lineTo(W,y);}
+  ax.stroke();
+  ax.strokeStyle=C.trail;ax.lineWidth=2;ax.beginPath();
+  trail.forEach((p,i)=>i?ax.lineTo(p.x,p.y):ax.moveTo(p.x,p.y));ax.stroke();
+  route.forEach(p=>{const done=!wps.some(w=>w.x===p.x&&w.y===p.y);
+    ax.beginPath();ax.arc(p.x,p.y,9,0,7);ax.lineWidth=2;ax.strokeStyle=C.err;ax.fillStyle=done?C.err:'transparent';ax.fill();ax.stroke();});
+  if(wps[0]){ax.setLineDash([6,5]);ax.strokeStyle=C.err;ax.lineWidth=1.5;ax.beginPath();ax.moveTo(robot.x,robot.y);ax.lineTo(wps[0].x,wps[0].y);ax.stroke();ax.setLineDash([]);}
+  ax.save();ax.translate(robot.x,robot.y);ax.rotate(robot.th);
+  ax.fillStyle=C.ink;ax.beginPath();ax.roundRect(-22,-L/2+4,44,L-8,5);ax.fill();       // body
+  ax.fillStyle=C.right;ax.fillRect(-12,-L/2-3,24,8);                                    // right wheel (robot's right = -y here)
+  ax.fillStyle=C.left;ax.fillRect(-12,L/2-5,24,8);                                      // left wheel
+  ax.fillStyle=C.panel;ax.beginPath();ax.moveTo(26,0);ax.lineTo(10,-8);ax.lineTo(10,8);ax.fill(); // nose
+  ax.restore();
+}
+
+function drawChart(C){
+  cx.setTransform(dpr,0,0,dpr,0,0);cx.clearRect(0,0,W,CH);
+  const mid=CH/2,sc=(CH/2-8)/Math.PI;
+  cx.strokeStyle=C.grid;cx.lineWidth=1;cx.beginPath();cx.moveTo(0,mid);cx.lineTo(W,mid);cx.stroke();
+  cx.fillStyle=C.mute;cx.font='11px sans-serif';cx.fillText('0°',4,mid-4);cx.fillText('+180°',4,12);cx.fillText('−180°',4,CH-4);
+  cx.strokeStyle=C.err;cx.lineWidth=2;cx.beginPath();
+  hist.forEach((e,i)=>{const x=W-(hist.length-i)*(W/360),y=mid-e*sc;i?cx.lineTo(x,y):cx.moveTo(x,y);});cx.stroke();
+}
+
+function readout(){
+  const set=(b,v,n)=>{const p=clamp(v/MAXV,-1,1)*50;b.style.width=Math.abs(p)+'%';b.style.left=p<0?(50+p)+'%':'50%';n.textContent=Math.round(v);};
+  set($('bl'),cmd[0],$('vl'));set($('br'),cmd[1],$('vr'));
+  $('kpv').textContent=$('kp').value;$('kiv').textContent=$('ki').value;$('kdv').textContent=$('kd').value;
+}
+
+let last=performance.now();
+function frame(now){
+  let acc=Math.min((now-last)/1000,0.1);last=now;
+  while(acc>0){const dt=Math.min(acc,1/120);step(dt);acc-=dt;}
+  const s=getComputedStyle(document.documentElement),g=n=>s.getPropertyValue(n).trim();
+  const C={grid:g('--grid'),trail:g('--trail'),err:g('--err'),ink:g('--ink'),right:g('--right'),left:g('--left'),panel:g('--panel'),mute:g('--mute')};
+  drawArena(C);drawChart(C);readout();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+arena.addEventListener('pointerdown',ev=>{
+  const r=arena.getBoundingClientRect();
+  const p={x:(ev.clientX-r.left)/r.width*W,y:H-(ev.clientY-r.top)/r.height*H};
+  route.push(p);wps.push({...p});
+});
+$('reset').onclick=restart;
+$('clear').onclick=()=>{route=[];restart();};
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{
+  const [kp,ki,kd,bias]=b.dataset.p.split(',').map(Number);
+  $('kp').value=kp;$('ki').value=ki;$('kd').value=kd;$('bias').checked=!!bias;restart();
+});
+</script>
+</body>
+</html>

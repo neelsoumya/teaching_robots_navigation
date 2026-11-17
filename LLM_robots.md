@@ -321,6 +321,15 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 - [https://github.com/robocurve/inspect-robots](https://github.com/robocurve/inspect-robots)
 
 
+## NVIDIA tools
+
+- [NVIDIA Omniverse™: Digital Twin and Simulation](https://www.nvidia.com/en-in/omniverse/)
+- [NVIDIA IGX for edge computing](https://www.nvidia.com/en-in/edge-computing/products/igx/)
+- [NVIDIA Cosmos: A frontier open platform to build, specialize, and deploy world models faster for physical AI](https://www.nvidia.com/en-in/ai/cosmos/)
+- [NVIDIA Halos: full-stack safety system for physical AI](https://www.nvidia.com/en-in/ai-trust-center/halos/robotics/)
+
+![image](https://github.com/NVIDIA/halos-outside-in-safety/blob/main/assets/architecture.png)
+
 ## VLA Engineer roadmap
 
 - from Learn Robotics and AI Linkedin post

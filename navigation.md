@@ -69,6 +69,33 @@
 
 ![image](images/lidar_vs_human_map.svg)
 
+- how do you find out where you are (_self localize_)?
+
+- you ask a passerby or look for a landmark
+
+- need _map_
+
+- need path planning
+
+- need _robot controller_
+
+- maybe differential control (control left wheel velocity and right wheel velocity)
+
+- PID controllers (proportional integrative controller): takes error and takes steps to reduce error to 0
+
+- _path planner_ will produce a sequence of x and y co-ordinates (it will need a 🗺 map)
+
+- when this comes to the robot controller, these are converted to left and right 🛞 wheel velocities
+
+- [🎮 💡 🛠️ demo please 🙏  play around](steering_two-wheeled_robot_with_PID.html)
+
+- _self localisation_
+
+- [explanation of how this gets translated to wheel velocities](wheel-velocities.md)
+
+- [🎮 💡 🛠️ demo: how does it get translated to wheel velocities](steering_two-wheeled_robot_with_PID.html)
+
+
 ## 🤔❓Challenge question (discussion in class)
 
 - 🤔❓[how does a submarine navigate underwater without GPS?](inertial_navigation.md)
