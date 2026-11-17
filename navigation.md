@@ -81,6 +81,8 @@
 
 - maybe differential control (control left wheel velocity and right wheel velocity)
 
+![image](images/robot-navigation-diagram.png)
+
 - PID controllers (proportional integrative controller): takes error and takes steps to reduce error to 0
 
 - _path planner_ will produce a sequence of x and y co-ordinates (it will need a 🗺 map)
