@@ -330,6 +330,25 @@ The table below lists the 11 tasks included in the high-level locomotion composi
 
 ![image](https://github.com/NVIDIA/halos-outside-in-safety/blob/main/assets/architecture.png)
 
+
+## Other tools
+
+- Praxis
+
+- a robot control model, with open weights and source code
+
+- the following is an excerpt from 📝 [The Batch](https://www.deeplearning.ai/the-batch)
+
+> The model takes camera images, text instructions, and the robot’s position data, predicts how the scene will change, and outputs matching robot movements. It builds on a video model fine-tuned with human-action videos and robot data, and it still needs adaptation per robot
+
+> For developers, the weights and code are on Hugging Face and GitHub. However, the standard model needs an 80 GB GPU
+
+## 📝 Reading 
+
+- 📝 [The Batch](https://www.deeplearning.ai/the-batch)
+
+
+
 ## VLA Engineer roadmap
 
 - from Learn Robotics and AI Linkedin post

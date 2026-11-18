@@ -106,6 +106,8 @@
 
 ## Occupancy map
 
+- dorm room to be vacuumed
+
 - exploration of environment
 
 - position estimation using robot pose
@@ -122,6 +124,10 @@
 - divide into grids
 
 - binary (occupied/not occupied) within each cell
+
+- now we have a _map_
+
+- how do we do _path planning_ to go from A to B
 
 
 ## Artificial potential fields
@@ -197,7 +203,6 @@ B = length between the wheels
 ## Sample based planning
 
 
-
 ![image](images/sample_based_planning.jpeg)
 
 
@@ -253,6 +258,17 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 * **Probabilistic Completeness:** If a valid path exists, the probability that the algorithm finds it approaches $100\%$ as the number of samples increases.
 * **Efficiency:** Avoids costly geometric calculations by relying on fast point-wise collision checking.
 
+
+
+## What is this device?
+
+![image](https://theaviationgeekclub.com/the-sr-71-blackbird-astro-nav-system-aka-r2-d2-worked-by-tracking-the-stars-and-was-so-powerful-that-it-could-see-the-stars-even-in-daylight/)
+
+![image](https://www.twz.com/wp-content/uploads/message-editor/1514914884271-a19700234000d4.jpg?w=773&h=1024&quality=85)
+
+- [link to TWZ 🖼 article](https://www.twz.com/17207/sr-71s-r2-d2-could-be-the-key-to-winning-future-fights-in-gps-denied-environments)
+
+- [video of SNARC intercontinental cruise missile](https://www.youtube.com/watch?v=zyLWYZXdf28)
 
 
 ## Next resource for class discussion
