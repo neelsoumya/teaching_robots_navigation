@@ -23,7 +23,7 @@
 
 - mines do not change a lot
 
-- GPS geofencing: GPS will work since it is a large mine
+- _Concept_ 🧩 🚀💡🔑🔐 GPS `geofencing`: GPS will work since it is a large mine
 
 
 ## 1. The Rio Tinto "Mine of the Future"
@@ -62,7 +62,40 @@ A particularly useful official overview is:
 
 >Giant trucks the size of townhouses, capable of hauling 300 tonnes, criss-cross red-earth roads in various sections of this open-pit mine complex. During a tour of the site in a normal-sized company vehicle, one of the trucks comes into view, approaching from a side road. I sigh with relief as it deftly turns and continues in the direction we have just come.
 
--  🤔❓how did this happen?
+-  🤔❓how did this happen? how did the robot avoid?
+
+- 3d LIDAR
+
+- moving obstacle
+
+- can we use GPS on each vehicle?
+
+- what is problematic with GPS?
+
+
+> virtual bubble
+
+- what does that remind you of?
+
+
+
+- can we use artificial potential field?
+
+- every single time we have an obstacle, we have to recompute
+
+- learn to question science 🧪  reporting. do not believe everything that reporters say.
+
+
+- Because a fully loaded mining truck weighs hundreds of tons, sudden evasive steering on a haul road could cause a rollover or a collision with roadside berms. Instead, these trucks avoid incoming vehicles through _strict virtual lane discipline, fleet-wide telemetry, and automated slowing or stopping_.
+
+
+- *Fenced Autonomous Operating Zones (AOZ)*: Autonomous trucks operate strictly inside designated, digitally mapped zones. Every manned light vehicle (such as a pickup truck or maintenance ute) entering an AOZ must be fitted with a tracking transponder and follow strict access rules.
+
+- *Pre-Curve Digital Awareness*: Long before two vehicles meet on a blind curve, the central supervisory system already knows the exact position, speed, and heading of every authorized vehicle in the mine. On two-way haul roads, trucks follow strictly separated virtual lanes so they never drift into the opposing lane.
+
+- *Safety Bubbles & Right-of-Way*: Each truck projects a dynamic safety envelope around itself based on its speed, load weight, and road grade. If an oncoming light vehicle encroaches into that safety bubble or approaches a narrow chokepoint, the system automatically commands the autonomous truck to decelerate smoothly or come to a complete halt until the vehicle clears the area.
+
+- *Emergency Stopping & Human Escalation*: If an unequipped vehicle, stray piece of equipment, or rockfall suddenly appears on the truck’s planned path, its onboard sensors trigger an immediate emergency stop. Once stopped, the system escalates the exception to human controllers
 
 
 #  Obstacle avoidance is particularly interesting
@@ -71,7 +104,7 @@ Rio Tinto says that its autonomous trucks use **pre-defined GPS courses** and kn
 
 So conceptually you can think of the problem as:
 
-![image](images/riotinto_avoidance.jpeg)
+![image](images/incoming.jpeg)
 
 - _Concept_ 🧩 🚀 The really interesting part is that **the environment itself is engineered to simplify the planning problem**.
 
