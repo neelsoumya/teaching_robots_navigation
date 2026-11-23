@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PID Robot Playground</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#1d1d1b;--mute:#6b6a64;--line:#dcdad2;--acc:#d9480f;--p:#1c7ed6;--i:#2f9e44;--d:#e8590c;--road:#eceae2;--tgt:#d9480f;--robot:#364fc7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16161a;--card:#1f2026;--ink:#ecebe6;--mute:#9a998f;--line:#34353d;--acc:#ff922b;--p:#74c0fc;--i:#8ce99a;--d:#ffa94d;--road:#24252c;--tgt:#ff922b;--robot:#91a7ff}}
+:root[data-theme="dark"]{--bg:#16161a;--card:#1f2026;--ink:#ecebe6;--mute:#9a998f;--line:#34353d;--acc:#ff922b;--p:#74c0fc;--i:#8ce99a;--d:#ffa94d;--road:#24252c;--tgt:#ff922b;--robot:#91a7ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:4px 0}
+p.sub{color:var(--mute);margin:0 0 12px;font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
+canvas{width:100%;display:block;border-radius:8px;background:var(--road);touch-action:none}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.sl{flex:1 1 200px}
+.sl label{display:flex;justify-content:space-between;font-weight:600;font-size:.9rem}
+.sl small{color:var(--mute);display:block;font-size:.78rem}
+input[type=range]{width:100%}
+button{font:inherit;font-size:.85rem;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--acc)}
+button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.85rem}
+.bar{height:14px;background:var(--road);border-radius:7px;position:relative;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;left:50%;width:0}
+.bar:after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--mute)}
+.mono{font-variant-numeric:tabular-nums;color:var(--mute);min-width:3.5em;text-align:right}
+.hint{font-size:.88rem;color:var(--mute)}
+.hint b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>PID Robot Playground</h1>
+<p class="sub">The robot must follow the orange line. <b>Click or drag on the road</b> to move the line, then tune the three knobs.</p>
+
+<div class="card">
+<canvas id="road" width="800" height="300"></canvas>
+<div class="row" style="margin-top:10px">
+<button id="push">💥 Push robot</button>
+<button id="bias">⚙ Weak wheel: off</button>
+<button id="reset">↺ Reset</button>
+</div>
+</div>
+
+<div class="card">
+<div class="row">
+<div class="sl"><label><span style="color:var(--p)">P · Present</span><span id="vp"></span></label><input id="kp" type="range" min="0" max="6" step="0.1" value="1.5"><small>Push harder when the error is bigger</small></div>
+<div class="sl"><label><span style="color:var(--i)">I · Past</span><span id="vi"></span></label><input id="ki" type="range" min="0" max="3" step="0.05" value="0"><small>Add up lingering error</small></div>
+<div class="sl"><label><span style="color:var(--d)">D · Future</span><span id="vd"></span></label><input id="kd" type="range" min="0" max="6" step="0.1" value="2"><small>Brake when error is shrinking fast</small></div>
+</div>
+<div class="row" style="margin-top:10px">
+<span class="hint">Presets:</span>
+<button data-p="1.5,0,0">P only</button>
+<button data-p="5,0,0">P too high</button>
+<button data-p="1.5,0,2">P + D</button>
+<button data-p="1.5,0.6,2">Full PID</button>
+</div>
+</div>
+
+<div class="card">
+<div class="bars">
+<span style="color:var(--p)">P</span><div class="bar"><i id="bp" style="background:var(--p)"></i></div><span class="mono" id="tp"></span>
+<span style="color:var(--i)">I</span><div class="bar"><i id="bi" style="background:var(--i)"></i></div><span class="mono" id="ti"></span>
+<span style="color:var(--d)">D</span><div class="bar"><i id="bd" style="background:var(--d)"></i></div><span class="mono" id="td"></span>
+<span><b>Left wheel</b></span><div class="bar"><i id="bl" style="background:var(--robot)"></i></div><span class="mono" id="tl"></span>
+<span><b>Right wheel</b></span><div class="bar"><i id="br" style="background:var(--robot)"></i></div><span class="mono" id="tr"></span>
+</div>
+<p class="hint" style="margin:10px 0 4px">Error over time (line at zero = perfect tracking):</p>
+<canvas id="plot" width="800" height="110"></canvas>
+</div>
+
+<div class="card hint">
+<b>Things to try:</b>
+<ol style="margin:6px 0 0;padding-left:20px">
+<li><b>P only:</b> the robot reaches the line but weaves forever. P reacts to where you are, not how fast you are moving.</li>
+<li><b>P too high:</b> violent wobbling.</li>
+<li><b>Add D:</b> the wobble dies out, like a shock absorber.</li>
+<li><b>Switch on “Weak wheel”</b> with P + D: the robot settles <i>beside</i> the line, a steady error. Now raise <b>I</b> and watch it creep onto the line.</li>
+</ol>
+<p style="margin:8px 0 0">Wheels: when the controller outputs a turn command ω, the left wheel gets v + ω·L/2 and the right wheel v − ω·L/2 (positive ω = turn right).</p>
+</div>
+</div>
+
+<script>
+(function(){
+var cv=document.getElementById('road'),ctx=cv.getContext('2d');
+var pv=document.getElementById('plot'),pc=pv.getContext('2d');
+var W=cv.width,H=cv.height,RX=520,V=100,L=30;
+var S={};
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function reset(){S={y:H/2,th:0,target:H/2,integ:0,prevY:H/2,trail:[],err:[],scroll:0,P:0,I:0,D:0,out:0}}
+reset();
+var bias=false;
+var kp=document.getElementById('kp'),ki=document.getElementById('ki'),kd=document.getElementById('kd');
+function lab(){document.getElementById('vp').textContent=(+kp.value).toFixed(1);document.getElementById('vi').textContent=(+ki.value).toFixed(2);document.getElementById('vd').textContent=(+kd.value).toFixed(1)}
+[kp,ki,kd].forEach(function(e){e.addEventListener('input',lab)});lab();
+document.querySelectorAll('button[data-p]').forEach(function(b){b.addEventListener('click',function(){
+var a=b.getAttribute('data-p').split(',');kp.value=a[0];ki.value=a[1];kd.value=a[2];lab();S.integ=0})});
+document.getElementById('push').onclick=function(){S.th+=0.6};
+document.getElementById('reset').onclick=reset;
+var bb=document.getElementById('bias');
+bb.onclick=function(){bias=!bias;bb.textContent='⚙ Weak wheel: '+(bias?'on':'off');bb.classList.toggle('on',bias)};
+function setT(ev){var r=cv.getBoundingClientRect();S.target=Math.max(30,Math.min(H-30,(ev.clientY-r.top)*H/r.height))}
+var drag=false;
+cv.addEventListener('pointerdown',function(e){drag=true;setT(e)});
+cv.addEventListener('pointermove',function(e){if(drag)setT(e)});
+window.addEventListener('pointerup',function(){drag=false});
+function step(dt){
+var e=(S.target-S.y)/100;
+S.integ+=e*dt;S.integ=Math.max(-1.5,Math.min(1.5,S.integ));
+var dy=(S.y-S.prevY)/100/dt;S.prevY=S.y;
+S.P=+kp.value*e;S.I=+ki.value*S.integ;S.D=-(+kd.value)*dy;
+var out=S.P+S.I+S.D;out=Math.max(-3,Math.min(3,out));S.out=out;
+S.th+=(out+(bias?0.3:0))*dt;S.th=Math.max(-1.2,Math.min(1.2,S.th));
+S.y+=V*Math.sin(S.th)*dt;S.y=Math.max(20,Math.min(H-20,S.y));
+S.scroll=(S.scroll+V*Math.cos(S.th)*dt)%80;
+S.trail.push(S.y);if(S.trail.length>320)S.trail.shift();
+S.err.push(e);if(S.err.length>400)S.err.shift();
+}
+function bar(id,v,max,txt){var el=document.getElementById('b'+id),w=Math.max(-1,Math.min(1,v/max))*50;
+el.style.left=(w>=0?50:50+w)+'%';el.style.width=Math.abs(w)+'%';document.getElementById('t'+id).textContent=txt}
+function draw(){
+ctx.clearRect(0,0,W,H);
+ctx.strokeStyle=css('--line');ctx.lineWidth=2;ctx.setLineDash([24,16]);
+for(var k=-1;k<12;k++){var x=k*80-S.scroll;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,0);ctx.stroke()}
+ctx.setLineDash([]);
+ctx.strokeStyle=css('--line');ctx.lineWidth=1;
+for(var k=-1;k<12;k++){var x=k*80-S.scroll;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+ctx.strokeStyle=css('--tgt');ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,S.target);ctx.lineTo(W,S.target);ctx.stroke();
+ctx.strokeStyle=css('--robot');ctx.globalAlpha=.55;ctx.lineWidth=3;ctx.beginPath();
+var n=S.trail.length;for(var i=0;i<n;i++){var x=RX-(n-1-i)*1.6;if(i==0)ctx.moveTo(x,S.trail[i]);else ctx.lineTo(x,S.trail[i])}
+ctx.stroke();ctx.globalAlpha=1;
+ctx.save();ctx.translate(RX,S.y);ctx.rotate(S.th);
+ctx.fillStyle=css('--robot');ctx.fillRect(-26,-18,52,36);
+ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(26,0);ctx.lineTo(10,-9);ctx.lineTo(10,9);ctx.closePath();ctx.fill();
+ctx.fillStyle='#222';ctx.fillRect(-14,-24,28,8);ctx.fillRect(-14,16,28,8);
+ctx.restore();
+ctx.fillStyle=css('--mute');ctx.font='13px system-ui';ctx.fillText('Left wheel (top)  /  Right wheel (bottom)  →  robot drives to the right',10,H-10);
+// plot
+var pw=pv.width,ph=pv.height;pc.clearRect(0,0,pw,ph);
+pc.strokeStyle=css('--mute');pc.lineWidth=1;pc.beginPath();pc.moveTo(0,ph/2);pc.lineTo(pw,ph/2);pc.stroke();
+pc.strokeStyle=css('--acc');pc.lineWidth=2;pc.beginPath();
+var m=S.err.length;for(var j=0;j<m;j++){var x=pw-(m-1-j)*(pw/400),y=ph/2-Math.max(-1.5,Math.min(1.5,S.err[j]))*(ph/3.2);if(j==0)pc.moveTo(x,y);else pc.lineTo(x,y)}
+pc.stroke();
+bar('p',S.P,3,S.P.toFixed(2));bar('i',S.I,3,S.I.toFixed(2));bar('d',S.D,3,S.D.toFixed(2));
+var vl=V+S.out*L/2*10,vr=V-S.out*L/2*10;
+bar('l',vl-V,60,vl.toFixed(0));bar('r',vr-V,60,vr.toFixed(0));
+}
+var last=performance.now();
+function loop(t){var dt=Math.min(0.033,(t-last)/1000);last=t;if(dt>0)step(dt);draw();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

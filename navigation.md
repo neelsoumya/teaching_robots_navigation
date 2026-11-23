@@ -79,15 +79,37 @@
 
 - need _map_
 
+- where do I want to go? hospita|? restaurant? 🏨 
+
 - need path planning
 
 - need _robot controller_
 
-- maybe differential control (control left wheel velocity and right wheel velocity)
+- maybe differential control/drive (control left wheel velocity and right wheel velocity)
 
 ![image](images/robot-navigation-diagram.png)
 
 - PID controllers (proportional integrative controller): takes error and takes steps to reduce error to 0
+
+- A PID controller is a way of correcting a mistake automatically.
+
+- You tell it what you want (the target) and it looks at what you have (the measurement).
+
+- It then decides how hard to push the motors to shrink that error.
+
+- *P (Proportional)*: react to the present. The bigger the error, the harder you push. Think of steering a car: a big drift from the lane means a big steering correction.
+
+- *I (Integral)*: react to the past. It adds up the error over time. If a small error lingers (say, friction stops the robot just short of the target), the sum grows and eventually pushes it through.
+
+- *D (Derivative)*: react to the future. It looks at how fast the error is changing. If you're approaching the target quickly, D eases off the throttle to stop you overshooting. It acts like a brake.
+
+- driving to a 🛑 stop sign
+
+- _P_ is how hard you press the brake based on distance remaining.
+
+- _D_ is easing off as you approach quickly, so you don't lurch
+
+- [🎮 💡 🛠️ demo please 🙏  play around](PID_Robot_Playground.html)
 
 - _path planner_ will produce a sequence of x and y co-ordinates (it will need a 🗺 map)
 
