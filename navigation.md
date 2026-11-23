@@ -16,7 +16,7 @@
 
 - PID controller Proportional Integrative and Derivative 
 
-- See resource on [odometry](odometry.md)
+- See resource on [`odometry`](odometry.md)
 
 ![image](images/pid.jpeg)
 

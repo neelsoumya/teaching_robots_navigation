@@ -17,7 +17,7 @@ Teaching robot navigation
 
 - 🤔❓[how does a submarine navigate underwater without GPS](inertial_navigation.md)
 
-- [navigation](navigation.md)
+- [Navigation](navigation.md)
 - [odometry](odometry.md)
 - [Rio Tinto case study](riotinto.md)
 
