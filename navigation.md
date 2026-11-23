@@ -262,7 +262,7 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 
 ## What is this device?
 
-![image](https://theaviationgeekclub.com/the-sr-71-blackbird-astro-nav-system-aka-r2-d2-worked-by-tracking-the-stars-and-was-so-powerful-that-it-could-see-the-stars-even-in-daylight/)
+[image](https://theaviationgeekclub.com/the-sr-71-blackbird-astro-nav-system-aka-r2-d2-worked-by-tracking-the-stars-and-was-so-powerful-that-it-could-see-the-stars-even-in-daylight/)
 
 ![image](https://www.twz.com/wp-content/uploads/message-editor/1514914884271-a19700234000d4.jpg?w=773&h=1024&quality=85)
 
