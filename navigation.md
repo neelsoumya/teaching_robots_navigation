@@ -53,6 +53,8 @@
 
 - reinforcement learning: control strategies that work get reinforced
 
+##🤔❓What is the difference between autonomous mining and autonomous driving in a city
+
 ## What is required 
 
 - a global map
@@ -62,6 +64,8 @@
 
 
 -  🤔❓can you just connect a smartphone to a robot and ask it to navigate from one room to another in your 🏠 house?
+
+- not enough resolution within a house
 
 - the way a robot sees the world is very different from the way we _see_ the 🗺 world
 
