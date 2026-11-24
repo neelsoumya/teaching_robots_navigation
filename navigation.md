@@ -115,6 +115,8 @@
 
 - [🎮 💡 🛠️ demo please 🙏  play around](PID_Robot_Playground.html)
 
+- [more mathematical details on PID](PID_Control_Differential-DriveNavigation.md)
+
 - 🤔❓does this remind you of another technique/algorithm?
 
 - _Hint_ it underlies modern AI
