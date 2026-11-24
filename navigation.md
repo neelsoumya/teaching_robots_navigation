@@ -328,6 +328,9 @@ The performance of sampling-based planners depends heavily on the chosen sample 
 ## Next resource for class discussion
 
 - now see [Rio Tinto case study](riotinto.md)
+- QR code
+
+![image](images/bbc_article_qr.png)
 
 
 ## Summary
