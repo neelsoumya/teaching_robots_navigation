@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Planning with a battery: strategic and reactive layers</title>
+<style>
+:root{--bg:#f4f6f7;--panel:#fff;--ink:#14212b;--mute:#566673;--line:#d5dde2;--bot:#1d4ed8;--c0:#eaf0f2;--c1:#c9a875;--c2:#2c3a44;--c3:#f2c230;--pa:#d9480f;--bad:#c92a4a;--ok:#2f9e44;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f161b;--panel:#18222a;--ink:#e6edf1;--mute:#93a4b0;--line:#2b3a45;--bot:#6ea0ff;--c0:#1c2931;--c1:#8a6c3f;--c2:#05080a;--c3:#d9aa1a;--pa:#ff9f5a;--bad:#ff6b88;--ok:#5ccf74}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f161b;--panel:#18222a;--ink:#e6edf1;--mute:#93a4b0;--line:#2b3a45;--bot:#6ea0ff;--c0:#1c2931;--c1:#8a6c3f;--c2:#05080a;--c3:#d9aa1a;--pa:#ff9f5a;--bad:#ff6b88;--ok:#5ccf74}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif}
+main{max-width:1200px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 16px;max-width:75ch}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
+@media(max-width:920px){.grid{grid-template-columns:1fr}}
+.stage,.box{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.stage{padding:8px}
+canvas{width:100%;height:auto;display:block;border-radius:6px;touch-action:none;cursor:crosshair}
+.side{display:flex;flex-direction:column;gap:12px}
+.box{padding:12px 14px}
+.box h2{font-size:.95rem;margin:0 0 8px}
+.row{display:flex;flex-wrap:wrap;gap:6px}
+button{font:inherit;font-size:.85rem;padding:6px 10px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--bot)}
+button.on{border-color:var(--bot);box-shadow:inset 0 0 0 1px var(--bot);font-weight:600}
+button.primary{background:var(--bot);border-color:var(--bot);color:#fff}
+button:focus-visible,input:focus-visible{outline:2px solid var(--bot);outline-offset:2px}
+label{display:grid;grid-template-columns:1fr auto;font-size:.85rem;margin-top:8px;color:var(--mute)}
+label b{color:var(--ink);font-variant-numeric:tabular-nums}
+input[type=range]{grid-column:1/3;width:100%;accent-color:var(--bot)}
+.hint{color:var(--mute);font-size:.85rem;margin:8px 4px 2px}
+table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+th,td{padding:3px 0;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--mute);font-size:.8rem}tr:last-child td{border-bottom:0}
+.gauge{height:14px;border-radius:7px;background:var(--line);overflow:hidden;margin:6px 0 2px}
+.gauge i{display:block;height:100%;width:100%;background:var(--ok);transition:width .1s}
+#log{font-size:.82rem;color:var(--mute);min-height:120px;margin:0;padding-left:16px}
+#log li{margin-bottom:2px}#log li:first-child{color:var(--ink)}
+.chk{display:flex;gap:6px;align-items:center;font-size:.85rem;margin-top:6px}
+.leg{font-size:.8rem;color:var(--mute);margin:8px 4px 0;display:flex;gap:14px;flex-wrap:wrap}
+.leg s{display:inline-block;width:18px;height:0;border-top:3px solid var(--bot);vertical-align:middle;margin-right:5px;text-decoration:none}
+.leg s.d{border-top:3px solid var(--pa)}.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modes button{padding:10px;text-align:left;font-weight:600;line-height:1.3}.modes button small{font-weight:400;color:var(--mute);font-size:.78rem}#sum{font-size:.88rem;margin:10px 0;min-height:4.2em}summary{cursor:pointer;font-weight:600;font-size:.9rem}details.box>summary{font-size:.95rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Planning with a battery</h1>
+<p class="sub">A strategic layer plans the whole trip ahead of time, deciding where to detour and where to recharge. A reactive layer drives the plan step by step and calls the strategic layer again when the world changes. Paint terrain to see both layers work.</p>
+<div class="grid">
+<div>
+<div class="stage">
+<canvas id="c" width="768" height="480" aria-label="Grid map with route plans"></canvas>
+<div class="leg"><div><s class="d"></s>default path</div><div><s></s>battery-aware path</div><div>⚡ charger</div><div>S start, G goal; hills cost extra energy</div></div>
+<p class="hint">Pick a brush, then click or drag on the map. Edits made while the robot is moving force it to replan from where it is, with the battery it has left.</p>
+</div>
+</div>
+<div class="side">
+<details class="box" style="order:5"><summary>Edit the map</summary>
+<div class="row" id="brushes" style="margin-top:8px">
+<button data-b="0" class="on">Flat</button><button data-b="1">Hill</button><button data-b="2">Wall</button><button data-b="3">Charger</button><button data-b="S">Start</button><button data-b="G">Goal</button>
+</div>
+<div class="row" style="margin-top:8px"><button id="rmap">Reset map</button></div>
+</details>
+<div class="box" style="order:1">
+<h2>Choose a planner</h2>
+<div class="modes" id="sel"><button data-s="A" class="on">Default path<br><small>shortest route, ignores the battery</small></button><button data-s="B">Battery-aware<br><small>plans detours and charging</small></button></div>
+<p id="sum"></p>
+<div class="row"><button class="primary" id="run">Run</button><button id="reset">Reset</button></div>
+<div class="gauge" aria-hidden="true"><i id="g"></i></div>
+<div id="bt" style="font-size:.85rem;font-weight:600"></div>
+</div>
+<div class="box" style="order:2">
+<h2>Battery</h2>
+<label>Battery capacity (energy units)<b id="vcap"></b><input type="range" id="cap" min="10" max="80" step="1" value="30"></label>
+<details style="margin-top:10px"><summary>More settings</summary>
+<label>Hill energy per cell (flat = 1)<b id="vhill"></b><input type="range" id="hill" min="2" max="8" step="1" value="4"></label>
+<label>Energy weight λ in cost = time + λ·energy<b id="vlam"></b><input type="range" id="lam" min="0" max="2" step="0.1" value="0.5"></label>
+<label>Charging time per energy unit<b id="vrate"></b><input type="range" id="rate" min="0" max="2" step="0.1" value="0.5"></label>
+<label>Robot speed (cells/s)<b id="vspeed"></b><input type="range" id="speed" min="2" max="20" step="1" value="8"></label>
+</details>
+</div>
+<details class="box" style="order:6"><summary>Compare the numbers</summary>
+<table id="tbl" style="margin-top:8px"></table>
+</details>
+<div class="box" style="order:3">
+<h2>What the layers are saying</h2>
+<ul id="log"></ul>
+</div>
+<details class="box" style="order:7"><summary>How the strategic layer works</summary>
+<div style="font-size:.85rem;color:var(--mute)">Dijkstra search over states (x, y, battery). A move to a cell costs 1 + λ·energy and lowers the battery by that cell’s energy. A move that would take the battery below zero does not exist. Standing on a charger adds a move to a full battery, costing time in proportion to the energy refilled. The shortest-path plan ignores all of this, so it can strand the robot.</div>
+</details>
+</div>
+</div>
+</main>
+<script>
+const GW=24,GH=15,CS=32,cv=document.getElementById('c'),ctx=cv.getContext('2d'),$=id=>document.getElementById(id);
+const D=[[1,0],[-1,0],[0,1],[0,-1]];
+const P={cap:30,hill:4,lam:.5,rate:.5,speed:8};
+let T=new Uint8Array(GW*GH),st={x:1,y:7},gl={x:22,y:7},plans={A:null,B:null},R=null,brush='0',sel='A',down=false,logs=[];
+const en=t=>t===1?P.hill:1;
+function initMap(){T.fill(0);for(let y=3;y<=11;y++)for(let x=9;x<=14;x++)T[y*GW+x]=1;for(let y=0;y<=4;y++)T[y*GW+5]=2;for(let y=10;y<GH;y++)T[y*GW+17]=2;T[1*GW+12]=3;T[13*GW+7]=3;st={x:1,y:7};gl={x:22,y:7}}
+function log(m){logs.unshift(m);logs=logs.slice(0,8);$('log').innerHTML=logs.map(s=>'<li>'+s+'</li>').join('')}
+class Heap{constructor(){this.a=[]}get n(){return this.a.length}
+push(d,i){const a=this.a;a.push([d,i]);let k=a.length-1;while(k>0){const p=(k-1)>>1;if(a[p][0]<=a[k][0])break;[a[p],a[k]]=[a[k],a[p]];k=p}}
+pop(){const a=this.a,top=a[0],last=a.pop();if(a.length){a[0]=last;let k=0;for(;;){const l=2*k+1,r=l+1;let m=k;if(l<a.length&&a[l][0]<a[m][0])m=l;if(r<a.length&&a[r][0]<a[m][0])m=r;if(m===k)break;[a[m],a[k]]=[a[k],a[m]];k=m}}return top}}
+// Strategic layer: Dijkstra over (cell, battery)
+function planB(sx,sy,b0){
+ const cap=P.cap,S=cap+1,N=GW*GH*S,dist=new Float64Array(N).fill(Infinity),prev=new Int32Array(N).fill(-1),h=new Heap();
+ const s0=(sy*GW+sx)*S+Math.max(0,Math.min(b0,cap)),gc=gl.y*GW+gl.x;dist[s0]=0;h.push(0,s0);let end=-1;
+ while(h.n){const[d,i]=h.pop();if(d>dist[i])continue;const c=(i/S)|0,b=i%S;if(c===gc){end=i;break}
+  const x=c%GW,y=(c/GW)|0;
+  if(T[c]===3&&b<cap){const j=c*S+cap,nd=d+(cap-b)*P.rate;if(nd<dist[j]){dist[j]=nd;prev[j]=i;h.push(nd,j)}}
+  for(const[dx,dy]of D){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=GW||ny>=GH)continue;const nc=ny*GW+nx,t=T[nc];if(t===2)continue;const e=en(t);if(b-e<0)continue;const j=nc*S+b-e,nd=d+1+P.lam*e;if(nd<dist[j]){dist[j]=nd;prev[j]=i;h.push(nd,j)}}}
+ if(end<0)return null;
+ const nodes=[];for(let i=end;i>=0;i=prev[i]){const c=(i/S)|0;nodes.push({x:c%GW,y:(c/GW)|0,b:i%S,ch:false})}
+ nodes.reverse();for(let k=1;k<nodes.length;k++)if(nodes[k].x===nodes[k-1].x&&nodes[k].y===nodes[k-1].y)nodes[k].ch=true;
+ nodes.dead=-1;return nodes}
+// Baseline: fewest moves, battery ignored
+function planA(sx,sy,b0){
+ const gc=gl.y*GW+gl.x,prev=new Int32Array(GW*GH).fill(-2),q=[sy*GW+sx];prev[q[0]]=-1;
+ for(let h=0;h<q.length;h++){const c=q[h];if(c===gc)break;const x=c%GW,y=(c/GW)|0;for(const[dx,dy]of D){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=GW||ny>=GH)continue;const nc=ny*GW+nx;if(T[nc]===2||prev[nc]!==-2)continue;prev[nc]=c;q.push(nc)}}
+ if(prev[gc]===-2)return null;const cells=[];for(let c=gc;c!==-1;c=prev[c])cells.push(c);cells.reverse();
+ let b=b0,dead=-1;const nodes=cells.map((c,k)=>{if(k>0){b-=en(T[c]);if(b<0&&dead<0)dead=k}return{x:c%GW,y:(c/GW)|0,b,ch:false}});nodes.dead=dead;return nodes}
+function stats(n){if(!n)return null;let mv=0,e=0,ch=0,tm=0;for(let k=1;k<n.length;k++){if(n[k].ch){ch++;tm+=(P.cap-n[k-1].b)*P.rate}else{mv++;e+=en(T[n[k].y*GW+n[k].x]);tm++}}return{mv,e,ch,tm:Math.round(tm*10)/10}}
+function table(){
+ const a=stats(plans.A),b=stats(plans.B),f=(s,k)=>s?s[k]:'–';
+ const feasA=!plans.A?'no route':plans.A.dead<0?'yes':'dies at step '+plans.A.dead;
+ $('tbl').innerHTML='<tr><th></th><th>Battery-aware</th><th>Shortest</th></tr><tr><td>Moves</td><td>'+f(b,'mv')+'</td><td>'+f(a,'mv')+'</td></tr><tr><td>Energy used</td><td>'+f(b,'e')+'</td><td>'+f(a,'e')+'</td></tr><tr><td>Charging stops</td><td>'+f(b,'ch')+'</td><td>'+f(a,'ch')+'</td></tr><tr><td>Total time</td><td>'+f(b,'tm')+'</td><td>'+f(a,'tm')+'</td></tr><tr><td>Reaches goal?</td><td>'+(plans.B?'yes':'no feasible plan')+'</td><td style="color:'+(plans.A&&plans.A.dead<0?'var(--ok)':'var(--bad)')+'">'+feasA+'</td></tr>'}
+function recompute(){plans.B=planB(st.x,st.y,P.cap);plans.A=planA(st.x,st.y,P.cap);table();summary()}
+function summary(){const n=plans[sel];let t;if(!n)t='No route exists. Remove a wall.';else{const s=stats(n);if(sel==='A')t=n.dead<0?'Fewest steps, never checks the battery. Here it still makes it: '+s.e+' energy needed, battery holds '+P.cap+'.':'Fewest steps, never checks the battery. It needs '+s.e+' energy but the battery holds '+P.cap+', so it runs out at step '+n.dead+' (the red ✕).';else t='Plans the whole trip around the battery: '+s.mv+' steps, '+s.e+' energy'+(s.ch?', '+s.ch+' charging stop'+(s.ch>1?'s':''):'')+'.'}$('sum').textContent=t}
+// Reactive layer: execute, sense, trigger replanning
+function start(){const n=plans[sel];if(!n){log('Strategic: no route exists. Remove a wall.');return}
+ R={nodes:n.slice(),i:0,bat:P.cap,wait:0,acc:0,trail:[{x:st.x,y:st.y}],sel,state:'run',replans:0,used:0,chg:0};
+ log(sel==='B'?'Strategic: battery-aware plan loaded. Executing.':'Strategic: shortest path loaded (battery not considered).')}
+function replan(why){if(!R||R.state!=='run')return;const c=R.nodes[R.i];const nodes=R.sel==='B'?planB(c.x,c.y,R.bat):planA(c.x,c.y,R.bat);
+ if(!nodes){R.state='dead';log('Strategic: no feasible plan from here. Robot is stranded.');return}
+ R.nodes=nodes;R.i=0;R.replans++;log('Reactive: '+why+' Strategic: replanned from ('+c.x+','+c.y+') with battery '+R.bat+'.')}
+function tick(dt){if(!R||R.state!=='run')return;if(R.wait>0){R.wait-=dt;return}R.acc+=dt;if(R.acc<1/P.speed)return;R.acc=0;
+ if(R.i>=R.nodes.length-1){R.state='done';log('Reached the goal: energy '+R.used+', charges '+R.chg+', replans '+R.replans+'.');return}
+ const n=R.nodes[++R.i];
+ if(n.ch){R.chg++;R.wait=Math.min(1.5,.15+(P.cap-R.bat)*P.rate*.04);log('Reactive: charging at ⚡ ('+n.x+','+n.y+').');R.bat=P.cap}
+ else{const e=en(T[n.y*GW+n.x]);R.bat-=e;R.used+=e;R.trail.push({x:n.x,y:n.y});
+  if(R.bat<0){R.bat=0;R.state='dead';log('Reactive: battery empty at ('+n.x+','+n.y+'). The plan ignored the battery.');return}}
+ if(R.i>=R.nodes.length-1){R.state='done';log('Reached the goal: energy '+R.used+', charges '+R.chg+', replans '+R.replans+'.')}}
+// editing
+function cellAt(e){const r=cv.getBoundingClientRect();return{x:Math.floor((e.clientX-r.left)*GW/r.width),y:Math.floor((e.clientY-r.top)*GH/r.height)}}
+function paint(e){const{x,y}=cellAt(e);if(x<0||y<0||x>=GW||y>=GH)return;const c=y*GW+x;let ch=false;
+ if(brush==='S'){if(R&&R.state==='run')return;if(T[c]!==2&&(x!==st.x||y!==st.y)){st={x,y};ch=true}}
+ else if(brush==='G'){if(T[c]!==2&&(x!==gl.x||y!==gl.y)){gl={x,y};ch=true}}
+ else{const t=+brush;if(T[c]===t||(x===st.x&&y===st.y)||(x===gl.x&&y===gl.y))return;if(R&&R.state==='run'){const cu=R.nodes[R.i];if(cu.x===x&&cu.y===y)return}T[c]=t;ch=true}
+ if(!ch)return;
+ if(R&&R.state==='run')replan('Map changed.');else{if(R)R=null;recompute()}}
+cv.addEventListener('pointerdown',e=>{down=true;cv.setPointerCapture(e.pointerId);paint(e)});
+cv.addEventListener('pointermove',e=>{if(down)paint(e)});cv.addEventListener('pointerup',()=>down=false);
+// draw
+function col(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function pathLine(nodes,from,c,dash,w){if(!nodes||nodes.length<2)return;ctx.strokeStyle=c;ctx.lineWidth=w;ctx.setLineDash(dash);ctx.beginPath();for(let k=from;k<nodes.length;k++){const px=nodes[k].x*CS+CS/2,py=nodes[k].y*CS+CS/2;k===from?ctx.moveTo(px,py):ctx.lineTo(px,py)}ctx.stroke();ctx.setLineDash([])}
+function draw(){
+ const C={c0:col('--c0'),c1:col('--c1'),c2:col('--c2'),c3:col('--c3'),bot:col('--bot'),pa:col('--pa'),bad:col('--bad'),ok:col('--ok'),ink:col('--ink'),line:col('--line')};
+ ctx.clearRect(0,0,cv.width,cv.height);ctx.font='600 13px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+ for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){const t=T[y*GW+x];ctx.fillStyle=[C.c0,C.c1,C.c2,C.c0][t];ctx.fillRect(x*CS,y*CS,CS,CS);ctx.strokeStyle=C.line;ctx.lineWidth=.5;ctx.strokeRect(x*CS,y*CS,CS,CS);
+  if(t===1){ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillText(P.hill,x*CS+CS/2,y*CS+CS/2)}
+  if(t===3){ctx.fillStyle=C.c3;ctx.fillRect(x*CS+4,y*CS+4,CS-8,CS-8);ctx.fillStyle='#222';ctx.fillText('⚡',x*CS+CS/2,y*CS+CS/2+1)}}
+ const idle=!R;
+ if(idle){if(sel==='A')pathLine(plans.A,0,C.pa,[],5);if(sel==='A'&&plans.A&&plans.A.dead>=0){const d=plans.A[plans.A.dead];ctx.strokeStyle=C.bad;ctx.lineWidth=3;const px=d.x*CS+CS/2,py=d.y*CS+CS/2;ctx.beginPath();ctx.moveTo(px-8,py-8);ctx.lineTo(px+8,py+8);ctx.moveTo(px+8,py-8);ctx.lineTo(px-8,py+8);ctx.stroke()}
+  if(sel==='B')pathLine(plans.B,0,C.bot,[],5);if(sel==='B'&&plans.B)plans.B.forEach(n=>{if(n.ch){ctx.strokeStyle=C.c3;ctx.lineWidth=3;ctx.beginPath();ctx.arc(n.x*CS+CS/2,n.y*CS+CS/2,CS/2-2,0,7);ctx.stroke()}})}
+ else{ctx.globalAlpha=.35;pathLine(R.trail.map(p=>p),0,R.sel==='B'?C.bot:C.pa,[],5);ctx.globalAlpha=1;pathLine(R.nodes,R.i,R.sel==='B'?C.bot:C.pa,[],4)}
+ // start and goal
+ ctx.fillStyle=C.ok;ctx.beginPath();ctx.arc(st.x*CS+CS/2,st.y*CS+CS/2,11,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.fillText('S',st.x*CS+CS/2,st.y*CS+CS/2+1);
+ ctx.fillStyle=C.bad;ctx.beginPath();ctx.arc(gl.x*CS+CS/2,gl.y*CS+CS/2,11,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.fillText('G',gl.x*CS+CS/2,gl.y*CS+CS/2+1);
+ // robot
+ const rp=idle?st:R.nodes[R.i],bat=idle?P.cap:R.bat,fr=Math.max(0,bat/P.cap),rc=fr>.5?C.ok:fr>.2?C.c3:C.bad;
+ const rx=rp.x*CS+CS/2,ry=rp.y*CS+CS/2;ctx.fillStyle=R&&R.state==='dead'?C.bad:C.bot;ctx.beginPath();ctx.arc(rx,ry,10,0,7);ctx.fill();
+ ctx.strokeStyle=rc;ctx.lineWidth=4;ctx.beginPath();ctx.arc(rx,ry,14,-Math.PI/2,-Math.PI/2+fr*Math.PI*2);ctx.stroke();
+ $('g').style.width=(fr*100)+'%';$('g').style.background=rc;
+ $('bt').textContent=idle?'Battery '+P.cap+' / '+P.cap:'Battery '+Math.max(0,R.bat)+' / '+P.cap+(R.state==='done'?'  (goal reached)':R.state==='dead'?'  (stopped)':'')}
+let last=performance.now();function loop(n){const dt=Math.min(.05,(n-last)/1000);last=n;tick(dt);draw();requestAnimationFrame(loop)}
+// controls
+for(const[id,k]of[['cap','cap'],['hill','hill'],['lam','lam'],['rate','rate'],['speed','speed']]){const el=$(id),v=$('v'+id);const up=()=>{P[k]=+el.value;v.textContent=P[k];if(id!=='speed'){R=null;recompute()}};el.addEventListener('input',up);up()}
+$('brushes').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;brush=b.dataset.b;[...$('brushes').children].forEach(x=>x.classList.toggle('on',x===b))});
+$('sel').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;sel=b.dataset.s;[...$('sel').children].forEach(x=>x.classList.toggle('on',x===b));R=null;recompute();start()})
+$('run').onclick=()=>{if(R&&R.state==='run')return;R=null;recompute();start()};
+$('reset').onclick=()=>{R=null;recompute();log('Robot reset to start.')};
+$('rmap').onclick=()=>{R=null;initMap();recompute();log('Map reset.')};
+initMap();recompute();log('Strategic: planned the whole trip. Compare the two routes, then press Run.');requestAnimationFrame(loop);
+</script>
+</body>
+</html>

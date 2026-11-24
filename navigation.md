@@ -212,6 +212,12 @@ B = length between the wheels
 - [🎥 video explaining how delivery robots navigate using artificial magnets](https://youtube.com/shorts/0ZC6JxeRvh4)
 
 
+
+## Strategic planning (trajectory) vs. short term planning
+
+- [🎮 💡 🛠️ interactive demo](Planning_with_a_battery_strategic_and_reactive_layers.html)
+
+
 ## Grid based techniques for robot navigation 
 
 - [🎥 video explanation](https://youtube.com/shorts/P6xDDc4QUp4)
