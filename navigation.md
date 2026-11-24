@@ -221,6 +221,9 @@ B = length between the wheels
 
 - [🎮 💡 🛠️ interactive demo](Planning_with_a_battery_strategic_and_reactive_layers.html)
 
+- QR code below
+
+![image](images/battery_planner_qr.png)
 
 ## Grid based techniques for robot navigation 
 
