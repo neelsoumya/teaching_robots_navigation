@@ -178,6 +178,10 @@
 
 - [🎮 💡 🛠️ interactive demo](Artificial_potential_fields_interactivedemo.html)
 
+- QR code below
+
+![image](images/apf_demo_qr.png)
+
 $$V_{Left} = V_{des} - \frac{B \theta_{des}}{2}$$
 
 $$V_{Right} = V_{des} + \frac{B \theta_{des}}{2}$$
