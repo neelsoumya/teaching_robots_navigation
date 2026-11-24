@@ -115,6 +115,8 @@
 
 - [🎮 💡 🛠️ demo please 🙏  play around](PID_Robot_Playground.html)
 
+![image](images/pid_robot_playground_qr.png)
+
 - [more mathematical details on PID](PID_Control_Differential-DriveNavigation.md)
 
 - 🤔❓does this remind you of another technique/algorithm?
@@ -126,6 +128,8 @@
 - when this comes to the robot controller, these are converted to left and right 🛞 wheel velocities
 
 - [🎮 💡 🛠️ demo please 🙏  play around](steering_two-wheeled_robot_with_PID.html)
+
+![image](images/steering_two_wheeled_robot_pid_qr.png)
 
 - _self localisation_
 
