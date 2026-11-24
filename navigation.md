@@ -176,6 +176,7 @@
 
 ![image](images/apf.jpeg)
 
+- [🎮 💡 🛠️ interactive demo](Artificial_potential_fields_interactivedemo.html)
 
 $$V_{Left} = V_{des} - \frac{B \theta_{des}}{2}$$
 

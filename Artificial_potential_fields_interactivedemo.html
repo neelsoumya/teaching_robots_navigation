@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Artificial potential fields: interactive demo</title>
+<style>
+:root{--bg:#f4f6f7;--panel:#ffffff;--ink:#14212b;--mute:#566673;--line:#d5dde2;--goal:#0f766e;--obs:#b4285b;--bot:#1d4ed8;--force:#c26a00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f161b;--panel:#18222a;--ink:#e6edf1;--mute:#93a4b0;--line:#2b3a45;--goal:#2dd4bf;--obs:#f472a6;--bot:#6ea0ff;--force:#fbb040}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f161b;--panel:#18222a;--ink:#e6edf1;--mute:#93a4b0;--line:#2b3a45;--goal:#2dd4bf;--obs:#f472a6;--bot:#6ea0ff;--force:#fbb040}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 16px;max-width:70ch}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px}
+canvas{width:100%;height:auto;display:block;border-radius:6px;touch-action:none;cursor:crosshair;background:var(--bg)}
+.hint{color:var(--mute);font-size:.85rem;margin:8px 4px 2px}
+.side{display:flex;flex-direction:column;gap:12px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.box h2{font-size:.95rem;margin:0 0 8px}
+label{display:grid;grid-template-columns:1fr auto;font-size:.85rem;margin-top:8px;color:var(--mute)}
+label b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
+input[type=range]{grid-column:1/3;width:100%;accent-color:var(--bot)}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-size:.85rem;padding:7px 11px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--bot)}
+button.primary{background:var(--bot);border-color:var(--bot);color:#fff}
+button:focus-visible,input:focus-visible{outline:2px solid var(--bot);outline-offset:2px}
+.chk{display:flex;gap:6px;align-items:center;font-size:.85rem;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+td{padding:3px 0;border-bottom:1px solid var(--line)}td:last-child{text-align:right;font-weight:600}
+tr:last-child td{border-bottom:0}
+.eq{font-family:Cambria,Georgia,serif;font-size:.95rem;line-height:1.7;color:var(--ink)}
+.status{font-size:.85rem;font-weight:600;margin-top:6px}
+.leg span{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:baseline}
+.leg{font-size:.8rem;color:var(--mute);margin:6px 4px 0;display:flex;gap:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<main>
+<h1>Artificial potential fields</h1>
+<p class="sub">The goal pulls the robot in, each obstacle pushes it away, and the robot slides down the sum of the two. Drag things around and watch the wheel speeds change.</p>
+<div class="grid">
+<div>
+<div class="stage">
+<canvas id="c" width="800" height="520" aria-label="Potential field simulation"></canvas>
+<div class="leg">
+<div><span style="background:var(--bot)"></span>robot</div>
+<div><span style="background:var(--goal)"></span>goal (attracts)</div>
+<div><span style="background:var(--obs)"></span>obstacle (repels)</div>
+<div><span style="background:#2f9e44"></span>F attractive</div>
+<div><span style="background:#d6336c"></span>F repulsive</div>
+<div><span style="background:var(--force)"></span>F total</div>
+</div>
+<p class="hint">Drag the robot, goal or obstacles. Double-click empty space to add an obstacle, double-click an obstacle to remove it. Colour bands are equipotential lines; the robot moves downhill.</p>
+</div>
+</div>
+<div class="side">
+<div class="box">
+<div class="row">
+<button class="primary" id="run">Pause</button>
+<button id="reset">Reset robot</button>
+<button id="trap">Local minimum scene</button>
+<button id="clear">Clear obstacles</button>
+</div>
+<div class="status" id="status"></div>
+</div>
+<div class="box">
+<h2>Field parameters</h2>
+<label>Attractive gain k<sub>att</sub><b id="vka"></b><input type="range" id="ka" min="0.05" max="1" step="0.05" value="0.3"></label>
+<label>Repulsive gain k<sub>rep</sub><b id="vkr"></b><input type="range" id="kr" min="0.5" max="40" step="0.5" value="10"></label>
+<label>Influence radius ρ<sub>0</sub> (px)<b id="vrho"></b><input type="range" id="rho" min="30" max="450" step="5" value="240"></label>
+<label>Robot gain k (F → V, ω)<b id="vk"></b><input type="range" id="k" min="0.5" max="10" step="0.5" value="4"></label>
+<label>Wheel base B (px)<b id="vB"></b><input type="range" id="B" min="10" max="50" step="1" value="26"></label>
+<div class="chk"><input type="checkbox" id="sf" checked><label style="display:inline;margin:0" for="sf">Show potential bands</label></div>
+<div class="chk"><input type="checkbox" id="sv" checked><label style="display:inline;margin:0" for="sv">Show force arrows on a grid</label></div>
+<div class="chk"><input type="checkbox" id="jit"><label style="display:inline;margin:0" for="jit">Add a small random nudge (escape minima)</label></div>
+</div>
+<div class="box">
+<h2>Differential drive, live</h2>
+<div class="eq">V<sub>des</sub> = k·F<sub>linear</sub><br>ω<sub>des</sub> = k·F<sub>angular</sub><br>V<sub>L</sub> = V<sub>des</sub> − Bω<sub>des</sub>/2<br>V<sub>R</sub> = V<sub>des</sub> + Bω<sub>des</sub>/2</div>
+<table style="margin-top:8px">
+<tr><td>|F| total</td><td id="o_f"></td></tr>
+<tr><td>F<sub>linear</sub> (along heading)</td><td id="o_fl"></td></tr>
+<tr><td>F<sub>angular</sub> (heading error, rad)</td><td id="o_fa"></td></tr>
+<tr><td>V<sub>des</sub></td><td id="o_v"></td></tr>
+<tr><td>ω<sub>des</sub></td><td id="o_w"></td></tr>
+<tr><td>V<sub>Left</sub></td><td id="o_l"></td></tr>
+<tr><td>V<sub>Right</sub></td><td id="o_r"></td></tr>
+</table>
+</div>
+<div class="box">
+<h2>Model used</h2>
+<div class="eq" style="font-size:.88rem">U<sub>att</sub> = ½ k<sub>att</sub> d<sub>goal</sub>²<br>|F<sub>rep</sub>| = k<sub>rep</sub> (ρ<sub>0</sub>/d − 1)(ρ<sub>0</sub>/d) for d &lt; ρ<sub>0</sub>, else 0<br>F = −∇(U<sub>att</sub> + U<sub>rep</sub>)<br>d = gap between robot body and obstacle surface</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+const $=id=>document.getElementById(id);
+const P={ka:.3,kr:10,rho:240,k:4,B:26};
+const FMAX=60,VMAX=140,WMAX=3.5,GOALR=14,RR=13;
+let goal={x:700,y:260},robot,obs=[],trail=[],running=true,drag=null,dirty=true,heat=null,t0=0;
+const colors=()=>{const s=getComputedStyle(document.documentElement);return{bg:s.getPropertyValue('--bg').trim(),goal:s.getPropertyValue('--goal').trim(),obs:s.getPropertyValue('--obs').trim(),bot:s.getPropertyValue('--bot').trim(),force:s.getPropertyValue('--force').trim(),ink:s.getPropertyValue('--ink').trim()}};
+function resetRobot(){robot={x:90,y:260,th:0.4};trail=[];}
+function defaultObs(){obs=[{x:300,y:190,r:34},{x:420,y:330,r:42},{x:540,y:200,r:30}];}
+resetRobot();defaultObs();
+
+// forces at a point
+function forces(x,y){
+ let dx=goal.x-x,dy=goal.y-y,d=Math.hypot(dx,dy)||1e-6;
+ let m=Math.min(P.ka*d,FMAX);
+ const fa={x:dx/d*m,y:dy/d*m};
+ const fr={x:0,y:0};
+ for(const o of obs){
+  const ox=x-o.x,oy=y-o.y,c=Math.hypot(ox,oy)||1e-6,s=Math.max(c-o.r-RR,2);
+  if(s<P.rho){
+   const mag=Math.min(P.kr*P.rho*(P.rho-s)/(s*s),300);
+   fr.x+=ox/c*mag;fr.y+=oy/c*mag;
+  }
+ }
+ return{fa,fr,f:{x:fa.x+fr.x,y:fa.y+fr.y}};
+}
+function potential(x,y){
+ const d=Math.hypot(goal.x-x,goal.y-y);const dc=FMAX/P.ka;let U=d<=dc?0.5*P.ka*d*d:FMAX*d-0.5*FMAX*FMAX/P.ka;
+ for(const o of obs){const c=Math.hypot(x-o.x,y-o.y),s=Math.max(c-o.r-RR,2);
+  if(s<P.rho)U+=P.kr*P.rho*(P.rho*(1/s-1/P.rho)-Math.log(P.rho/s));}
+ return U;
+}
+function buildHeat(){
+ const cs=8,gw=Math.ceil(W/cs),gh=Math.ceil(H/cs),off=document.createElement('canvas');off.width=gw;off.height=gh;
+ const g=off.getContext('2d'),img=g.createImageData(gw,gh);
+ const dark=getComputedStyle(document.documentElement).colorScheme.includes('dark')||matchMedia('(prefers-color-scheme: dark)').matches&&document.documentElement.dataset.theme!=='light';
+ for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){
+  const U=potential(i*cs+cs/2,j*cs+cs/2),t=Math.min(1,Math.log(1+U)/Math.log(1+60000));
+  const band=((Math.log(1+U)*3.2)%1)<0.09?0.55:1;
+  let r,gc,b;
+  if(dark){r=20+t*150;gc=40+t*20;b=60+t*60;}else{r=225-t*10;gc=240-t*150;b=238-t*120;}
+  const k=(j*gw+i)*4;img.data[k]=r*band;img.data[k+1]=gc*band;img.data[k+2]=b*band;img.data[k+3]=255;
+ }
+ g.putImageData(img,0,0);heat=off;dirty=false;
+}
+function wrap(a){while(a>Math.PI)a-=2*Math.PI;while(a<-Math.PI)a+=2*Math.PI;return a}
+let out={};
+function step(dt){
+ const F=forces(robot.x,robot.y);
+ let fx=F.f.x,fy=F.f.y;
+ if($('jit').checked){fx+=(Math.random()-.5)*6;fy+=(Math.random()-.5)*6}
+ const fm=Math.hypot(fx,fy),dirF=Math.atan2(fy,fx);
+ const Flin=fx*Math.cos(robot.th)+fy*Math.sin(robot.th);
+ const err=fm<0.05?0:wrap(dirF-robot.th);
+ const Fang=err*Math.min(fm,10)/10*1; // heading error weighted by force strength
+ let V=Math.max(-20,Math.min(VMAX,P.k*Flin)),w=Math.max(-WMAX,Math.min(WMAX,P.k*Fang));
+ if(Flin<0)V=Math.max(V,0)*0; // do not reverse into the field, rotate first
+ const VL=V-P.B*w/2,VR=V+P.B*w/2;
+ // integrate actual differential drive from wheel speeds
+ const v=(VL+VR)/2,om=(VR-VL)/P.B;
+ robot.th=wrap(robot.th+om*dt);robot.x+=v*Math.cos(robot.th)*dt;robot.y+=v*Math.sin(robot.th)*dt;
+ robot.x=Math.max(5,Math.min(W-5,robot.x));robot.y=Math.max(5,Math.min(H-5,robot.y));
+ for(const o of obs){const ox=robot.x-o.x,oy=robot.y-o.y,c=Math.hypot(ox,oy)||1e-6,m=o.r+RR+1;if(c<m){robot.x=o.x+ox/c*m;robot.y=o.y+oy/c*m}}
+ const last=trail[trail.length-1];if(!last||Math.hypot(last.x-robot.x,last.y-robot.y)>3){trail.push({x:robot.x,y:robot.y});if(trail.length>1500)trail.shift()}
+ out={F,fm,Flin,Fang,V,w,VL,VR,speed:Math.abs(v)};
+}
+function arrow(x,y,vx,vy,col,wd,scale){
+ const l=Math.hypot(vx,vy);if(l<0.5)return;const L=Math.min(l*scale,90),ux=vx/l,uy=vy/l,ex=x+ux*L,ey=y+uy*L;
+ ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=wd;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();
+ const hs=Math.min(8,L*0.5);ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(ex-ux*hs-uy*hs*.5,ey-uy*hs+ux*hs*.5);ctx.lineTo(ex-ux*hs+uy*hs*.5,ey-uy*hs-ux*hs*.5);ctx.closePath();ctx.fill();
+}
+function draw(){
+ const C=colors();ctx.clearRect(0,0,W,H);
+ if($('sf').checked){if(dirty||!heat)buildHeat();ctx.imageSmoothingEnabled=true;ctx.drawImage(heat,0,0,W,H)}else{ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H)}
+ if($('sv').checked){
+  for(let y=30;y<H;y+=40)for(let x=30;x<W;x+=40){
+   let ok=true;for(const o of obs)if(Math.hypot(x-o.x,y-o.y)<o.r+4)ok=false;if(Math.hypot(x-goal.x,y-goal.y)<GOALR+4)ok=false;
+   if(!ok)continue;const f=forces(x,y).f,m=Math.hypot(f.x,f.y);
+   ctx.globalAlpha=.55;arrow(x-f.x/m*8,y-f.y/m*8,f.x,f.y,C.ink,1.2,0.001*0+16/Math.max(m,1));ctx.globalAlpha=1}
+ }
+ // trail
+ ctx.strokeStyle=C.bot;ctx.lineWidth=2.5;ctx.globalAlpha=.8;ctx.beginPath();trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();ctx.globalAlpha=1;
+ // influence rings
+ ctx.setLineDash([4,5]);ctx.lineWidth=1;ctx.strokeStyle=C.obs;ctx.globalAlpha=.45;
+ for(const o of obs){ctx.beginPath();ctx.arc(o.x,o.y,o.r+RR+P.rho,0,7);ctx.stroke()}
+ ctx.setLineDash([]);ctx.globalAlpha=1;
+ for(const o of obs){ctx.fillStyle=C.obs;ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,7);ctx.fill()}
+ // goal
+ ctx.fillStyle=C.goal;ctx.beginPath();ctx.arc(goal.x,goal.y,GOALR,0,7);ctx.fill();
+ ctx.strokeStyle=C.goal;ctx.lineWidth=2;ctx.beginPath();ctx.arc(goal.x,goal.y,GOALR+6,0,7);ctx.stroke();
+ // robot (body, wheels, heading)
+ ctx.save();ctx.translate(robot.x,robot.y);ctx.rotate(robot.th);
+ const hb=P.B/2;ctx.fillStyle=C.ink;ctx.fillRect(-7,-hb-2,14,5);ctx.fillRect(-7,hb-3,14,5);
+ ctx.fillStyle=C.bot;ctx.beginPath();ctx.arc(0,0,RR,0,7);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(RR+4,0);ctx.lineTo(2,-6);ctx.lineTo(2,6);ctx.closePath();ctx.fill();ctx.restore();
+ // force vectors
+ if(out.F){const s=2.2;arrow(robot.x,robot.y,out.F.fa.x,out.F.fa.y,'#2f9e44',3,s);arrow(robot.x,robot.y,out.F.fr.x,out.F.fr.y,'#d6336c',3,s);arrow(robot.x,robot.y,out.F.f.x,out.F.f.y,C.force,4,s)}
+}
+function readout(){
+ if(!out.F)return;const f=n=>n.toFixed(2);
+ $('o_f').textContent=f(out.fm);$('o_fl').textContent=f(out.Flin);$('o_fa').textContent=f(out.Fang);
+ $('o_v').textContent=f(out.V)+' px/s';$('o_w').textContent=f(out.w)+' rad/s';
+ $('o_l').textContent=f(out.VL)+' px/s';$('o_r').textContent=f(out.VR)+' px/s';
+ const dg=Math.hypot(goal.x-robot.x,goal.y-robot.y);
+ $('status').textContent=dg<GOALR+RR?'Reached the goal.':(out.speed<2&&out.fm<8&&dg>40?'Stuck: forces cancel (local minimum).':(running?'Following the negative gradient…':'Paused.'));
+}
+let last=performance.now();
+function loop(now){
+ const dt=Math.min(0.05,(now-last)/1000);last=now;
+ const dg=Math.hypot(goal.x-robot.x,goal.y-robot.y);
+ if(running&&dg>GOALR+RR-4)step(dt);else if(!out.F)step(0);else{const F=forces(robot.x,robot.y);out.F=F;out.fm=Math.hypot(F.f.x,F.f.y)}
+ if(dg<=GOALR+RR-4){out.V=0;out.w=0;out.VL=0;out.VR=0;out.speed=0}
+ draw();readout();requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// interaction
+function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+function pick(p){
+ if(Math.hypot(p.x-robot.x,p.y-robot.y)<RR+8)return{t:'robot'};
+ if(Math.hypot(p.x-goal.x,p.y-goal.y)<GOALR+10)return{t:'goal'};
+ for(let i=obs.length-1;i>=0;i--)if(Math.hypot(p.x-obs[i].x,p.y-obs[i].y)<obs[i].r)return{t:'obs',i};
+ return null;
+}
+cv.addEventListener('pointerdown',e=>{const p=pos(e),h=pick(p);if(h){drag=h;cv.setPointerCapture(e.pointerId)}});
+cv.addEventListener('pointermove',e=>{
+ const p=pos(e);if(!drag){const h=pick(p);cv.style.cursor=h?'grab':'crosshair';return}
+ cv.style.cursor='grabbing';
+ if(drag.t==='robot'){robot.x=p.x;robot.y=p.y;trail=[]}else if(drag.t==='goal'){goal.x=p.x;goal.y=p.y}else{obs[drag.i].x=p.x;obs[drag.i].y=p.y}
+ dirty=true;
+});
+cv.addEventListener('pointerup',()=>{drag=null});
+cv.addEventListener('dblclick',e=>{
+ const p=pos(e),h=pick(p);
+ if(h&&h.t==='obs')obs.splice(h.i,1);else if(!h)obs.push({x:p.x,y:p.y,r:28+Math.round(Math.random()*14)});
+ dirty=true;
+});
+
+// controls
+const bind=(id,key,vid,fmt)=>{const el=$(id),v=$(vid);const up=()=>{P[key]=+el.value;v.textContent=fmt?fmt(P[key]):P[key];dirty=true};el.addEventListener('input',up);up()};
+bind('ka','ka','vka');bind('kr','kr','vkr');bind('rho','rho','vrho');bind('k','k','vk');bind('B','B','vB');
+$('sf').addEventListener('change',()=>dirty=true);
+$('run').onclick=()=>{running=!running;$('run').textContent=running?'Pause':'Run'};
+$('reset').onclick=()=>{resetRobot();running=true;$('run').textContent='Pause'};
+$('clear').onclick=()=>{obs=[];dirty=true};
+$('trap').onclick=()=>{goal={x:700,y:260};robot={x:90,y:260,th:0};trail=[];obs=[{x:400,y:260,r:46}];dirty=true;running=true;$('run').textContent='Pause';$('jit').checked=false};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>dirty=true);
+</script>
+</body>
+</html>
