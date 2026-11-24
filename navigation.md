@@ -18,6 +18,10 @@
 
 - See resource on [`odometry`](odometry.md)
 
+- 🤔❓ have you ever tried walking in a straight line with your 👁 eyes closed?
+
+- why does it not work?
+
 ![image](images/pid.jpeg)
 
 
@@ -110,6 +114,10 @@
 - _D_ is easing off as you approach quickly, so you don't lurch
 
 - [🎮 💡 🛠️ demo please 🙏  play around](PID_Robot_Playground.html)
+
+- 🤔❓does this remind you of another technique/algorithm?
+
+- _Hint_ it underlies modern AI
 
 - _path planner_ will produce a sequence of x and y co-ordinates (it will need a 🗺 map)
 
