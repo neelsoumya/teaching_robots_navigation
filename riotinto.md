@@ -28,10 +28,11 @@
 
 ![image](images/rio.jpeg)
 
-- mines do not change a lot
+- _Concept_ 🧩 🚀💡🔑🔐 mines do not change a lot
 
 - _Concept_ 🧩 🚀💡🔑🔐 GPS `geofencing`: GPS will work since it is a large mine
 
+- _Concept_ 🧩 🚀💡🔑🔐 control the environment (if you can)
 
 ## 1. The Rio Tinto "Mine of the Future"
 
