@@ -1,6 +1,6 @@
 # The case of Rio Tinto
 
-- read the BB article
+- read the BBC article
 
 - QR code
 
