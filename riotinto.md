@@ -1,5 +1,12 @@
 # The case of Rio Tinto
 
+- read the BB article
+
+- QR code
+
+![image](images/bbc_article_qr.png)
+
+
 ![image](images/riointo.png)
 
 ![image](images/openpitmines.jpeg)
