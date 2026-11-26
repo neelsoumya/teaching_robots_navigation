@@ -61,6 +61,11 @@
 - binary (occupied/not occupied) within each cell
 
 
+## Braitenberg vehicles and reactive controllers
+
+- Braitenberg vehicles and reactive controllers
+
+
 ## SLAM
 
 - Simultaneous Localization and Mapping (SLAM)
@@ -162,7 +167,7 @@ _Concept_ 🧩 🚀  the greater the distance between landmarks, the greater the
 
 ![image](images/dead_reckoning.png)
 
-- charger could be potential landmark
+- ⚠️ charger could be potential landmark
 
 _Concept_ 🧩 🚀landmark should be static 
 
